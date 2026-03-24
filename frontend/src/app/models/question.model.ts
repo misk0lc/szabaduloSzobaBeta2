@@ -20,5 +20,8 @@ export interface CheckAnswerResponse {
   RewardDigit?: number;
   MoneyReward?: number;
   NewBalance?: number;
+  MoneyPenalty?: number;
+  TimePenalty?: number;
+  WrongCount?: number;
   Penalty?: number;
 }

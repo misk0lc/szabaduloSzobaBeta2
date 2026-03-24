@@ -20,9 +20,12 @@
 
     <!-- Timer + statisztika -->
     <div class="room-stats">
-      <div class="stat-chip timer-chip" [class.warning]="timerWarning">
+      <div class="stat-chip timer-chip" [class.warning]="timerWarning" [class.timer-penalty]="timePenaltyAnim">
         <span class="stat-icon">⏱</span>
         <span class="stat-val mono">{{ timerDisplay }}</span>
+        @if (timePenaltyAnim) {
+          <span class="penalty-badge">+{{ lastTimePenalty >= 60 ? (lastTimePenalty / 60) + ' perc' : lastTimePenalty + 'mp' }}</span>
+        }
       </div>
       <div class="stat-chip">
         <span class="stat-icon">💰</span>
@@ -151,6 +154,21 @@
               <span class="modal-reward-badge">💰 +{{ activeQuestion.question.MoneyReward }}</span>
             }
           </div>
+          <!-- Élő pénz + idő a modalban -->
+          <div class="modal-live-stats">
+            <span class="modal-stat-chip modal-money-chip"
+                  [class.anim-gain]="modalBalanceAnim === 'gain'"
+                  [class.anim-loss]="modalBalanceAnim === 'loss'">
+              💰 {{ modalBalance }}
+            </span>
+            <span class="modal-stat-chip modal-timer-chip"
+                  [class.anim-time-penalty]="modalTimerAnim === 'penalty'">
+              ⏱ {{ modalTimerDisplay }}
+              @if (modalTimerAnim === 'penalty') {
+                <span class="modal-penalty-tag">+{{ lastTimePenalty >= 60 ? (lastTimePenalty / 60) + ' perc' : lastTimePenalty + 'mp' }}</span>
+              }
+            </span>
+          </div>
           <button class="btn-modal-close" (click)="closeQuestion()">✕</button>
         </div>
 
@@ -195,6 +213,12 @@
           >
             <span class="feedback-icon">{{ answerResult.correct ? '🎉' : '❌' }}</span>
             <span>{{ answerResult.message }}</span>
+            @if (!answerResult.correct && answerResult.MoneyPenalty) {
+              <span class="penalty-detail">💰 -{{ answerResult.MoneyPenalty }} pont</span>
+            }
+            @if (!answerResult.correct && answerResult.TimePenalty) {
+              <span class="penalty-detail">⏱ +{{ answerResult.TimePenalty }} másodperc</span>
+            }
           </div>
         }
 

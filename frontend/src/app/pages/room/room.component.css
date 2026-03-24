@@ -148,6 +148,34 @@
 
 .timer-chip.warning .stat-val { color: #f87171; }
 
+.timer-chip.timer-penalty {
+  border-color: rgba(239,68,68,.8) !important;
+  animation: penalty-flash .4s ease 3 !important;
+}
+.timer-chip.timer-penalty .stat-val { color: #f87171; }
+
+.penalty-badge {
+  font-size: .7rem;
+  font-weight: 700;
+  color: #fff;
+  background: #ef4444;
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-left: 4px;
+  animation: pop-in .3s ease;
+}
+
+@keyframes penalty-flash {
+  0%, 100% { box-shadow: none; background: transparent; }
+  50%       { box-shadow: 0 0 12px rgba(239,68,68,.7); background: rgba(239,68,68,.15); }
+}
+
+@keyframes pop-in {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 @keyframes timer-pulse {
   0%, 100% { box-shadow: none; }
   50%       { box-shadow: 0 0 8px rgba(239,68,68,.4); }
@@ -553,12 +581,86 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
+  gap: .5rem;
 }
 
 .modal-head-left {
   display: flex;
   align-items: center;
   gap: .6rem;
+  flex: 1;
+}
+
+/* ─── Modal élő stat chipek ──────────────────────────────── */
+.modal-live-stats {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.modal-stat-chip {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .2rem .55rem;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  transition: all .3s ease;
+}
+
+.modal-money-chip { color: #fbbf24; border-color: rgba(251,191,36,.3); }
+.modal-timer-chip { color: #c19a6b; border-color: rgba(193,154,107,.3); position: relative; }
+
+/* Pénz nyeremény animáció */
+.modal-money-chip.anim-gain {
+  color: #34d399;
+  border-color: rgba(52,211,153,.5);
+  background: rgba(52,211,153,.12);
+  animation: chip-gain .6s ease;
+}
+
+/* Pénz levonás animáció */
+.modal-money-chip.anim-loss {
+  color: #f87171;
+  border-color: rgba(239,68,68,.5);
+  background: rgba(239,68,68,.12);
+  animation: chip-loss .6s ease;
+}
+
+/* Időbüntetés animáció */
+.modal-timer-chip.anim-time-penalty {
+  color: #f87171;
+  border-color: rgba(239,68,68,.6);
+  background: rgba(239,68,68,.15);
+  animation: chip-loss .4s ease 3;
+}
+
+.modal-penalty-tag {
+  font-size: .65rem;
+  font-weight: 800;
+  color: #fff;
+  background: #ef4444;
+  border-radius: 4px;
+  padding: 0 4px;
+  animation: pop-in .3s ease;
+}
+
+@keyframes chip-gain {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.18); box-shadow: 0 0 12px rgba(52,211,153,.5); }
+  60%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+@keyframes chip-loss {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.12) translateX(-3px); box-shadow: 0 0 10px rgba(239,68,68,.5); }
+  50%  { transform: scale(1.12) translateX(3px); }
+  75%  { transform: scale(1.05) translateX(-2px); }
+  100% { transform: scale(1) translateX(0); }
 }
 
 .modal-q-num {
@@ -758,6 +860,17 @@
   border: 1px solid rgba(239,68,68,.3);
   color: #f87171;
   animation: shake .5s ease;
+}
+
+.penalty-detail {
+  display: inline-block;
+  font-size: .75rem;
+  font-weight: 700;
+  background: rgba(239,68,68,.2);
+  border: 1px solid rgba(239,68,68,.4);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 6px;
 }
 
 /* ─── Answer Animations ───────────────────────────────────── */

@@ -85,6 +85,12 @@ class QuestionController extends Controller
         $correctAnswer = trim($question->CorrectAnswer);
         $isCorrect     = strcasecmp($givenAnswer, $correctAnswer) === 0;
 
+        // Eddigi hibás próbálkozások száma BEFORE naplózás (ez az aktuális hiba sorszáma)
+        $wrongBefore = UserAnswer::where('UserID', $user->UserID)
+            ->where('QuestionID', $question->QuestionID)
+            ->where('IsCorrect', false)
+            ->count();
+
         // Válasz naplózása
         UserAnswer::create([
             'UserID'      => $user->UserID,
@@ -111,16 +117,36 @@ class QuestionController extends Controller
                 'NewBalance'  => $money->fresh()->Amount,
             ]);
         } else {
-            // Hibás válasz: opcionális levonás (10 egység, de min. 0)
-            $penalty = 10;
-            $newAmount = max(0, $money->Amount - $penalty);
-            $money->update(['Amount' => $newAmount]);
+            // $wrongBefore == 0 → ez az 1. hiba → -50 pénz
+            // $wrongBefore == 1 → ez a 2. hiba → +30 mp
+            // $wrongBefore >= 2 → ez a 3.+ hiba → +120 mp (+2 perc)
+            $moneyPenalty = 0;
+            $timePenalty  = 0;
+            $newAmount    = $money->Amount;
+
+            if ($wrongBefore === 0) {
+                $moneyPenalty = 50;
+                $newAmount    = max(0, $money->Amount - $moneyPenalty);
+                $money->update(['Amount' => $newAmount]);
+            } elseif ($wrongBefore === 1) {
+                $timePenalty = 30;
+            } else {
+                $timePenalty = 120;
+            }
+
+            $message = match(true) {
+                $wrongBefore === 0 => 'Hibás válasz! -50 pont levonva.',
+                $wrongBefore === 1 => 'Hibás válasz! +30 másodperc büntetés.',
+                default            => 'Hibás válasz! +2 perc büntetés!',
+            };
 
             return response()->json([
-                'correct'    => false,
-                'message'    => 'Hibás válasz. Próbáld újra!',
-                'Penalty'    => $penalty,
-                'NewBalance' => $newAmount,
+                'correct'      => false,
+                'message'      => $message,
+                'WrongCount'   => $wrongBefore + 1,
+                'MoneyPenalty' => $moneyPenalty,
+                'TimePenalty'  => $timePenalty,
+                'NewBalance'   => $newAmount,
             ], 200);
         }
     }

@@ -64,6 +64,12 @@ export class RoomComponent implements OnInit, OnDestroy {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   }
 
+  get modalTimerDisplay(): string {
+    const m = Math.floor(this.modalTimeSpent / 60);
+    const s = this.modalTimeSpent % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
   // ─── Kérdés modal ──────────────────────────────────────────────
   activeQuestion: QuestionState | null = null;
   answerInput = '';
@@ -72,6 +78,13 @@ export class RoomComponent implements OnInit, OnDestroy {
   answerLoading = false;
   modalVisible = false;    // CSS animáció
   answerAnim: 'correct' | 'wrong' | null = null;  // answer animation trigger
+
+  // ─── Modal badge animációk ─────────────────────────────────────
+  modalBalanceAnim: 'gain' | 'loss' | null = null;   // pénz animáció a modalban
+  modalTimerAnim: 'penalty' | null = null;            // idő animáció a modalban
+  modalBalance = 0;        // modal saját pénzegyenleg (szinkronban balance-szal)
+  modalTimeSpent = 0;      // modal saját időkijelző
+  lastTimePenalty = 0;     // utolsó időbüntetés értéke (mp-ben)
 
   // ─── Hint panel ────────────────────────────────────────────────
   showHints = false;
@@ -197,6 +210,10 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.timerSub = interval(1000).subscribe(() => {
       this.timeSpent++;
       this.timerWarning = this.timeSpent > 600; // 10 perc után figyelmeztetés
+      // Modal timer szinkronban, ha nincs büntetés animáció aktív
+      if (this.modalTimerAnim === null) {
+        this.modalTimeSpent = this.timeSpent;
+      }
     });
   }
 
@@ -238,6 +255,10 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.showHints = false;
     this.hints = [];
     this.hintError = '';
+    this.modalBalance = this.balance;
+    this.modalTimeSpent = this.timeSpent;
+    this.modalBalanceAnim = null;
+    this.modalTimerAnim = null;
     // Animáció delay
     setTimeout(() => this.modalVisible = true, 10);
   }
@@ -248,8 +269,13 @@ export class RoomComponent implements OnInit, OnDestroy {
       this.activeQuestion = null;
       this.answerResult = null;
       this.selectedOption = null;
+      this.modalBalanceAnim = null;
+      this.modalTimerAnim = null;
     }, 250);
   }
+
+  // időbüntetés villogás trigger
+  timePenaltyAnim = false;
 
   checkAnswer(): void {
     if (!this.activeQuestion || !this.selectedOption) return;
@@ -271,6 +297,27 @@ export class RoomComponent implements OnInit, OnDestroy {
           if (!res.correct) this.selectedOption = null;
         }, 800);
 
+        if (!res.correct) {
+          // Pénzlevonás frissítése + modal animáció
+          if (res.NewBalance !== undefined) {
+            this.balance = res.NewBalance;
+            this.modalBalance = res.NewBalance;
+            if (res.MoneyPenalty && res.MoneyPenalty > 0) {
+              this.modalBalanceAnim = 'loss';
+              setTimeout(() => this.modalBalanceAnim = null, 1200);
+            }
+          }
+          // Időbüntetés hozzáadása a timerhez + modal animáció
+          if (res.TimePenalty && res.TimePenalty > 0) {
+            this.timeSpent += res.TimePenalty;
+            this.modalTimeSpent = this.timeSpent;
+            this.lastTimePenalty = res.TimePenalty;
+            this.timePenaltyAnim = true;
+            this.modalTimerAnim = 'penalty';
+            setTimeout(() => { this.timePenaltyAnim = false; this.modalTimerAnim = null; }, 1500);
+          }
+        }
+
         if (res.correct && this.activeQuestion) {
           this.activeQuestion.solved = true;
           this.activeQuestion.justSolved = true;
@@ -283,7 +330,12 @@ export class RoomComponent implements OnInit, OnDestroy {
             this.newDigitIndex = idx;
             setTimeout(() => this.newDigitIndex = null, 1500);
           }
-          if (res.NewBalance !== undefined) this.balance = res.NewBalance;
+          if (res.NewBalance !== undefined) {
+            this.balance = res.NewBalance;
+            this.modalBalance = res.NewBalance;
+            this.modalBalanceAnim = 'gain';
+            setTimeout(() => this.modalBalanceAnim = null, 1200);
+          }
 
           setTimeout(() => this.closeQuestion(), 1800);
         }
