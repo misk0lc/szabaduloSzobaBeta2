@@ -6,6 +6,7 @@ use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Publikus útvonalak ───────────────────────────────────────────────────────
@@ -32,6 +33,9 @@ Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
     // ─── Leaderboard ─────────────────────────────────────────────────────────
     Route::get('/leaderboard', [LeaderboardController::class, 'index']);
 
+    // ─── Bejelentések ────────────────────────────────────────────────────────
+    Route::post('/reports', [ReportController::class, 'store']);
+
     // ─── Admin-only útvonalak ─────────────────────────────────────────────────
     Route::middleware('is_admin')->prefix('admin')->group(function () {
         // Dashboard statisztikák
@@ -53,5 +57,10 @@ Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
         Route::post('/questions',         [AdminController::class, 'createQuestion']);
         Route::put('/questions/{id}',     [AdminController::class, 'updateQuestion']);
         Route::delete('/questions/{id}',  [AdminController::class, 'deleteQuestion']);
+
+        // Reports
+        Route::get('/reports',            [AdminController::class, 'reports']);
+        Route::put('/reports/{id}',       [AdminController::class, 'updateReport']);
+        Route::delete('/reports/{id}',    [AdminController::class, 'deleteReport']);
     });
 });
