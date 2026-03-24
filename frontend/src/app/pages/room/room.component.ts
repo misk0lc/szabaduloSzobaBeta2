@@ -94,11 +94,33 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   // ─── Digit gyűjtés ─────────────────────────────────────────────
   newDigitIndex: number | null = null;   // villog animáció
+  manualDigits: (string | undefined)[] = [];  // kézzel beírt számjegyek
 
   get collectedDigits(): (number | null)[] {
     return [...this.questions]
       .sort((a, b) => a.question.PositionX - b.question.PositionX)
       .map(q => q.digit);
+  }
+
+  // Megoldott + kézzel beírt digit összefésülve (kód beküldéshez)
+  get mergedDigits(): string[] {
+    return this.collectedDigits.map((d, i) =>
+      d !== null ? String(d) : (this.manualDigits[i] ?? '')
+    );
+  }
+
+  onManualDigitInput(i: number, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    // Csak 0-9 engedélyezett, 1 karakter
+    const val = input.value.replace(/[^0-9]/g, '').slice(-1);
+    input.value = val;
+    if (!this.manualDigits) this.manualDigits = [];
+    this.manualDigits[i] = val;
+    // Következő üres mezőre ugrás
+    if (val) {
+      const next = document.querySelector<HTMLInputElement>(`.digit-manual-input[data-idx="${i + 1}"]`);
+      next?.focus();
+    }
   }
 
   get solvedCount(): number {
@@ -112,6 +134,10 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   get allSolved(): boolean {
     return this.questions.length > 0 && this.questions.every(q => q.solved);
+  }
+
+  get canSubmitCode(): boolean {
+    return this.mergedDigits.length > 0 && this.mergedDigits.every(d => d !== '');
   }
 
   // ─── Kód beküldés ──────────────────────────────────────────────
@@ -364,8 +390,23 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.hintSvc.buyHint(hint.HintID).subscribe({
       next: (res) => {
         this.balance = res.NewBalance;
+        this.modalBalance = res.NewBalance;
+        // Tipp megvásárolva: jelöljük megvettnek
         const idx = this.hints.findIndex(h => h.HintID === hint.HintID);
         if (idx !== -1) this.hints[idx] = { ...hint, HintText: res.HintText };
+
+        // 50/50: eltávolítjuk a 2 rossz opciót, csak a helyes + 1 hamis marad
+        if (this.activeQuestion?.question.Options) {
+          const opts = this.activeQuestion.question.Options;
+          const correct = opts.filter(o => o.IsCorrect);
+          const wrong   = opts.filter(o => !o.IsCorrect);
+          // Véletlenszerűen megtartunk 1 rosszat
+          const keepWrong = wrong.length > 0
+            ? [wrong[Math.floor(Math.random() * wrong.length)]]
+            : [];
+          this.activeQuestion.question.Options = [...correct, ...keepWrong]
+            .sort(() => Math.random() - 0.5);
+        }
       },
       error: () => { this.hintError = 'Nincs elegendő egyenleged, vagy már megvetted.'; }
     });
@@ -378,12 +419,9 @@ export class RoomComponent implements OnInit, OnDestroy {
   // ─── Kód beküldés ──────────────────────────────────────────────
   openCodeSubmit(): void {
     this.showCodeSubmit = true;
-    this.codeInput = this.collectedDigits.map(d => d !== null ? String(d) : '').join('');
+    this.codeInput = this.mergedDigits.join('');
     this.submitResult = null;
     this.submitSuccess = false;
-    console.log('collectedDigits:', this.collectedDigits);
-    console.log('codeInput:', this.codeInput);
-    console.log('codeInput.trim() empty?', !this.codeInput.trim());
   }
 
   closeCodeSubmit(): void {

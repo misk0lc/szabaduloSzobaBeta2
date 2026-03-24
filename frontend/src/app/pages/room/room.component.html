@@ -114,15 +114,29 @@
             <div
               class="digit-cell"
               [class.digit-filled]="d !== null"
+              [class.digit-manual]="d === null && (manualDigits[i] ?? '') !== ''"
               [class.digit-new]="newDigitIndex === i"
             >
-              <span class="digit-val">{{ d !== null ? d : '?' }}</span>
+              @if (d !== null) {
+                <span class="digit-val">{{ d }}</span>
+              } @else {
+                <input
+                  class="digit-manual-input"
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="1"
+                  [attr.data-idx]="i"
+                  [value]="manualDigits[i] ?? ''"
+                  (input)="onManualDigitInput(i, $event)"
+                  placeholder="?"
+                />
+              }
               <span class="digit-idx">{{ i + 1 }}</span>
             </div>
           }
         </div>
 
-        @if (allSolved) {
+        @if (canSubmitCode) {
           <button class="btn-open-code pulse-green" (click)="openCodeSubmit()">
             🔓 Kód beküldése
           </button>
@@ -225,7 +239,7 @@
         <!-- Tipp szekció -->
         <div class="hint-section">
           <button class="btn-hints-toggle" (click)="toggleHints()">
-            <span>💡 Tippek</span>
+            <span>💡 Segítség</span>
             <span class="hint-toggle-arrow">{{ showHints ? '▲' : '▼' }}</span>
           </button>
 
@@ -236,17 +250,17 @@
               } @else if (hintError) {
                 <div class="hint-error-msg">{{ hintError }}</div>
               } @else if (hints.length === 0) {
-                <div class="hint-empty-msg">Nincs elérhető tipp ehhez a kérdéshez.</div>
+                <div class="hint-empty-msg">Nincs elérhető segítség ehhez a kérdéshez.</div>
               } @else {
                 @for (hint of hints; track hint.HintID) {
                   <div class="hint-item" [class.hint-bought]="isHintBought(hint)">
                     @if (isHintBought(hint)) {
-                      <span class="hint-badge">💡</span>
-                      <span class="hint-text-content">{{ hint.HintText }}</span>
+                      <span class="hint-badge">✂️</span>
+                      <span class="hint-text-content">50/50 – 2 rossz opció eltávolítva</span>
                     } @else {
-                      <span class="hint-order-label">{{ hint.HintOrder }}. tipp</span>
+                      <span class="hint-order-label">50/50</span>
                       <span class="hint-cost-label">💰 {{ hint.Cost }}</span>
-                      <button class="btn-buy-hint" (click)="buyHint(hint)">Megveszem</button>
+                      <button class="btn-buy-hint" (click)="buyHint(hint)">Használom</button>
                     }
                   </div>
                 }
