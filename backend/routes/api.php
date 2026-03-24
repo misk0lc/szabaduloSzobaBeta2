@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HintController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ProgressController;
@@ -27,10 +26,6 @@ Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
     Route::get('/levels/{levelId}/questions',   [QuestionController::class, 'index']);
     Route::post('/questions/{id}/check-answer', [QuestionController::class, 'checkAnswer']);
 
-    // ─── Hint útvonalak ──────────────────────────────────────────────────────
-    Route::get('/questions/{questionId}/hints', [HintController::class, 'index']);
-    Route::post('/hints/{id}/buy',              [HintController::class, 'buy']);
-
     // ─── Progress / kód beküldés ─────────────────────────────────────────────
     Route::post('/levels/{levelId}/submit-code', [ProgressController::class, 'submitCode']);
 
@@ -53,18 +48,10 @@ Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
         Route::put('/levels/{id}',             [AdminController::class, 'updateLevel']);
         Route::delete('/levels/{id}',          [AdminController::class, 'deleteLevel']);
 
-        // Questions CRUD
+        // Questions CRUD (opciókkal)
         Route::get('/questions',          [AdminController::class, 'questions']);
         Route::post('/questions',         [AdminController::class, 'createQuestion']);
         Route::put('/questions/{id}',     [AdminController::class, 'updateQuestion']);
         Route::delete('/questions/{id}',  [AdminController::class, 'deleteQuestion']);
-
-        // Hints CRUD
-        Route::get('/hints',          [AdminController::class, 'hints']);
-        Route::post('/hints',         [AdminController::class, 'createHint']);
-        Route::put('/hints/{id}',     [AdminController::class, 'updateHint']);
-        Route::delete('/hints/{id}',  [AdminController::class, 'deleteHint']);
     });
 });
-
-// php artisan serve --port=8001 --host=0.0.0.0

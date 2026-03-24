@@ -22,6 +22,12 @@ export interface AdminLevel {
   BackgroundUrl?: string | null;
 }
 
+export interface AdminQuestionOption {
+  OptionID?: number;
+  OptionText: string;
+  IsCorrect: boolean;
+}
+
 export interface AdminQuestion {
   QuestionID: number;
   LevelID: number;
@@ -32,15 +38,7 @@ export interface AdminQuestion {
   PositionX: number;
   PositionY: number;
   level?: { LevelID: number; Name: string };
-}
-
-export interface AdminHint {
-  HintID: number;
-  QuestionID: number;
-  HintText: string;
-  Cost: number;
-  HintOrder: number;
-  question?: { QuestionID: number; QuestionText: string; LevelID: number };
+  options?: AdminQuestionOption[];
 }
 
 export interface AdminStats {
@@ -48,7 +46,6 @@ export interface AdminStats {
   activeUsers: number;
   totalLevels: number;
   totalQuestions: number;
-  totalHints: number;
   totalAnswers: number;
   correctAnswers: number;
   completedRooms: number;
@@ -112,24 +109,5 @@ export class AdminService {
 
   deleteQuestion(id: number): Observable<any> {
     return this.http.delete(`${this.api}/questions/${id}`);
-  }
-
-  // Hints
-  getHints(questionId?: number): Observable<AdminHint[]> {
-    const params: any = {};
-    if (questionId) params.question_id = questionId;
-    return this.http.get<AdminHint[]>(`${this.api}/hints`, { params });
-  }
-
-  createHint(data: Partial<AdminHint>): Observable<AdminHint> {
-    return this.http.post<AdminHint>(`${this.api}/hints`, data);
-  }
-
-  updateHint(id: number, data: Partial<AdminHint>): Observable<AdminHint> {
-    return this.http.put<AdminHint>(`${this.api}/hints/${id}`, data);
-  }
-
-  deleteHint(id: number): Observable<any> {
-    return this.http.delete(`${this.api}/hints/${id}`);
   }
 }

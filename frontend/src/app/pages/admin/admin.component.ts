@@ -5,10 +5,10 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {
   AdminService,
-  AdminUser, AdminLevel, AdminQuestion, AdminHint, AdminStats
+  AdminUser, AdminLevel, AdminQuestion, AdminQuestionOption, AdminStats
 } from '../../services/admin.service';
 
-type Tab = 'dashboard' | 'users' | 'levels' | 'questions' | 'hints';
+type Tab = 'dashboard' | 'users' | 'levels' | 'questions';
 
 @Component({
   selector: 'app-admin',
@@ -41,12 +41,6 @@ export class AdminComponent implements OnInit {
   editingQuestion: Partial<AdminQuestion> | null = null;
   isNewQuestion = false;
 
-  // Hints
-  hints: AdminHint[] = [];
-  hintQuestionFilter = 0;
-  editingHint: Partial<AdminHint> | null = null;
-  isNewHint = false;
-
   // Toast
   toast = '';
   toastType: 'ok' | 'err' = 'ok';
@@ -69,17 +63,14 @@ export class AdminComponent implements OnInit {
     if (tab === 'users') this.loadUsers();
     if (tab === 'levels') this.loadLevels();
     if (tab === 'questions') this.loadQuestions();
-    if (tab === 'hints') this.loadHints();
   }
 
   closeAllEditors(): void {
     this.editingUser = null;
     this.editingLevel = null;
     this.editingQuestion = null;
-    this.editingHint = null;
     this.isNewLevel = false;
     this.isNewQuestion = false;
-    this.isNewHint = false;
   }
 
   showToast(msg: string, type: 'ok' | 'err' = 'ok'): void {
@@ -203,14 +194,47 @@ export class AdminComponent implements OnInit {
     this.editingQuestion = {
       LevelID: this.questionLevelFilter || (this.levels[0]?.LevelID ?? 1),
       QuestionText: '', CorrectAnswer: '', RewardDigit: 0, MoneyReward: 50,
-      PositionX: 1, PositionY: 1
+      PositionX: 1, PositionY: 1,
+      options: [
+        { OptionText: '', IsCorrect: true },
+        { OptionText: '', IsCorrect: false },
+        { OptionText: '', IsCorrect: false },
+        { OptionText: '', IsCorrect: false },
+      ]
     };
     this.isNewQuestion = true;
   }
 
   editQuestion(q: AdminQuestion): void {
-    this.editingQuestion = { ...q };
+    this.editingQuestion = {
+      ...q,
+      options: q.options?.length
+        ? q.options.map(o => ({ OptionText: o.OptionText, IsCorrect: o.IsCorrect }))
+        : [
+            { OptionText: '', IsCorrect: true },
+            { OptionText: '', IsCorrect: false },
+            { OptionText: '', IsCorrect: false },
+            { OptionText: '', IsCorrect: false },
+          ]
+    };
     this.isNewQuestion = false;
+  }
+
+  setCorrectOption(index: number): void {
+    if (!this.editingQuestion?.options) return;
+    this.editingQuestion.options = this.editingQuestion.options.map((o, i) => ({
+      ...o,
+      IsCorrect: i === index
+    }));
+    // sync CorrectAnswer from the correct option
+    this.editingQuestion.CorrectAnswer = this.editingQuestion.options[index].OptionText;
+  }
+
+  onOptionTextChange(index: number): void {
+    if (!this.editingQuestion?.options) return;
+    if (this.editingQuestion.options[index].IsCorrect) {
+      this.editingQuestion.CorrectAnswer = this.editingQuestion.options[index].OptionText;
+    }
   }
 
   saveQuestion(): void {
@@ -229,45 +253,6 @@ export class AdminComponent implements OnInit {
     if (!confirm('Biztosan törlöd ezt a kérdést?')) return;
     this.admin.deleteQuestion(q.QuestionID).subscribe({
       next: () => { this.showToast('Kérdés törölve.'); this.loadQuestions(); },
-      error: () => this.showToast('Törlés sikertelen.', 'err')
-    });
-  }
-
-  // ─── Hints ───────────────────────────────────────
-  loadHints(): void {
-    const filter = this.hintQuestionFilter || undefined;
-    this.admin.getHints(filter).subscribe({
-      next: h => this.hints = h,
-      error: () => this.showToast('Tippek betöltése sikertelen.', 'err')
-    });
-  }
-
-  newHint(): void {
-    this.editingHint = { QuestionID: this.hintQuestionFilter || 1, HintText: '', Cost: 25, HintOrder: 1 };
-    this.isNewHint = true;
-  }
-
-  editHint(h: AdminHint): void {
-    this.editingHint = { ...h };
-    this.isNewHint = false;
-  }
-
-  saveHint(): void {
-    if (!this.editingHint) return;
-    const obs = this.isNewHint
-      ? this.admin.createHint(this.editingHint)
-      : this.admin.updateHint(this.editingHint.HintID!, this.editingHint);
-
-    obs.subscribe({
-      next: () => { this.showToast(this.isNewHint ? 'Tipp létrehozva.' : 'Tipp mentve.'); this.editingHint = null; this.loadHints(); },
-      error: () => this.showToast('Mentés sikertelen.', 'err')
-    });
-  }
-
-  deleteHint(h: AdminHint): void {
-    if (!confirm('Biztosan törlöd ezt a tippet?')) return;
-    this.admin.deleteHint(h.HintID).subscribe({
-      next: () => { this.showToast('Tipp törölve.'); this.loadHints(); },
       error: () => this.showToast('Törlés sikertelen.', 'err')
     });
   }
