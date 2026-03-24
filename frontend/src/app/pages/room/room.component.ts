@@ -6,12 +6,10 @@ import { interval, Subscription, forkJoin } from 'rxjs';
 
 import { AuthService } from '../../services/auth.service';
 import { QuestionService } from '../../services/question.service';
-import { HintService } from '../../services/hint.service';
 import { ProgressService } from '../../services/progress.service';
 import { LevelService } from '../../services/level.service';
 
 import { Question, CheckAnswerResponse } from '../../models/question.model';
-import { Hint } from '../../models/hint.model';
 import { LevelDetail } from '../../models/level.model';
 
 export interface QuestionState {
@@ -87,9 +85,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   lastTimePenalty = 0;     // utolsó időbüntetés értéke (mp-ben)
 
   // ─── Hint panel ────────────────────────────────────────────────
-  showHints = false;
-  hints: Hint[] = [];
-  hintsLoading = false;
+  hintUsed = false;
   hintError = '';
 
   // ─── Digit gyűjtés ─────────────────────────────────────────────
@@ -219,7 +215,6 @@ export class RoomComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private levelSvc: LevelService,
     private questionSvc: QuestionService,
-    private hintSvc: HintService,
     private progressSvc: ProgressService
   ) {}
 
@@ -278,8 +273,7 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.answerInput = '';
     this.selectedOption = null;
     this.answerResult = null;
-    this.showHints = false;
-    this.hints = [];
+    this.hintUsed = false;
     this.hintError = '';
     this.modalBalance = this.balance;
     this.modalTimeSpent = this.timeSpent;
@@ -363,7 +357,7 @@ export class RoomComponent implements OnInit, OnDestroy {
             setTimeout(() => this.modalBalanceAnim = null, 1200);
           }
 
-          setTimeout(() => this.closeQuestion(), 1800);
+          setTimeout(() => this.closeQuestion(), 700);
         }
       },
       error: () => {
@@ -373,47 +367,32 @@ export class RoomComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ─── Hint ──────────────────────────────────────────────────────
-  toggleHints(): void {
-    this.showHints = !this.showHints;
-    if (this.showHints && this.hints.length === 0 && this.activeQuestion) {
-      this.hintsLoading = true;
-      this.hintSvc.getHints(this.activeQuestion.question.QuestionID).subscribe({
-        next: (data) => { this.hints = data; this.hintsLoading = false; },
-        error: () => { this.hintError = 'Nem sikerült betölteni a tippeket.'; this.hintsLoading = false; }
-      });
-    }
-  }
-
-  buyHint(hint: Hint): void {
+  // ─── 50/50 Hint ────────────────────────────────────────────────
+  use5050(): void {
     this.hintError = '';
-    this.hintSvc.buyHint(hint.HintID).subscribe({
-      next: (res) => {
-        this.balance = res.NewBalance;
-        this.modalBalance = res.NewBalance;
-        // Tipp megvásárolva: jelöljük megvettnek
-        const idx = this.hints.findIndex(h => h.HintID === hint.HintID);
-        if (idx !== -1) this.hints[idx] = { ...hint, HintText: res.HintText };
+    if (this.balance < 25) {
+      this.hintError = 'Nincs elegendő egyenleged a 50/50 használatához.';
+      return;
+    }
+    if (!this.activeQuestion?.question.Options) return;
 
-        // 50/50: eltávolítjuk a 2 rossz opciót, csak a helyes + 1 hamis marad
-        if (this.activeQuestion?.question.Options) {
-          const opts = this.activeQuestion.question.Options;
-          const correct = opts.filter(o => o.IsCorrect);
-          const wrong   = opts.filter(o => !o.IsCorrect);
-          // Véletlenszerűen megtartunk 1 rosszat
-          const keepWrong = wrong.length > 0
-            ? [wrong[Math.floor(Math.random() * wrong.length)]]
-            : [];
-          this.activeQuestion.question.Options = [...correct, ...keepWrong]
-            .sort(() => Math.random() - 0.5);
-        }
-      },
-      error: () => { this.hintError = 'Nincs elegendő egyenleged, vagy már megvetted.'; }
-    });
-  }
+    // Levonjuk a 25 pénzt lokálisan (backend nélkül)
+    this.balance -= 25;
+    this.modalBalance = this.balance;
+    this.modalBalanceAnim = 'loss';
+    setTimeout(() => this.modalBalanceAnim = null, 1200);
 
-  isHintBought(hint: Hint): boolean {
-    return hint.HintText !== undefined && hint.HintText !== null;
+    // 50/50: megtartjuk a helyes + 1 véletlenszerű rosszat
+    const opts = this.activeQuestion.question.Options;
+    const correct = opts.filter(o => o.IsCorrect);
+    const wrong   = opts.filter(o => !o.IsCorrect);
+    const keepWrong = wrong.length > 0
+      ? [wrong[Math.floor(Math.random() * wrong.length)]]
+      : [];
+    this.activeQuestion.question.Options = [...correct, ...keepWrong]
+      .sort(() => Math.random() - 0.5);
+
+    this.hintUsed = true;
   }
 
   // ─── Kód beküldés ──────────────────────────────────────────────

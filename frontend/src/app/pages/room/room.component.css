@@ -980,88 +980,56 @@
 .hint-section {
   border-top: 1px solid rgba(255,255,255,.07);
   padding-top: .9rem;
-}
-
-.btn-hints-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: .5rem .75rem;
-  background: rgba(251,191,36,.07);
-  border: 1px solid rgba(251,191,36,.2);
-  border-radius: 8px;
-  color: #fbbf24;
-  cursor: pointer;
-  font-size: .85rem;
-  transition: background .2s;
-}
-
-.btn-hints-toggle:hover { background: rgba(251,191,36,.13); }
-.hint-toggle-arrow { opacity: .7; }
-
-.hint-list {
-  margin-top: .6rem;
   display: flex;
   flex-direction: column;
   gap: .4rem;
 }
 
-.hint-loading {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  color: #8a7a6a;
-  font-size: .85rem;
-  padding: .5rem;
-}
-
-.mini-spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(193,154,107,.2);
-  border-top-color: #c19a6b;
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-}
-
-.hint-error-msg { color: #f87171; font-size: .85rem; padding: .5rem; }
-.hint-empty-msg { color: #8a7a6a; font-size: .85rem; padding: .5rem; font-style: italic; }
-
-.hint-item {
+.btn-fifty-fifty {
   display: flex;
   align-items: center;
   gap: .6rem;
-  padding: .55rem .75rem;
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.07);
+  width: 100%;
+  padding: .55rem .85rem;
+  background: rgba(251,191,36,.07);
+  border: 1px solid rgba(251,191,36,.25);
   border-radius: 8px;
-  font-size: .85rem;
-}
-
-.hint-item.hint-bought {
-  border-color: rgba(251,191,36,.25);
-  background: rgba(251,191,36,.06);
-}
-
-.hint-badge { font-size: 1rem; }
-.hint-text-content { color: #fde68a; line-height: 1.5; }
-.hint-order-label { color: #8a7a6a; flex: 1; }
-.hint-cost-label { color: #fbbf24; font-weight: 600; }
-
-.btn-buy-hint {
-  padding: .3rem .75rem;
-  background: rgba(251,191,36,.12);
-  border: 1px solid rgba(251,191,36,.35);
-  border-radius: 6px;
   color: #fbbf24;
   cursor: pointer;
-  font-size: .8rem;
-  transition: background .15s;
+  font-size: .88rem;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background .18s, border-color .18s, transform .12s;
 }
 
-.btn-buy-hint:hover { background: rgba(251,191,36,.25); }
+.btn-fifty-fifty:hover {
+  background: rgba(251,191,36,.16);
+  border-color: rgba(251,191,36,.5);
+  transform: translateY(-1px);
+}
+
+.btn-fifty-fifty .hint-icon { font-size: 1.1rem; }
+
+.btn-fifty-fifty .hint-cost {
+  margin-left: auto;
+  font-size: .8rem;
+  opacity: .75;
+}
+
+.hint-used-badge {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .45rem .75rem;
+  background: rgba(251,191,36,.05);
+  border: 1px solid rgba(251,191,36,.15);
+  border-radius: 8px;
+  color: #a89060;
+  font-size: .82rem;
+  font-style: italic;
+}
+
+.hint-error-msg { color: #f87171; font-size: .82rem; padding: .2rem .25rem; }
 
 /* ─── Kód beküldés modal ──────────────────────────────────── */
 .modal-code-box {

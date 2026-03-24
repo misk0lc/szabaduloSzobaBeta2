@@ -236,36 +236,19 @@
           </div>
         }
 
-        <!-- Tipp szekció -->
+        <!-- 50/50 Segítség -->
         <div class="hint-section">
-          <button class="btn-hints-toggle" (click)="toggleHints()">
-            <span>💡 Segítség</span>
-            <span class="hint-toggle-arrow">{{ showHints ? '▲' : '▼' }}</span>
-          </button>
-
-          @if (showHints) {
-            <div class="hint-list">
-              @if (hintsLoading) {
-                <div class="hint-loading"><span class="mini-spinner"></span> Betöltés...</div>
-              } @else if (hintError) {
-                <div class="hint-error-msg">{{ hintError }}</div>
-              } @else if (hints.length === 0) {
-                <div class="hint-empty-msg">Nincs elérhető segítség ehhez a kérdéshez.</div>
-              } @else {
-                @for (hint of hints; track hint.HintID) {
-                  <div class="hint-item" [class.hint-bought]="isHintBought(hint)">
-                    @if (isHintBought(hint)) {
-                      <span class="hint-badge">✂️</span>
-                      <span class="hint-text-content">50/50 – 2 rossz opció eltávolítva</span>
-                    } @else {
-                      <span class="hint-order-label">50/50</span>
-                      <span class="hint-cost-label">💰 {{ hint.Cost }}</span>
-                      <button class="btn-buy-hint" (click)="buyHint(hint)">Használom</button>
-                    }
-                  </div>
-                }
-              }
-            </div>
+          @if (!hintUsed) {
+            <button class="btn-fifty-fifty" (click)="use5050()">
+              <span class="hint-icon">🃏</span>
+              <span>50/50</span>
+              <span class="hint-cost">💰 25</span>
+            </button>
+          } @else {
+            <div class="hint-used-badge">✂️ 50/50 használva</div>
+          }
+          @if (hintError) {
+            <div class="hint-error-msg">{{ hintError }}</div>
           }
         </div>
 
