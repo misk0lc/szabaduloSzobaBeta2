@@ -1,0 +1,311 @@
+<div class="room-wrapper" [class]="roomTheme.bg">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════════════════════════ -->
+  <header class="room-header">
+
+    <div class="room-header-left">
+      <button class="btn-icon-back" (click)="visszaMegyek()" title="Vissza a pályákhoz">
+        <span>←</span>
+      </button>
+      <div class="room-title">
+        <span class="room-theme-icon">{{ roomTheme.icon }}</span>
+        <div class="room-title-text">
+          <span class="room-name">{{ level?.Name ?? ('Szoba #' + levelId) }}</span>
+          <span class="room-sub">{{ level?.Description | slice:0:60 }}…</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timer + statisztika -->
+    <div class="room-stats">
+      <div class="stat-chip timer-chip" [class.warning]="timerWarning">
+        <span class="stat-icon">⏱</span>
+        <span class="stat-val mono">{{ timerDisplay }}</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-icon">💰</span>
+        <span class="stat-val">{{ balance }}</span>
+      </div>
+      <div class="stat-chip progress-chip">
+        <span class="stat-icon">�</span>
+        <span class="stat-val">{{ solvedCount }}/{{ questions.length }}</span>
+        <div class="mini-progress-bar">
+          <div class="mini-progress-fill" [style.width.%]="progressPercent"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-header-right">
+      <span class="username-chip">{{ getUsername() }}</span>
+      <button class="btn-logout" (click)="kilepes()">Kilépés</button>
+    </div>
+
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       LOADING / ERROR
+  ════════════════════════════════════════════════════════════ -->
+  @if (loading) {
+    <div class="center-state">
+      <div class="spinner-ring"></div>
+      <p>Szoba betöltése...</p>
+    </div>
+  } @else if (error) {
+    <div class="center-state error-state">
+      <div class="error-icon-big">⚠️</div>
+      <p>{{ error }}</p>
+      <button class="btn-retry" (click)="loadRoom()">Újrapróbálás</button>
+    </div>
+  } @else {
+
+    <!-- ═══════════════════════════════════════════════════════
+         SZOBA CANVAS
+    ════════════════════════════════════════════════════════ -->
+    <main class="room-canvas" [style.background-image]="roomBgStyle">
+
+      <!-- Rácsháló vizuális segítség -->
+      <div class="room-grid-overlay"></div>
+
+      <!-- ── Kérdés objektumok ───────────────────────────── -->
+      @for (qs of questions; track qs.question.QuestionID; let i = $index) {
+        <button
+          class="obj-node"
+          [class.obj-solved]="qs.solved"
+          [class.obj-active]="activeQuestion === qs"
+          [class.obj-pulse]="!qs.solved"
+          [style.left.%]="nodeLeft(qs.question)"
+          [style.top.%]="nodeTop(qs.question)"
+          (click)="openQuestion(qs)"
+        >
+          <!-- Glow gyűrű megoldatlan elemekhez -->
+          @if (!qs.solved) {
+            <span class="obj-glow-ring"></span>
+          }
+
+          <!-- Ikon -->
+          <span class="obj-icon">
+            @if (qs.solved) { ✓ } @else { ? }
+          </span>
+
+          <!-- Megoldott: digit badge -->
+          @if (qs.solved && qs.digit !== null) {
+            <span class="obj-digit-badge" [class.new-digit]="newDigitIndex === i">
+              {{ qs.digit }}
+            </span>
+          }
+
+          <!-- Tooltip -->
+          <span class="obj-tooltip">
+            @if (qs.solved) { Megoldva ✓ } @else { Rejtély #{{ i + 1 }} }
+          </span>
+        </button>
+      }
+
+      <!-- ── Digit tálca alul ────────────────────────────── -->
+      <div class="digit-tray">
+        <span class="digit-tray-label">Összegyűjtött számjegyek:</span>
+        <div class="digit-tray-slots">
+          @for (d of collectedDigits; track $index; let i = $index) {
+            <div
+              class="digit-cell"
+              [class.digit-filled]="d !== null"
+              [class.digit-new]="newDigitIndex === i"
+            >
+              <span class="digit-val">{{ d !== null ? d : '?' }}</span>
+              <span class="digit-idx">{{ i + 1 }}</span>
+            </div>
+          }
+        </div>
+
+        @if (allSolved) {
+          <button class="btn-open-code pulse-green" (click)="openCodeSubmit()">
+            🔓 Kód beküldése
+          </button>
+        }
+      </div>
+
+    </main>
+
+  }
+
+  <!-- ═══════════════════════════════════════════════════════════
+       KÉRDÉS MODAL
+  ════════════════════════════════════════════════════════════ -->
+  @if (activeQuestion) {
+    <div class="modal-backdrop" (click)="closeQuestion()">
+      <div class="modal-box"
+           [class.modal-enter]="modalVisible"
+           [class.anim-correct]="answerAnim === 'correct'"
+           [class.anim-wrong]="answerAnim === 'wrong'"
+           (click)="$event.stopPropagation()">
+
+        <!-- Fejléc -->
+        <div class="modal-head">
+          <div class="modal-head-left">
+            <span class="modal-q-num">
+              Rejtély #{{ questions.indexOf(activeQuestion) + 1 }}
+            </span>
+            @if (activeQuestion.question.MoneyReward) {
+              <span class="modal-reward-badge">💰 +{{ activeQuestion.question.MoneyReward }}</span>
+            }
+          </div>
+          <button class="btn-modal-close" (click)="closeQuestion()">✕</button>
+        </div>
+
+        <!-- Kérdés szöveg -->
+        <p class="modal-question-text">{{ activeQuestion.question.QuestionText }}</p>
+
+        <!-- Válasz opciók ABCD -->
+        @if (!activeQuestion.solved) {
+          <div class="answer-area">
+            <div class="options-grid">
+              @for (opt of activeQuestion.question.Options; track opt.OptionID; let i = $index) {
+                <button
+                  class="option-btn"
+                  [class.option-selected]="selectedOption === opt.OptionText"
+                  [class.option-correct]="answerAnim === 'correct' && selectedOption === opt.OptionText"
+                  [class.option-wrong]="answerAnim === 'wrong' && selectedOption === opt.OptionText"
+                  [disabled]="answerLoading"
+                  (click)="selectedOption = opt.OptionText; checkAnswer()"
+                >
+                  <span class="option-letter">{{ ['A','B','C','D'][i] }}</span>
+                  <span class="option-text">{{ opt.OptionText }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        } @else {
+          <div class="solved-banner">
+            <span class="solved-check">✓</span>
+            <span>Megoldva!</span>
+            @if (activeQuestion.digit !== null) {
+              <span class="solved-digit">Kapott számjegy: <strong>{{ activeQuestion.digit }}</strong></span>
+            }
+          </div>
+        }
+
+        <!-- Visszajelzés -->
+        @if (answerResult) {
+          <div
+            class="answer-feedback"
+            [class.feedback-ok]="answerResult.correct"
+            [class.feedback-err]="!answerResult.correct"
+          >
+            <span class="feedback-icon">{{ answerResult.correct ? '🎉' : '❌' }}</span>
+            <span>{{ answerResult.message }}</span>
+          </div>
+        }
+
+        <!-- Tipp szekció -->
+        <div class="hint-section">
+          <button class="btn-hints-toggle" (click)="toggleHints()">
+            <span>💡 Tippek</span>
+            <span class="hint-toggle-arrow">{{ showHints ? '▲' : '▼' }}</span>
+          </button>
+
+          @if (showHints) {
+            <div class="hint-list">
+              @if (hintsLoading) {
+                <div class="hint-loading"><span class="mini-spinner"></span> Betöltés...</div>
+              } @else if (hintError) {
+                <div class="hint-error-msg">{{ hintError }}</div>
+              } @else if (hints.length === 0) {
+                <div class="hint-empty-msg">Nincs elérhető tipp ehhez a kérdéshez.</div>
+              } @else {
+                @for (hint of hints; track hint.HintID) {
+                  <div class="hint-item" [class.hint-bought]="isHintBought(hint)">
+                    @if (isHintBought(hint)) {
+                      <span class="hint-badge">💡</span>
+                      <span class="hint-text-content">{{ hint.HintText }}</span>
+                    } @else {
+                      <span class="hint-order-label">{{ hint.HintOrder }}. tipp</span>
+                      <span class="hint-cost-label">💰 {{ hint.Cost }}</span>
+                      <button class="btn-buy-hint" (click)="buyHint(hint)">Megveszem</button>
+                    }
+                  </div>
+                }
+              }
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════════════════
+       KÓD BEKÜLDÉS MODAL
+  ════════════════════════════════════════════════════════════ -->
+  @if (showCodeSubmit) {
+    <div class="modal-backdrop" (click)="closeCodeSubmit()">
+      <div class="modal-box modal-code-box modal-enter" (click)="$event.stopPropagation()">
+
+        @if (!submitSuccess) {
+          <button class="btn-modal-close" (click)="closeCodeSubmit()">✕</button>
+        }
+
+        <div class="code-modal-head">
+          <span class="code-modal-icon">🔐</span>
+          <h2 class="code-modal-title">Nyisd ki a zárat!</h2>
+          <p class="code-modal-sub">Az összegyűjtött számjegyek adják a kódot.</p>
+        </div>
+
+        <!-- Digit előnézet -->
+        <div class="code-digit-preview">
+          @for (d of collectedDigits; track $index) {
+            <div class="code-digit-cell" [class.filled]="d !== null">{{ d !== null ? d : '?' }}</div>
+          }
+        </div>
+
+        @if (!submitSuccess) {
+          <div class="code-input-area">
+            <input
+              class="code-input"
+              type="text"
+              placeholder="pl. 3174..."
+              [(ngModel)]="codeInput"
+              (keyup.enter)="submitCode()"
+              [disabled]="submitLoading"
+              maxlength="20"
+            />
+          </div>
+
+          <button
+            class="btn-submit-code-final"
+            (click)="submitCode()"
+            [disabled]="submitLoading || !codeInput.trim()"
+          >
+            @if (submitLoading) {
+              <span class="btn-spinner"></span> Ellenőrzés...
+            } @else {
+              🔓 Kód beküldése
+            }
+          </button>
+        }
+
+        @if (submitResult) {
+          <div
+            class="submit-result"
+            [class.result-ok]="submitResult.correct"
+            [class.result-err]="!submitResult.correct"
+          >
+            <span class="result-icon">{{ submitResult.correct ? '🎉' : '❌' }}</span>
+            <div class="result-body">
+              <p class="result-msg">{{ submitResult.message }}</p>
+              @if (submitResult.correct && submitResult.score) {
+                <p class="result-score">🏆 Pontszám: <strong>{{ submitResult.score }}</strong></p>
+              }
+              @if (submitResult.correct) {
+                <p class="result-redirect">Visszairányítás a pályák menübe...</p>
+              }
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  }
+
+</div>

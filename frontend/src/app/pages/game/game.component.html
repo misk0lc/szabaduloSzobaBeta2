@@ -1,0 +1,77 @@
+<div class="oldal">
+
+  <header class="fejlec">
+    <div class="fejlec-bal">
+      <span class="logo">🔐 SzabaduláS</span>
+    </div>
+    <div class="fejlec-jobb">
+      <span class="udvozles">Üdv, <strong>{{ user?.Username }}</strong>!</span>
+      <button class="nav-gomb" (click)="goLeaderboard()">🏆 Ranglista</button>
+      @if (user?.IsAdmin) {
+        <button class="nav-gomb admin-gomb" (click)="goAdmin()">🛠️ Admin</button>
+      }
+      <button class="kijel-gomb" (click)="logout()">Kijelentkezés</button>
+    </div>
+  </header>
+
+  <main class="fo-tartalom">
+    <h1 class="cim">Válassz szobát</h1>
+    <p class="alcim">Teljesítsd a szobákat sorban, hogy továbbjuthass!</p>
+
+    @if (toltes) {
+      <div class="toltes">
+        <div class="toltes-ikon">⏳</div>
+        <p>Szobák betöltése...</p>
+      </div>
+    }
+
+    @if (hiba) {
+      <div class="hiba-doboz">{{ hiba }}</div>
+    }
+
+    @if (!toltes && !hiba) {
+      <div class="szobak-racs">
+        @for (level of levels; track level.LevelID) {
+          <div
+            class="szoba-kartya"
+            [class.teljesitett]="getAllapot(level) === 'completed'"
+            [class.aktiv]="getAllapot(level) === 'active'"
+            [class.zarolt]="getAllapot(level) === 'locked'"
+            [style.background-image]="getBgStyle(level)"
+            (click)="szobaValaszt(level)"
+          >
+            <div class="szoba-alap">
+              <div class="szoba-szam">#{{ level.OrderNumber }}</div>
+
+              <div class="allapot-ikon">
+                @if (getAllapot(level) === 'completed') { <span>✅</span> }
+                @if (getAllapot(level) === 'active') { <span>🚪</span> }
+                @if (getAllapot(level) === 'locked') { <span>🔒</span> }
+              </div>
+
+              <h2 class="szoba-nev">{{ level.Name }}</h2>
+              <p class="szoba-leiras">{{ level.Description }}</p>
+
+              <div class="szoba-allapot-sav">
+                @if (getAllapot(level) === 'completed') {
+                  <span class="badge teljesitett-badge">✓ Teljesítve</span>
+                }
+                @if (getAllapot(level) === 'active') {
+                  <span class="badge aktiv-badge">▶ Belépés</span>
+                }
+                @if (getAllapot(level) === 'locked') {
+                  <span class="badge zarolt-badge">🔒 Zárolt</span>
+                }
+              </div>
+            </div>
+
+            @if (getAllapot(level) === 'locked') {
+              <div class="lock-takaras"></div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </main>
+
+</div>

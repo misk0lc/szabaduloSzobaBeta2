@@ -1,0 +1,24 @@
+<div class="oldal">
+  <div class="kartya">
+    <h1>Bejelentkezés</h1>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="mezo">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="Email" placeholder="pelda@email.com" />
+        @if (form.get('Email')?.invalid && form.get('Email')?.touched) {
+          <span class="hiba-szoveg">Érvényes email szükséges!</span>
+        }
+      </div>
+      <div class="mezo">
+        <label for="jelszo">Jelszó</label>
+        <input id="jelszo" type="password" formControlName="Password" placeholder="......" />
+        @if (form.get('Password')?.invalid && form.get('Password')?.touched) {
+          <span class="hiba-szoveg">Legalább 6 karakter szükséges!</span>
+        }
+      </div>
+      @if (hiba) { <p class="hiba-doboz">{{ hiba }}</p> }
+      <button type="submit" [disabled]="toltes">{{ toltes ? 'Betöltés...' : 'Bejelentkezés' }}</button>
+    </form>
+    <p class="link">Nincs még fiókod? <a routerLink="/register">Regisztrálj!</a></p>
+  </div>
+</div>

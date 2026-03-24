@@ -1,0 +1,105 @@
+.oldal {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1410;
+}
+
+.kartya {
+  background: #1e1814;
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(193,154,107,.12);
+}
+
+h1 {
+  color: #e8ddd0;
+  font-size: 24px;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.mezo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.mezo label {
+  color: #a89280;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.mezo input {
+  background: #2a1f15;
+  border: 1px solid rgba(193,154,107,.2);
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: #e8ddd0;
+  font-size: 14px;
+  outline: none;
+}
+
+.mezo input:focus {
+  border-color: #c19a6b;
+}
+
+.hiba-szoveg {
+  color: #fc8181;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.hiba-doboz {
+  background: #3d1f1f;
+  border: 1px solid #fc8181;
+  color: #fc8181;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #c19a6b;
+  border: none;
+  border-radius: 8px;
+  color: #1a1410;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+button:hover:not(:disabled) {
+  background: #a67c52;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.link {
+  text-align: center;
+  margin-top: 20px;
+  color: #8a7a6a;
+  font-size: 14px;
+}
+
+.link a {
+  color: #c19a6b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.link a:hover {
+  text-decoration: underline;
+}

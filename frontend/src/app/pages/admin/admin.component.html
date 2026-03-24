@@ -1,0 +1,421 @@
+<div class="admin-shell">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">🛠️</span>
+      <span class="logo-text">Admin</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button [class.active]="activeTab==='dashboard'" (click)="switchTab('dashboard')">
+        <span class="nav-icon">📊</span> Áttekintés
+      </button>
+      <button [class.active]="activeTab==='users'" (click)="switchTab('users')">
+        <span class="nav-icon">👥</span> Felhasználók
+      </button>
+      <button [class.active]="activeTab==='levels'" (click)="switchTab('levels')">
+        <span class="nav-icon">🚪</span> Pályák
+      </button>
+      <button [class.active]="activeTab==='questions'" (click)="switchTab('questions')">
+        <span class="nav-icon">❓</span> Kérdések
+      </button>
+      <button [class.active]="activeTab==='hints'" (click)="switchTab('hints')">
+        <span class="nav-icon">💡</span> Tippek
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sidebar-link" (click)="goGame()">🎮 Játék</button>
+      <button class="sidebar-link" (click)="goLeaderboard()">🏆 Ranglista</button>
+      <button class="sidebar-link logout" (click)="logout()">� Kilépés</button>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="admin-main">
+
+    <header class="admin-header">
+      <h1 class="page-title">
+        @if (activeTab === 'dashboard') { 📊 Áttekintés }
+        @else if (activeTab === 'users') { 👥 Felhasználók }
+        @else if (activeTab === 'levels') { 🚪 Pályák }
+        @else if (activeTab === 'questions') { ❓ Kérdések }
+        @else if (activeTab === 'hints') { 💡 Tippek }
+      </h1>
+      <span class="admin-user">{{ user?.Username }}</span>
+    </header>
+
+    <div class="admin-content">
+
+      <!-- ═══ DASHBOARD ═══ -->
+      @if (activeTab === 'dashboard') {
+        @if (stats) {
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-num">{{ stats.totalUsers }}</div>
+              <div class="stat-label">Felhasználók</div>
+              <div class="stat-sub">{{ stats.activeUsers }} aktív</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">{{ stats.totalLevels }}</div>
+              <div class="stat-label">Pályák</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">{{ stats.totalQuestions }}</div>
+              <div class="stat-label">Kérdések</div>
+              <div class="stat-sub">{{ stats.totalHints }} tipp</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">{{ stats.completedRooms }}</div>
+              <div class="stat-label">Teljesített szobák</div>
+            </div>
+            <div class="stat-card wide">
+              <div class="stat-label">Válaszok</div>
+              <div class="stat-bar-wrap">
+                <div class="stat-bar-fill" [style.width.%]="correctRate"></div>
+              </div>
+              <div class="stat-sub">{{ stats.correctAnswers }}/{{ stats.totalAnswers }} helyes ({{ correctRate }}%)</div>
+            </div>
+          </div>
+        } @else {
+          <div class="loading-msg">Betöltés...</div>
+        }
+      }
+
+      <!-- ═══ USERS ═══ -->
+      @if (activeTab === 'users') {
+        <div class="toolbar">
+          <div class="search-box">
+            <input
+              type="text"
+              placeholder="Keresés név vagy email alapján..."
+              [(ngModel)]="userSearch"
+              (keyup.enter)="searchUsers()"
+            />
+            <button class="btn-search" (click)="searchUsers()">🔍</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Név</th>
+                <th>Email</th>
+                <th>Admin</th>
+                <th>Aktív</th>
+                <th>Egyenleg</th>
+                <th>Pontszám</th>
+                <th>Műveletek</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (u of users; track u.UserID) {
+                <tr>
+                  <td>{{ u.UserID }}</td>
+                  <td class="cell-name">{{ u.Username }}</td>
+                  <td>{{ u.Email }}</td>
+                  <td><span class="badge" [class.badge-yes]="u.IsAdmin" [class.badge-no]="!u.IsAdmin">{{ u.IsAdmin ? 'Igen' : 'Nem' }}</span></td>
+                  <td><span class="badge" [class.badge-yes]="u.IsActive" [class.badge-no]="!u.IsActive">{{ u.IsActive ? 'Aktív' : 'Inaktív' }}</span></td>
+                  <td>{{ u.Balance }}</td>
+                  <td>{{ u.Score }}</td>
+                  <td class="cell-actions">
+                    <button class="btn-sm btn-edit" (click)="editUser(u)">✏️</button>
+                    <button class="btn-sm btn-toggle" (click)="toggleUserActive(u)">{{ u.IsActive ? '🔒' : '🔓' }}</button>
+                    <button class="btn-sm btn-del" (click)="deleteUser(u)">🗑️</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (editingUser) {
+          <div class="editor-overlay" (click)="editingUser = null">
+            <div class="editor-card" (click)="$event.stopPropagation()">
+              <h3>Felhasználó szerkesztése</h3>
+              <div class="form-row">
+                <label>Név</label>
+                <input type="text" [(ngModel)]="editingUser.Username" />
+              </div>
+              <div class="form-row">
+                <label>Email</label>
+                <input type="email" [(ngModel)]="editingUser.Email" />
+              </div>
+              <div class="form-row">
+                <label>Új jelszó (opcionális)</label>
+                <input type="password" [(ngModel)]="editingUser.Password" placeholder="Hagyd üresen ha nem változtatod" />
+              </div>
+              <div class="form-row-inline">
+                <label><input type="checkbox" [(ngModel)]="editingUser.IsAdmin" /> Admin</label>
+                <label><input type="checkbox" [(ngModel)]="editingUser.IsActive" /> Aktív</label>
+              </div>
+              <div class="editor-actions">
+                <button class="btn-save" (click)="saveUser()">💾 Mentés</button>
+                <button class="btn-cancel" (click)="editingUser = null">Mégse</button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+      <!-- ═══ LEVELS ═══ -->
+      @if (activeTab === 'levels') {
+        <div class="toolbar">
+          <button class="btn-new" (click)="newLevel()">+ Új szoba</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>#</th>
+                <th>Név</th>
+                <th>Leírás</th>
+                <th>Aktív</th>
+                <th>Műveletek</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (l of levels; track l.LevelID) {
+                <tr>
+                  <td>{{ l.LevelID }}</td>
+                  <td>{{ l.OrderNumber }}</td>
+                  <td class="cell-name">{{ l.Name }}</td>
+                  <td class="cell-desc">{{ l.Description | slice:0:60 }}…</td>
+                  <td><span class="badge" [class.badge-yes]="l.IsActive" [class.badge-no]="!l.IsActive">{{ l.IsActive ? 'Igen' : 'Nem' }}</span></td>
+                  <td class="cell-actions">
+                    <button class="btn-sm btn-edit" (click)="editLevel(l)">✏️</button>
+                    <button class="btn-sm btn-del" (click)="deleteLevel(l)">🗑️</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (editingLevel) {
+          <div class="editor-overlay" (click)="editingLevel = null">
+            <div class="editor-card" (click)="$event.stopPropagation()">
+              <h3>{{ isNewLevel ? 'Új szoba' : 'Szoba szerkesztése' }}</h3>
+
+              <div class="form-row">
+                <label>Név</label>
+                <input type="text" [(ngModel)]="editingLevel.Name" />
+              </div>
+              <div class="form-row">
+                <label>Leírás</label>
+                <textarea [(ngModel)]="editingLevel.Description" rows="3"></textarea>
+              </div>
+              <div class="form-row">
+                <label>Sorrend (#)</label>
+                <input type="number" [(ngModel)]="editingLevel.OrderNumber" min="1" />
+              </div>
+              <div class="form-row-inline">
+                <label><input type="checkbox" [(ngModel)]="editingLevel.IsActive" /> Aktív</label>
+              </div>
+
+              <!-- ── Háttérkép URL ── -->
+              <div class="form-section-title">🖼️ Háttérkép</div>
+              <div class="form-row">
+                <label>Kép URL-je</label>
+                <input
+                  type="url"
+                  [(ngModel)]="editingLevel.BackgroundUrl"
+                  placeholder="https://... vagy /rooms/room1/background.png"
+                />
+              </div>
+              @if (editingLevel.BackgroundUrl) {
+                <div class="bg-url-preview">
+                  <img [src]="editingLevel.BackgroundUrl" alt="Előnézet"
+                       (error)="editingLevel.BackgroundUrl = ''" />
+                </div>
+              }
+
+              <div class="editor-actions">
+                <button class="btn-save" (click)="saveLevel()">💾 Mentés</button>
+                <button class="btn-cancel" (click)="editingLevel = null">Mégse</button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+      <!-- ═══ QUESTIONS ═══ -->
+      @if (activeTab === 'questions') {
+        <div class="toolbar">
+          <select [(ngModel)]="questionLevelFilter" (ngModelChange)="loadQuestions()">
+            <option [ngValue]="0">Összes szoba</option>
+            @for (l of levels; track l.LevelID) {
+              <option [ngValue]="l.LevelID">{{ l.Name }}</option>
+            }
+          </select>
+          <button class="btn-new" (click)="newQuestion()">+ Új kérdés</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Szoba</th>
+                <th>Kérdés</th>
+                <th>Válasz</th>
+                <th>Digit</th>
+                <th>Jutalom</th>
+                <th>Poz</th>
+                <th>Műveletek</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (q of questions; track q.QuestionID) {
+                <tr>
+                  <td>{{ q.QuestionID }}</td>
+                  <td>{{ q.level?.Name ?? q.LevelID }}</td>
+                  <td class="cell-desc">{{ q.QuestionText | slice:0:50 }}…</td>
+                  <td class="cell-mono">{{ q.CorrectAnswer }}</td>
+                  <td class="cell-center">{{ q.RewardDigit }}</td>
+                  <td>💰 {{ q.MoneyReward }}</td>
+                  <td class="cell-center">{{ q.PositionX }},{{ q.PositionY }}</td>
+                  <td class="cell-actions">
+                    <button class="btn-sm btn-edit" (click)="editQuestion(q)">✏️</button>
+                    <button class="btn-sm btn-del" (click)="deleteQuestion(q)">🗑️</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (editingQuestion) {
+          <div class="editor-overlay" (click)="editingQuestion = null">
+            <div class="editor-card editor-wide" (click)="$event.stopPropagation()">
+              <h3>{{ isNewQuestion ? 'Új kérdés' : 'Kérdés szerkesztése' }}</h3>
+              <div class="form-row">
+                <label>Szoba</label>
+                <select [(ngModel)]="editingQuestion.LevelID">
+                  @for (l of levels; track l.LevelID) {
+                    <option [ngValue]="l.LevelID">{{ l.Name }}</option>
+                  }
+                </select>
+              </div>
+              <div class="form-row">
+                <label>Kérdés szöveg</label>
+                <textarea [(ngModel)]="editingQuestion.QuestionText" rows="3"></textarea>
+              </div>
+              <div class="form-row">
+                <label>Helyes válasz</label>
+                <input type="text" [(ngModel)]="editingQuestion.CorrectAnswer" />
+              </div>
+              <div class="form-grid-3">
+                <div class="form-row">
+                  <label>Jutalom számjegy (0-9)</label>
+                  <input type="number" [(ngModel)]="editingQuestion.RewardDigit" min="0" max="9" />
+                </div>
+                <div class="form-row">
+                  <label>Pénzjutalom</label>
+                  <input type="number" [(ngModel)]="editingQuestion.MoneyReward" min="0" />
+                </div>
+                <div class="form-row">
+                  <label>Pozíció (X, Y)</label>
+                  <div class="pos-inputs">
+                    <input type="number" [(ngModel)]="editingQuestion.PositionX" min="1" max="20" placeholder="X" />
+                    <input type="number" [(ngModel)]="editingQuestion.PositionY" min="1" max="4" placeholder="Y" />
+                  </div>
+                </div>
+              </div>
+              <div class="editor-actions">
+                <button class="btn-save" (click)="saveQuestion()">💾 Mentés</button>
+                <button class="btn-cancel" (click)="editingQuestion = null">Mégse</button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+      <!-- ═══ HINTS ═══ -->
+      @if (activeTab === 'hints') {
+        <div class="toolbar">
+          <input
+            type="number"
+            placeholder="Szűrés QuestionID alapján..."
+            [(ngModel)]="hintQuestionFilter"
+            (ngModelChange)="loadHints()"
+            style="width: 220px"
+          />
+          <button class="btn-new" (click)="newHint()">+ Új tipp</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Kérdés ID</th>
+                <th>Sorrend</th>
+                <th>Szöveg</th>
+                <th>Ár</th>
+                <th>Műveletek</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (h of hints; track h.HintID) {
+                <tr>
+                  <td>{{ h.HintID }}</td>
+                  <td>{{ h.QuestionID }}</td>
+                  <td class="cell-center">{{ h.HintOrder }}</td>
+                  <td class="cell-desc">{{ h.HintText | slice:0:60 }}…</td>
+                  <td>💰 {{ h.Cost }}</td>
+                  <td class="cell-actions">
+                    <button class="btn-sm btn-edit" (click)="editHint(h)">✏️</button>
+                    <button class="btn-sm btn-del" (click)="deleteHint(h)">🗑️</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (editingHint) {
+          <div class="editor-overlay" (click)="editingHint = null">
+            <div class="editor-card" (click)="$event.stopPropagation()">
+              <h3>{{ isNewHint ? 'Új tipp' : 'Tipp szerkesztése' }}</h3>
+              <div class="form-row">
+                <label>Kérdés ID</label>
+                <input type="number" [(ngModel)]="editingHint.QuestionID" />
+              </div>
+              <div class="form-row">
+                <label>Sorrend</label>
+                <input type="number" [(ngModel)]="editingHint.HintOrder" min="1" />
+              </div>
+              <div class="form-row">
+                <label>Szöveg</label>
+                <textarea [(ngModel)]="editingHint.HintText" rows="3"></textarea>
+              </div>
+              <div class="form-row">
+                <label>Ár</label>
+                <input type="number" [(ngModel)]="editingHint.Cost" min="0" />
+              </div>
+              <div class="editor-actions">
+                <button class="btn-save" (click)="saveHint()">💾 Mentés</button>
+                <button class="btn-cancel" (click)="editingHint = null">Mégse</button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+    </div>
+  </main>
+
+  <!-- Toast -->
+  @if (toast) {
+    <div class="toast" [class.toast-ok]="toastType==='ok'" [class.toast-err]="toastType==='err'">
+      {{ toast }}
+    </div>
+  }
+
+</div>

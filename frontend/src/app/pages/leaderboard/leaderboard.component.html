@@ -1,0 +1,155 @@
+<div class="lb-wrapper">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="lb-header">
+    <div class="lb-logo">
+      <span class="lb-icon">🏆</span>
+      <h1>Ranglista</h1>
+    </div>
+    <div class="lb-actions">
+      <button class="btn-back" (click)="visszaMegyek()">← Vissza</button>
+      @if (isAdmin()) {
+        <button class="btn-admin" (click)="adminPanel()">🛠️ Admin</button>
+      }
+      <button class="btn-logout" (click)="kilepes()">Kilépés</button>
+    </div>
+  </header>
+
+  <main class="lb-main">
+
+    @if (loading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Ranglista betöltése...</p>
+      </div>
+    } @else if (error) {
+      <div class="error-state">
+        <span class="error-icon">⚠️</span>
+        <p>{{ error }}</p>
+        <button class="btn-retry" (click)="load()">Újra</button>
+      </div>
+    } @else if (entries.length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">🔒</span>
+        <p>Még senki sem teljesített egyetlen pályát sem.</p>
+        <p class="empty-sub">Legyél az első!</p>
+      </div>
+    } @else {
+
+      <!-- ═══ STATISZTIKÁK ═══ -->
+      <section class="stats-row">
+        <div class="stat-box">
+          <div class="stat-value">{{ totalPlayers }}</div>
+          <div class="stat-name">Játékos</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">{{ avgScore }}</div>
+          <div class="stat-name">Átlag pont</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">{{ avgTime }}</div>
+          <div class="stat-name">Átlag idő</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">{{ topLevels }}</div>
+          <div class="stat-name">Max pályák</div>
+        </div>
+      </section>
+
+      <!-- ═══ RENDEZÉS ═══ -->
+      <div class="sort-bar">
+        <span class="sort-label">Rendezés:</span>
+        <button [class.active]="sortBy==='score'" (click)="setSortBy('score')">🏆 Pontszám</button>
+        <button [class.active]="sortBy==='levels'" (click)="setSortBy('levels')">🚪 Pályák</button>
+        <button [class.active]="sortBy==='time'" (click)="setSortBy('time')">⏱ Idő</button>
+        <button [class.active]="sortBy==='hints'" (click)="setSortBy('hints')">💡 Tippek</button>
+      </div>
+
+      <!-- ═══ TOP 3 KIEMELÉS ═══ -->
+      @if (sorted.length >= 3) {
+        <div class="podium">
+          <!-- 2. hely -->
+          <div class="podium-card silver">
+            <div class="podium-rank">🥈</div>
+            <div class="podium-name">{{ sorted[1].Username ?? 'Ismeretlen' }}</div>
+            <div class="podium-score">{{ sorted[1].Score | number }}</div>
+            <div class="podium-bar">
+              <div class="podium-fill" [style.height.%]="getScorePercent(sorted[1].Score)"></div>
+            </div>
+          </div>
+          <!-- 1. hely -->
+          <div class="podium-card gold">
+            <div class="podium-rank">🥇</div>
+            <div class="podium-name">{{ sorted[0].Username ?? 'Ismeretlen' }}</div>
+            <div class="podium-score">{{ sorted[0].Score | number }}</div>
+            <div class="podium-bar">
+              <div class="podium-fill" [style.height.%]="100"></div>
+            </div>
+          </div>
+          <!-- 3. hely -->
+          <div class="podium-card bronze">
+            <div class="podium-rank">🥉</div>
+            <div class="podium-name">{{ sorted[2].Username ?? 'Ismeretlen' }}</div>
+            <div class="podium-score">{{ sorted[2].Score | number }}</div>
+            <div class="podium-bar">
+              <div class="podium-fill" [style.height.%]="getScorePercent(sorted[2].Score)"></div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ═══ TOP 10 TÁBLA ═══ -->
+      <div class="lb-table-wrapper" [class.animated]="animatedIn">
+        <table class="lb-table">
+          <thead>
+            <tr>
+              <th class="col-rank">#</th>
+              <th class="col-name">Játékos</th>
+              <th class="col-levels">Pályák</th>
+              <th class="col-time">Idő</th>
+              <th class="col-hints">Tippek</th>
+              <th class="col-score">Pont</th>
+              <th class="col-bar">Vizualizáció</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (entry of sorted; track entry.UserID; let i = $index) {
+              <tr
+                [class.top1]="i === 0"
+                [class.top2]="i === 1"
+                [class.top3]="i === 2"
+                [class.sajat]="getSajat() === i + 1"
+                [style.animation-delay.ms]="i * 60"
+              >
+                <td class="col-rank">
+                  @if (i === 0) { <span class="medal">🥇</span> }
+                  @else if (i === 1) { <span class="medal">🥈</span> }
+                  @else if (i === 2) { <span class="medal">🥉</span> }
+                  @else { <span class="rank-num">{{ i + 1 }}</span> }
+                </td>
+                <td class="col-name">
+                  <span class="player-name">{{ entry.Username ?? 'Ismeretlen' }}</span>
+                  @if (getSajat() === i + 1) {
+                    <span class="you-badge">Te</span>
+                  }
+                </td>
+                <td class="col-levels">{{ entry.LevelsCompleted }}</td>
+                <td class="col-time">{{ formatIdo(entry.TimeTotal) }}</td>
+                <td class="col-hints">{{ entry.HintsUsed }}</td>
+                <td class="col-score">
+                  <span class="score-val">{{ entry.Score | number }}</span>
+                </td>
+                <td class="col-bar">
+                  <div class="row-bar">
+                    <div class="row-bar-fill" [style.width.%]="getScorePercent(entry.Score)"></div>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    }
+  </main>
+</div>
