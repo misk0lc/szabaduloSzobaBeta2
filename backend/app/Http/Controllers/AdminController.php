@@ -83,6 +83,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'Name'          => 'required|string|max:100',
             'Description'   => 'required|string|max:2000',
+            'Category'      => 'required|string|max:50',
             'OrderNumber'   => 'required|integer|min:1',
             'IsActive'      => 'sometimes|boolean',
             'BackgroundUrl' => 'nullable|string|max:500',
@@ -96,6 +97,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'Name'          => 'sometimes|string|max:100',
             'Description'   => 'sometimes|string|max:2000',
+            'Category'      => 'sometimes|string|max:50',
             'OrderNumber'   => 'sometimes|integer|min:1',
             'IsActive'      => 'sometimes|boolean',
             'BackgroundUrl' => 'nullable|string|max:500',

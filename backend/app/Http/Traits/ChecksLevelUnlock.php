@@ -9,8 +9,8 @@ trait ChecksLevelUnlock
 {
     /**
      * Meghatározza, hogy egy levelId unlock-olt-e az adott usernek.
-     * Az 1. pálya (OrderNumber = 1) mindig elérhető.
-     * Minden további pálya csak akkor, ha az előző completed.
+     * Kategóriánként az első szoba (legkisebb OrderNumber) mindig elérhető.
+     * Minden további szoba csak akkor, ha az előző kategórián belüli szoba completed.
      */
     protected function isLevelUnlocked(int $userId, int $levelId): bool
     {
@@ -20,20 +20,29 @@ trait ChecksLevelUnlock
             return false;
         }
 
-        if ($level->OrderNumber === 1) {
+        // Az adott kategória összes szobája OrderNumber szerint rendezve
+        $categoryLevels = Level::where('IsActive', true)
+            ->where('Category', $level->Category)
+            ->orderBy('OrderNumber')
+            ->get();
+
+        // Ha ez a kategória első szobája, mindig nyitott
+        if ($categoryLevels->first()->LevelID === $levelId) {
             return true;
         }
 
-        $previousLevel = Level::where('OrderNumber', $level->OrderNumber - 1)
-            ->where('IsActive', true)
-            ->first();
+        // Megkeressük az előző szobát a kategórián belül
+        $ids = $categoryLevels->pluck('LevelID')->toArray();
+        $pos = array_search($levelId, $ids);
 
-        if (!$previousLevel) {
+        if ($pos === false || $pos === 0) {
             return false;
         }
 
+        $previousLevelId = $ids[$pos - 1];
+
         return UserProgress::where('UserID', $userId)
-            ->where('LevelID', $previousLevel->LevelID)
+            ->where('LevelID', $previousLevelId)
             ->where('Completed', true)
             ->exists();
     }

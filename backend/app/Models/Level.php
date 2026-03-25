@@ -13,6 +13,7 @@ class Level extends Model
     protected $fillable = [
         'Name',
         'Description',
+        'Category',
         'OrderNumber',
         'IsActive',
         'BackgroundUrl',

@@ -26,28 +26,39 @@ class LevelController extends Controller
             ->pluck('LevelID')
             ->toArray();
 
+        // Kategóriánként csoportosítjuk a szobákat OrderNumber szerint rendezve
+        // hogy megtaláljuk az első szobát és az előző szobát kategórián belül
+        $byCategory = [];
+        foreach ($levels as $level) {
+            $byCategory[$level->Category][] = $level;
+        }
+
         $result = [];
 
-        foreach ($levels as $index => $level) {
+        foreach ($levels as $level) {
             $isCompleted = in_array($level->LevelID, $completedLevelIds);
 
-            // Unlock logika:
-            // - Az első pálya mindig unlock-olt
-            // - Minden következő pálya csak akkor unlock-olt, ha az előző completed
-            if ($index === 0) {
+            // Unlock logika kategóriánként:
+            // - Az adott kategória első szobája (legkisebb OrderNumber) mindig nyitott
+            // - Minden további szoba a kategórián belül csak akkor nyitott,
+            //   ha az előző (kategórián belüli) szoba teljesítve van
+            $categoryLevels = $byCategory[$level->Category]; // már rendezett OrderNumber szerint
+            $indexInCategory = array_search($level->LevelID, array_column($categoryLevels, 'LevelID'));
+
+            if ($indexInCategory === 0) {
                 $isUnlocked = true;
             } else {
-                $previousLevel = $levels[$index - 1];
-                $isUnlocked    = in_array($previousLevel->LevelID, $completedLevelIds);
+                $prevLevelInCategory = $categoryLevels[$indexInCategory - 1];
+                $isUnlocked = in_array($prevLevelInCategory->LevelID, $completedLevelIds);
             }
 
-            // Csak az első nem-completed, unlock-olt pálya az "aktív"
             $isActive = $isUnlocked && !$isCompleted;
 
             $result[] = [
                 'LevelID'      => $level->LevelID,
                 'Name'         => $level->Name,
                 'Description'  => $level->Description,
+                'Category'     => $level->Category,
                 'OrderNumber'  => $level->OrderNumber,
                 'BackgroundUrl'=> $level->BackgroundUrl,
                 'IsUnlocked'   => $isUnlocked,
@@ -81,6 +92,7 @@ class LevelController extends Controller
             'LevelID'      => $level->LevelID,
             'Name'         => $level->Name,
             'Description'  => $level->Description,
+            'Category'     => $level->Category,
             'OrderNumber'  => $level->OrderNumber,
             'BackgroundUrl'=> $level->BackgroundUrl,
             'IsCompleted'  => $progress?->Completed ?? false,

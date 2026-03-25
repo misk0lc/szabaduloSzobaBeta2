@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('LevelID');
             $table->string('Name', 100);
             $table->text('Description')->nullable();
+            $table->string('Category', 50)->default('Könnyed');
             $table->integer('OrderNumber')->unique();
             $table->boolean('IsActive')->default(true);
             $table->dateTime('CreatedAt')->useCurrent();
