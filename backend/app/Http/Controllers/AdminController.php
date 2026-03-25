@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\ProgressController;
 use App\Models\Level;
 use App\Models\Question;
 use App\Models\QuestionOption;
@@ -194,6 +195,17 @@ class AdminController extends Controller
     {
         Report::findOrFail($id)->delete();
         return response()->json(['message' => 'Report torolve.']);
+    }
+
+    /**
+     * DELETE /api/admin/users/{id}/reset-progress
+     * Admin bármikor resetelheti bármelyik user haladását.
+     */
+    public function resetUserProgress(int $id)
+    {
+        User::findOrFail($id); // 404 ha nincs
+        ProgressController::doResetProgress($id);
+        return response()->json(['message' => 'Felhasználó haladása törölve.']);
     }
 
     public function stats()

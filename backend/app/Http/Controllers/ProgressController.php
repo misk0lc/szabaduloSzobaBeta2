@@ -6,8 +6,11 @@ use App\Http\Traits\ChecksLevelUnlock;
 use App\Models\Level;
 use App\Models\LeaderboardEntry;
 use App\Models\Question;
+use App\Models\UserAnswer;
+use App\Models\UserMoney;
 use App\Models\UserProgress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProgressController extends Controller
 {
@@ -118,5 +121,67 @@ class ProgressController extends Controller
                 'OrderNumber' => $nextLevel->OrderNumber,
             ] : null,
         ]);
+    }
+
+    /**
+     * DELETE /api/me/reset-progress
+     * Saját progress törlése (csak ha az összes pályát teljesítette, VAGY admin hívja).
+     * Törli: UserProgress, UserAnswer, LeaderboardEntry, UserMoney visszaállítása 0-ra.
+     */
+    public function resetProgress(Request $request)
+    {
+        $user = $request->user();
+
+        $totalLevels = Level::where('IsActive', true)->count();
+        $completedLevels = UserProgress::where('UserID', $user->UserID)
+            ->where('Completed', true)->count();
+
+        if ($completedLevels < $totalLevels) {
+            return response()->json(['message' => 'Még nem teljesítetted az összes szobát.'], 403);
+        }
+
+        $this->doResetProgress($user->UserID);
+
+        return response()->json(['message' => 'Haladásod törölve. Újrakezdheted a játékot!']);
+    }
+
+    /**
+     * Közös reset logika (self + admin is hívhatja).
+     */
+    public static function doResetProgress(int $userId): void
+    {
+        UserProgress::where('UserID', $userId)->delete();
+        UserAnswer::where('UserID', $userId)->delete();
+        LeaderboardEntry::where('UserID', $userId)->delete();
+        UserMoney::where('UserID', $userId)->update(['Amount' => 0]);
+
+        // Multiplayer session userből eltávolítás + üres sessionök törlése
+        $sessionIds = DB::table('multiplayer_session_users')
+            ->where('UserID', $userId)
+            ->pluck('SessionID');
+
+        DB::table('multiplayer_session_users')->where('UserID', $userId)->delete();
+
+        foreach ($sessionIds as $sessionId) {
+            $remaining = DB::table('multiplayer_session_users')
+                ->where('SessionID', $sessionId)
+                ->count();
+            if ($remaining === 0) {
+                DB::table('multiplayer_sessions')->where('id', $sessionId)->delete();
+            }
+        }
+    }
+
+    /**
+     * Csak egyetlen szoba (LevelID) progress-ét törli – multiplayer kilépéshez.
+     * Törli: UserProgress, UserAnswer az adott szobánál.
+     * Leaderboard és pénz NEM változik.
+     */
+    public static function doResetLevelProgress(int $userId, int $levelId): void
+    {
+        UserProgress::where('UserID', $userId)->where('LevelID', $levelId)->delete();
+        UserAnswer::where('UserID', $userId)
+            ->whereHas('question', fn($q) => $q->where('LevelID', $levelId))
+            ->delete();
     }
 }

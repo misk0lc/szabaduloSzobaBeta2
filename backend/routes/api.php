@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\MultiplayerController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReportController;
@@ -31,6 +32,7 @@ Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
 
     // ─── Progress / kód beküldés ─────────────────────────────────────────────
     Route::post('/levels/{levelId}/submit-code', [ProgressController::class, 'submitCode']);
+    Route::delete('/me/reset-progress',          [ProgressController::class, 'resetProgress']);
 
     // ─── Leaderboard ─────────────────────────────────────────────────────────
     Route::get('/leaderboard', [LeaderboardController::class, 'index']);
@@ -38,15 +40,23 @@ Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
     // ─── Bejelentések ────────────────────────────────────────────────────────
     Route::post('/reports', [ReportController::class, 'store']);
 
+    // ─── Multiplayer ─────────────────────────────────────────────────────────
+    Route::post('/multiplayer/join',                [MultiplayerController::class, 'join']);
+    Route::get('/multiplayer/{sessionId}/state',    [MultiplayerController::class, 'state']);
+    Route::post('/multiplayer/{sessionId}/solve',   [MultiplayerController::class, 'solve']);
+    Route::post('/multiplayer/{sessionId}/finish',  [MultiplayerController::class, 'finish']);
+    Route::delete('/multiplayer/{sessionId}/leave', [MultiplayerController::class, 'leave']);
+
     // ─── Admin-only útvonalak ─────────────────────────────────────────────────
     Route::middleware('is_admin')->prefix('admin')->group(function () {
         // Dashboard statisztikák
         Route::get('/stats', [AdminController::class, 'stats']);
 
         // Users CRUD
-        Route::get('/users',          [AdminController::class, 'users']);
-        Route::put('/users/{id}',     [AdminController::class, 'updateUser']);
-        Route::delete('/users/{id}',  [AdminController::class, 'deleteUser']);
+        Route::get('/users',                          [AdminController::class, 'users']);
+        Route::put('/users/{id}',                     [AdminController::class, 'updateUser']);
+        Route::delete('/users/{id}',                  [AdminController::class, 'deleteUser']);
+        Route::delete('/users/{id}/reset-progress',   [AdminController::class, 'resetUserProgress']);
 
         // Levels CRUD
         Route::get('/levels',                  [AdminController::class, 'levels']);
