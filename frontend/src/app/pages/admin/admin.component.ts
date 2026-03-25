@@ -34,6 +34,7 @@ export class AdminComponent implements OnInit {
   levels: AdminLevel[] = [];
   editingLevel: Partial<AdminLevel> | null = null;
   isNewLevel = false;
+  readonly levelCategories = ['Könnyed', 'Közepes', 'Nehéz'];
 
   // Questions
   questions: AdminQuestion[] = [];
@@ -151,7 +152,7 @@ export class AdminComponent implements OnInit {
   }
 
   newLevel(): void {
-    this.editingLevel = { Name: '', Description: '', OrderNumber: this.levels.length + 1, IsActive: true, BackgroundUrl: '' };
+    this.editingLevel = { Name: '', Description: '', Category: 'Könnyed', OrderNumber: this.levels.length + 1, IsActive: true, BackgroundUrl: '' };
     this.isNewLevel = true;
   }
 

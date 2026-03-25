@@ -2,6 +2,7 @@ export interface Level {
   LevelID: number;
   Name: string;
   Description: string;
+  Category: string;
   OrderNumber: number;
   IsUnlocked: boolean;
   IsCompleted: boolean;

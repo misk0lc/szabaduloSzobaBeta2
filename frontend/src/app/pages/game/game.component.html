@@ -35,65 +35,75 @@
     }
 
     @if (!toltes && !hiba) {
-      <div class="szobak-racs">
-        @for (level of levels; track level.LevelID) {
-          <div
-            class="szoba-kartya"
-            [class.teljesitett]="getAllapot(level) === 'completed'"
-            [class.aktiv]="getAllapot(level) === 'active'"
-            [class.zarolt]="getAllapot(level) === 'locked'"
-            [style.background-image]="getBgStyle(level)"
-          >
-            <div class="szoba-alap">
-              <div class="szoba-szam">#{{ level.OrderNumber }}</div>
+      @for (group of groupedLevels; track group.category; let last = $last) {
+        <div class="kategoria-szekció">
+          <div class="kategoria-fejlec">
+            <span class="kategoria-badge">{{ categoryIcon(group.category) }} {{ group.category }}</span>
+          </div>
+          <div class="szobak-racs">
+            @for (level of group.levels; track level.LevelID) {
+              <div
+                class="szoba-kartya"
+                [class.teljesitett]="getAllapot(level) === 'completed'"
+                [class.aktiv]="getAllapot(level) === 'active'"
+                [class.zarolt]="getAllapot(level) === 'locked'"
+                [style.background-image]="getBgStyle(level)"
+              >
+                <div class="szoba-alap">
+                  <div class="szoba-szam">#{{ level.OrderNumber }}</div>
 
-              <div class="allapot-ikon">
-                @if (getAllapot(level) === 'completed') { <span>✅</span> }
-                @if (getAllapot(level) === 'active') { <span>🚪</span> }
-                @if (getAllapot(level) === 'locked') { <span>🔒</span> }
+                  <div class="allapot-ikon">
+                    @if (getAllapot(level) === 'completed') { <span>✅</span> }
+                    @if (getAllapot(level) === 'active') { <span>🚪</span> }
+                    @if (getAllapot(level) === 'locked') { <span>🔒</span> }
+                  </div>
+
+                  <h2 class="szoba-nev">{{ level.Name }}</h2>
+                  <p class="szoba-leiras">{{ level.Description }}</p>
+
+                  @if (getAllapot(level) === 'completed') {
+                    <div class="szoba-allapot-sav">
+                      <span class="badge teljesitett-badge">✔ Teljesítve</span>
+                    </div>
+                  }
+
+                  @if (getAllapot(level) === 'active') {
+                    <div class="szoba-gombok">
+                      <button class="szoba-btn btn-solo" (click)="szobaValaszt(level)">
+                        🎮 Egyjátékos
+                      </button>
+                      <button
+                        class="szoba-btn btn-multi"
+                        (click)="szobaMulti(level, $event)"
+                        [disabled]="multiJoining === level.LevelID"
+                      >
+                        @if (multiJoining === level.LevelID) {
+                          ⬛ Csatlakozás...
+                        } @else {
+                          👥 Többjátékos
+                        }
+                      </button>
+                    </div>
+                  }
+
+                  @if (getAllapot(level) === 'locked') {
+                    <div class="szoba-allapot-sav">
+                      <span class="badge zarolt-badge">🔒 Zárolt</span>
+                    </div>
+                  }
+                </div>
+
+                @if (getAllapot(level) === 'locked') {
+                  <div class="lock-takaras"></div>
+                }
               </div>
-
-              <h2 class="szoba-nev">{{ level.Name }}</h2>
-              <p class="szoba-leiras">{{ level.Description }}</p>
-
-              @if (getAllapot(level) === 'completed') {
-                <div class="szoba-allapot-sav">
-                  <span class="badge teljesitett-badge">✔ Teljesítve</span>
-                </div>
-              }
-
-              @if (getAllapot(level) === 'active') {
-                <div class="szoba-gombok">
-                  <button class="szoba-btn btn-solo" (click)="szobaValaszt(level)">
-                    🎮 Egyjátékos
-                  </button>
-                  <button
-                    class="szoba-btn btn-multi"
-                    (click)="szobaMulti(level, $event)"
-                    [disabled]="multiJoining === level.LevelID"
-                  >
-                    @if (multiJoining === level.LevelID) {
-                      ⬛ Csatlakozás...
-                    } @else {
-                      👥 Többjátékos
-                    }
-                  </button>
-                </div>
-              }
-
-              @if (getAllapot(level) === 'locked') {
-                <div class="szoba-allapot-sav">
-                  <span class="badge zarolt-badge">🔒 Zárolt</span>
-                </div>
-              }
-            </div>
-
-            @if (getAllapot(level) === 'locked') {
-              <div class="lock-takaras"></div>
             }
           </div>
-        }
-      </div>
+          @if (!last) {
+            <div class="kategoria-elvalaszto"></div>
+          }
+        </div>
+      }
     }
 
     @if (allLevelsCompleted) {

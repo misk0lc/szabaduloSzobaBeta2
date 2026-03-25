@@ -17,6 +17,7 @@ export interface AdminLevel {
   LevelID: number;
   Name: string;
   Description: string;
+  Category: string;
   OrderNumber: number;
   IsActive: boolean;
   BackgroundUrl?: string | null;

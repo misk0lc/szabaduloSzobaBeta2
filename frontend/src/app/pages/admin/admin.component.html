@@ -183,6 +183,7 @@
                 <th>ID</th>
                 <th>#</th>
                 <th>Név</th>
+                <th>Kategória</th>
                 <th>Leírás</th>
                 <th>Aktív</th>
                 <th>Műveletek</th>
@@ -194,6 +195,7 @@
                   <td>{{ l.LevelID }}</td>
                   <td>{{ l.OrderNumber }}</td>
                   <td class="cell-name">{{ l.Name }}</td>
+                  <td><span class="badge badge-cat">{{ l.Category }}</span></td>
                   <td class="cell-desc">{{ l.Description | slice:0:60 }}…</td>
                   <td><span class="badge" [class.badge-yes]="l.IsActive" [class.badge-no]="!l.IsActive">{{ l.IsActive ? 'Igen' : 'Nem' }}</span></td>
                   <td class="cell-actions">
@@ -218,6 +220,14 @@
               <div class="form-row">
                 <label>Leírás</label>
                 <textarea [(ngModel)]="editingLevel.Description" rows="3"></textarea>
+              </div>
+              <div class="form-row">
+                <label>Nehézség</label>
+                <select [(ngModel)]="editingLevel.Category">
+                  @for (cat of levelCategories; track cat) {
+                    <option [value]="cat">{{ cat }}</option>
+                  }
+                </select>
               </div>
               <div class="form-row">
                 <label>Sorrend (#)</label>

@@ -405,6 +405,7 @@ td {
 
 .badge-yes { background: rgba(52,211,153,.15); color: #34d399; border: 1px solid rgba(52,211,153,.3); }
 .badge-no { background: rgba(239,68,68,.1); color: #f87171; border: 1px solid rgba(239,68,68,.25); }
+.badge-cat { background: rgba(167,139,250,.12); color: #a78bfa; border: 1px solid rgba(167,139,250,.3); }
 
 .loading-msg { text-align: center; color: #8a7a6a; padding: 4rem; }
 

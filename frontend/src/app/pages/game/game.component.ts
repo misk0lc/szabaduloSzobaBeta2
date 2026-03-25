@@ -236,4 +236,30 @@ export class GameComponent implements OnInit {
     }
     return 'none';
   }
+
+  /** Kategóriák megjelenítési sorrendje */
+  readonly categoryOrder = ['Könnyed', 'Közepes', 'Nehéz'];
+
+  categoryIcon(cat: string): string {
+    const icons: Record<string, string> = {
+      'Könnyed': '🟢',
+      'Közepes': '🟡',
+      'Nehéz':   '🔴',
+    };
+    return icons[cat] ?? '⚪';
+  }
+
+  /** Szobákat kategóriánként csoportosítva adja vissza, csak teli csoportokat */
+  get groupedLevels(): { category: string; levels: Level[] }[] {
+    const map = new Map<string, Level[]>();
+    for (const level of this.levels) {
+      const cat = level.Category || 'Egyéb';
+      if (!map.has(cat)) map.set(cat, []);
+      map.get(cat)!.push(level);
+    }
+    // Rendeljük a categoryOrder szerint, ismeretlen kategóriák a végére
+    const known = this.categoryOrder.filter(c => map.has(c)).map(c => ({ category: c, levels: map.get(c)! }));
+    const unknown = [...map.entries()].filter(([c]) => !this.categoryOrder.includes(c)).map(([c, ls]) => ({ category: c, levels: ls }));
+    return [...known, ...unknown];
+  }
 }
