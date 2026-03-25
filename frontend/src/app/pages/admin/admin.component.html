@@ -31,6 +31,12 @@
         <button [class.active]="activeTab==='questions'" (click)="switchTab('questions')">
           <span class="nav-icon">❓</span> Kérdések
         </button>
+        <button [class.active]="activeTab==='reports'" (click)="switchTab('reports')">
+          <span class="nav-icon">📋</span> Bejelentések
+          @if (stats && stats.newReports > 0) {
+            <span class="nav-badge">{{ stats.newReports }}</span>
+          }
+        </button>
       </nav>
     </aside>
 
@@ -42,6 +48,7 @@
         @else if (activeTab === 'users') { 👥 Felhasználók }
         @else if (activeTab === 'levels') { 🚪 Pályák }
         @else if (activeTab === 'questions') { ❓ Kérdések }
+        @else if (activeTab === 'reports') { 📋 Bejelentések }
       </div>
 
       <div class="admin-content">
@@ -66,6 +73,10 @@
             <div class="stat-card">
               <div class="stat-num">{{ stats.completedRooms }}</div>
               <div class="stat-label">Teljesített szobák</div>
+            </div>
+            <div class="stat-card" [class.stat-card-alert]="stats.newReports > 0" (click)="switchTab('reports')" style="cursor:pointer">
+              <div class="stat-num">{{ stats.newReports }}</div>
+              <div class="stat-label">Új bejelentés</div>
             </div>
             <div class="stat-card wide">
               <div class="stat-label">Válaszok</div>
@@ -353,6 +364,78 @@
                 <button class="btn-cancel" (click)="editingQuestion = null">Mégse</button>
               </div>
             </div>
+          </div>
+        }
+      }
+
+      <!-- ═══ REPORTS ═══ -->
+      @if (activeTab === 'reports') {
+        <div class="toolbar">
+          <div class="filter-btns">
+            <button [class.active-filter]="reportsFilter===''"      (click)="filterReports('')">Mind</button>
+            <button [class.active-filter]="reportsFilter==='new'"   (click)="filterReports('new')">🔴 Új</button>
+            <button [class.active-filter]="reportsFilter==='seen'"  (click)="filterReports('seen')">🟡 Megtekintett</button>
+            <button [class.active-filter]="reportsFilter==='resolved'" (click)="filterReports('resolved')">🟢 Megoldott</button>
+          </div>
+        </div>
+
+        @if (reports.length === 0) {
+          <div class="empty-msg">Nincs bejelentés.</div>
+        } @else {
+          <div class="report-table-wrap">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Kategória</th>
+                  <th>Felhasználó / Email</th>
+                  <th>Cím & Leírás</th>
+                  <th>Oldal</th>
+                  <th>Státusz</th>
+                  <th>Dátum</th>
+                  <th>Műveletek</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (r of reports; track r.ReportID) {
+                  <tr>
+                    <td class="report-id">{{ r.ReportID }}</td>
+                    <td><span class="report-cat-badge">{{ r.Category }}</span></td>
+                    <td>
+                      <div>{{ r.user?.Username ?? '—' }}</div>
+                      @if (r.ContactEmail) {
+                        <div class="report-contact-email">✉ {{ r.ContactEmail }}</div>
+                      }
+                    </td>
+                    <td>
+                      <div class="report-title-cell">{{ r.Title }}</div>
+                      <div class="report-msg-cell">{{ r.Message }}</div>
+                    </td>
+                    <td class="report-page">{{ r.Page ?? '—' }}</td>
+                    <td>
+                      <span class="report-badge" [class]="'badge-' + r.Status">
+                        {{ r.Status === 'new' ? '🔴 Új' : r.Status === 'seen' ? '🟡 Látott' : '🟢 Megoldva' }}
+                      </span>
+                    </td>
+                    <td class="report-date">{{ r.created_at | date:'yyyy.MM.dd HH:mm' }}</td>
+                    <td>
+                      <div class="report-actions">
+                        @if (r.Status !== 'seen') {
+                          <button class="btn-status seen" (click)="updateReportStatus(r, 'seen')" title="Megtekintett">👁</button>
+                        }
+                        @if (r.Status !== 'resolved') {
+                          <button class="btn-status resolved" (click)="updateReportStatus(r, 'resolved')" title="Megoldva">✅</button>
+                        }
+                        @if (r.Status !== 'new') {
+                          <button class="btn-status new" (click)="updateReportStatus(r, 'new')" title="Visszaállít újra">↩</button>
+                        }
+                        <button class="btn-del-small" (click)="deleteReport(r)" title="Törlés">🗑</button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
           </div>
         }
       }

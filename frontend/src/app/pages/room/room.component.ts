@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { QuestionService } from '../../services/question.service';
 import { ProgressService } from '../../services/progress.service';
 import { LevelService } from '../../services/level.service';
+import { ReportService } from '../../services/report.service';
 
 import { Question, CheckAnswerResponse } from '../../models/question.model';
 import { LevelDetail } from '../../models/level.model';
@@ -87,6 +88,20 @@ export class RoomComponent implements OnInit, OnDestroy {
   // ─── Hint panel ────────────────────────────────────────────────
   hintUsed = false;
   hintError = '';
+
+  // ─── Report panel ───────────────────────────────────────────────
+  showReport = false;
+  reportCategories = [
+    { value: 'bug',      label: '🐛 Bug / Hiba' },
+    { value: 'question', label: '❓ Kérdés' },
+    { value: 'other',    label: '📝 Egyéb' },
+  ];
+  reportCategory = 'bug';
+  reportTitle = '';
+  reportMessage = '';
+  reportLoading = false;
+  reportSent = false;
+  reportError = '';
 
   // ─── Digit gyűjtés ─────────────────────────────────────────────
   newDigitIndex: number | null = null;   // villog animáció
@@ -215,7 +230,8 @@ export class RoomComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private levelSvc: LevelService,
     private questionSvc: QuestionService,
-    private progressSvc: ProgressService
+    private progressSvc: ProgressService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -445,5 +461,41 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   getUsername(): string {
     return this.auth.getUser()?.Username ?? '';
+  }
+
+  // ─── Report panel ───────────────────────────────────────────────
+  openReport(): void {
+    this.showReport = true;
+    this.reportTitle = '';
+    this.reportCategory = 'bug';
+    this.reportMessage = '';
+    this.reportSent = false;
+    this.reportError = '';
+  }
+
+  closeReport(): void {
+    this.showReport = false;
+  }
+
+  submitReport(): void {
+    if (!this.reportTitle.trim() || !this.reportMessage.trim()) return;
+    this.reportLoading = true;
+    this.reportError = '';
+    this.reportService.createReport({
+      Title:    this.reportTitle.trim(),
+      Category: this.reportCategory,
+      Message: this.reportMessage.trim(),
+      Page: window.location.pathname,
+    }).subscribe({
+      next: () => {
+        this.reportLoading = false;
+        this.reportSent = true;
+        setTimeout(() => this.closeReport(), 2000);
+      },
+      error: () => {
+        this.reportLoading = false;
+        this.reportError = 'Hiba történt a beküldés során.';
+      }
+    });
   }
 }

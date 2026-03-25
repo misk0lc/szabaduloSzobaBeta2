@@ -49,6 +49,20 @@ export interface AdminStats {
   totalAnswers: number;
   correctAnswers: number;
   completedRooms: number;
+  newReports: number;
+}
+
+export interface AdminReport {
+  ReportID: number;
+  UserID: number | null;
+  Title: string;
+  Category: string;
+  ContactEmail?: string;
+  Message: string;
+  Page?: string;
+  Status: 'new' | 'seen' | 'resolved';
+  created_at: string;
+  user?: { UserID: number; Username: string; Email: string };
 }
 
 @Injectable({ providedIn: 'root' })
@@ -109,5 +123,20 @@ export class AdminService {
 
   deleteQuestion(id: number): Observable<any> {
     return this.http.delete(`${this.api}/questions/${id}`);
+  }
+
+  // Reports
+  getReports(status?: string): Observable<AdminReport[]> {
+    const params: any = {};
+    if (status) params.status = status;
+    return this.http.get<AdminReport[]>(`${this.api}/reports`, { params });
+  }
+
+  updateReport(id: number, status: 'new' | 'seen' | 'resolved'): Observable<AdminReport> {
+    return this.http.put<AdminReport>(`${this.api}/reports/${id}`, { Status: status });
+  }
+
+  deleteReport(id: number): Observable<any> {
+    return this.http.delete(`${this.api}/reports/${id}`);
   }
 }

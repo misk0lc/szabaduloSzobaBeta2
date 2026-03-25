@@ -2,14 +2,15 @@
 
   <header class="fejlec">
     <div class="fejlec-bal">
-      <span class="logo">🔐 SzabaduláS</span>
+      <span class="logo">🔐 SzabadulóS</span>
     </div>
     <div class="fejlec-jobb">
       <span class="udvozles">Üdv, <strong>{{ user?.Username }}</strong>!</span>
-      <button class="nav-gomb" (click)="goLeaderboard()">🏆 Ranglista</button>
       @if (user?.IsAdmin) {
-        <button class="nav-gomb admin-gomb" (click)="goAdmin()">🛠️ Admin</button>
+        <button class="nav-gomb admin-gomb" (click)="goAdmin()">🛡️ Admin</button>
       }
+      <button class="nav-gomb" (click)="goLeaderboard()">🏆 Ranglista</button>
+      <button class="nav-gomb" (click)="openPasswordChange()">🔑 Jelszó</button>
       <button class="kijel-gomb" (click)="logout()">Kijelentkezés</button>
     </div>
   </header>
@@ -20,7 +21,7 @@
 
     @if (toltes) {
       <div class="toltes">
-        <div class="toltes-ikon">⏳</div>
+        <div class="toltes-ikon">⬛</div>
         <p>Szobák betöltése...</p>
       </div>
     }
@@ -54,7 +55,7 @@
 
               <div class="szoba-allapot-sav">
                 @if (getAllapot(level) === 'completed') {
-                  <span class="badge teljesitett-badge">✓ Teljesítve</span>
+                  <span class="badge teljesitett-badge">✔ Teljesítve</span>
                 }
                 @if (getAllapot(level) === 'active') {
                   <span class="badge aktiv-badge">▶ Belépés</span>
@@ -75,3 +76,105 @@
   </main>
 
 </div>
+
+<!-- Lebegő bejelentés gomb -->
+<button class="report-fab" (click)="openReport()" title="Hiba bejelentése">🐛</button>
+
+<!-- Jelszóváltó modal -->
+@if (showPasswordChange) {
+  <div class="report-overlay" (click)="closePasswordChange()"></div>
+  <div class="report-modal">
+    <div class="report-modal-header">
+      <span>🔑 Jelszó megváltoztatása</span>
+      <button class="report-close" (click)="closePasswordChange()">✕</button>
+    </div>
+    <div class="report-modal-body">
+      @if (pwSuccess) {
+        <div class="report-success">
+          <div class="report-success-ikon">✅</div>
+          <p>{{ pwSuccess }}</p>
+        </div>
+      } @else {
+        <label>Jelenlegi jelszó *</label>
+        <input type="password" [(ngModel)]="pwCurrent" placeholder="••••••" />
+
+        <label>Új jelszó * (min. 6 karakter, betű + szám)</label>
+        <input type="password" [(ngModel)]="pwNew" placeholder="••••••" />
+
+        <label>Új jelszó megerősítése *</label>
+        <input type="password" [(ngModel)]="pwConfirm" placeholder="••••••" />
+
+        @if (pwError) {
+          <div class="report-hiba">{{ pwError }}</div>
+        }
+
+        <button
+          class="report-submit"
+          (click)="submitPasswordChange()"
+          [disabled]="pwLoading"
+        >
+          @if (pwLoading) { ⬛ Mentés... } @else { 💾 Jelszó mentése }
+        </button>
+      }
+    </div>
+  </div>
+}
+
+<!-- Report modal -->
+@if (showReport) {
+  <div class="report-overlay" (click)="closeReport()"></div>
+  <div class="report-modal">
+    <div class="report-modal-header">
+      <span>🐛 Bejelentés / Visszajelzés</span>
+      <button class="report-close" (click)="closeReport()">✕</button>
+    </div>
+
+    @if (reportSent) {
+      <div class="report-success">
+        <div class="report-success-ikon">✅</div>
+        <p>Köszönjük a visszajelzést!</p>
+      </div>
+    } @else {
+      <div class="report-modal-body">
+        <label>Kategória</label>
+        <div class="category-grid">
+          @for (cat of reportCategories; track cat.value) {
+            <button
+              class="cat-btn"
+              [class.cat-active]="reportCategory === cat.value"
+              (click)="reportCategory = cat.value"
+            >{{ cat.label }}</button>
+          }
+        </div>
+
+        <label>Cím *</label>
+        <input
+          type="text"
+          [(ngModel)]="reportTitle"
+          placeholder="Pl. Kérdés nem jelenik meg"
+          maxlength="100"
+        />
+
+        <label>Leírás *</label>
+        <textarea
+          [(ngModel)]="reportMessage"
+          placeholder="Írd le részletesen a problémát..."
+          maxlength="2000"
+          rows="5"
+        ></textarea>
+
+        @if (reportError) {
+          <div class="report-hiba">{{ reportError }}</div>
+        }
+
+        <button
+          class="report-submit"
+          (click)="submitReport()"
+          [disabled]="reportLoading || !reportTitle.trim() || !reportMessage.trim()"
+        >
+          @if (reportLoading) { ⬛ Küldés... } @else { 📤 Beküldés }
+        </button>
+      </div>
+    }
+  </div>
+}

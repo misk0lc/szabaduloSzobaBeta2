@@ -20,5 +20,78 @@
       <button type="submit" [disabled]="toltes">{{ toltes ? 'Betöltés...' : 'Bejelentkezés' }}</button>
     </form>
     <p class="link">Nincs még fiókod? <a routerLink="/register">Regisztrálj!</a></p>
+
+    <button class="help-btn" type="button" (click)="openReport()">
+      <span class="help-icon">?</span> Segítség / Bejelentés
+    </button>
   </div>
 </div>
+
+@if (showReport) {
+  <div class="report-overlay" (click)="closeReport()"></div>
+  <div class="report-modal">
+    <div class="report-modal-header">
+      <span>💬 Kapcsolat / Bejelentés</span>
+      <button class="report-close" (click)="closeReport()">✕</button>
+    </div>
+
+    @if (reportSent) {
+      <div class="report-success">
+        <div class="report-success-ikon">✅</div>
+        <p>Köszönjük! Hamarosan felvesszük veled a kapcsolatot.</p>
+      </div>
+    } @else {
+      <div class="report-modal-body">
+
+        <label>Kategória *</label>
+        <div class="category-grid">
+          @for (cat of reportCategories; track cat.value) {
+            <button
+              type="button"
+              class="cat-btn"
+              [class.cat-active]="reportCategory === cat.value"
+              (click)="reportCategory = cat.value"
+            >{{ cat.label }}</button>
+          }
+        </div>
+
+        <label>Tárgy *</label>
+        <input
+          type="text"
+          [(ngModel)]="reportTitle"
+          placeholder="Rövid leírás a problémáról"
+          maxlength="100"
+        />
+
+        <label>Leírás *</label>
+        <textarea
+          [(ngModel)]="reportMessage"
+          placeholder="Részletes leírás..."
+          maxlength="2000"
+          rows="4"
+        ></textarea>
+
+        <label>Email (opcionális — ha szeretnél választ kapni)</label>
+        <input
+          type="email"
+          [(ngModel)]="reportContactEmail"
+          placeholder="valaki@email.com"
+          maxlength="100"
+        />
+
+        @if (reportError) {
+          <div class="report-hiba">{{ reportError }}</div>
+        }
+
+        <button
+          type="button"
+          class="report-submit"
+          (click)="submitReport()"
+          [disabled]="reportLoading || !reportTitle.trim() || !reportMessage.trim()"
+        >
+          @if (reportLoading) { ⏳ Küldés... } @else { 📤 Beküldés }
+        </button>
+      </div>
+    }
+  </div>
+}

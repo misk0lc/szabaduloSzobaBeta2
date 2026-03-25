@@ -330,3 +330,65 @@
   }
 
 </div>
+
+<!-- Lebegő bejelentés gomb -->
+<button class="report-fab" (click)="openReport()" title="Hiba bejelentése">🐛</button>
+
+<!-- Report modal -->
+@if (showReport) {
+  <div class="report-overlay" (click)="closeReport()"></div>
+  <div class="report-modal">
+    <div class="report-modal-header">
+      <span>🐛 Bejelentés / Visszajelzés</span>
+      <button class="report-close" (click)="closeReport()">✕</button>
+    </div>
+
+    @if (reportSent) {
+      <div class="report-success">
+        <div class="report-success-ikon">✅</div>
+        <p>Köszönjük a visszajelzést!</p>
+      </div>
+    } @else {
+      <div class="report-modal-body">
+        <label>Kategória</label>
+        <div class="category-grid">
+          @for (cat of reportCategories; track cat.value) {
+            <button
+              class="cat-btn"
+              [class.cat-active]="reportCategory === cat.value"
+              (click)="reportCategory = cat.value"
+            >{{ cat.label }}</button>
+          }
+        </div>
+
+        <label>Cím *</label>
+        <input
+          type="text"
+          [(ngModel)]="reportTitle"
+          placeholder="Pl. Kérdés nem jelenik meg"
+          maxlength="100"
+        />
+
+        <label>Leírás *</label>
+        <textarea
+          [(ngModel)]="reportMessage"
+          placeholder="Írd le részletesen a problémát..."
+          maxlength="2000"
+          rows="5"
+        ></textarea>
+
+        @if (reportError) {
+          <div class="report-hiba">{{ reportError }}</div>
+        }
+
+        <button
+          class="report-submit"
+          (click)="submitReport()"
+          [disabled]="reportLoading || !reportTitle.trim() || !reportMessage.trim()"
+        >
+          @if (reportLoading) { ⏳ Küldés... } @else { 📤 Beküldés }
+        </button>
+      </div>
+    }
+  </div>
+}

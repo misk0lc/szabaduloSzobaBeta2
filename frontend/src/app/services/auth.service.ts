@@ -64,4 +64,11 @@ export class AuthService {
     return this.http.get<User>(`${this.api}/me`);
   }
 
+  changePassword(currentPassword: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(`${this.api}/me/password`, {
+      current_password: currentPassword,
+      new_password: newPassword,
+    });
+  }
+
 }

@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\Route;
 // ─── Publikus útvonalak ───────────────────────────────────────────────────────
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
+Route::post('/reports/public', [ReportController::class, 'storePublic']);
 
 // ─── Authentikált útvonalak (Sanctum token + aktív fiók) ─────────────────────
 Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
+    Route::put('/me/password', [AuthController::class, 'changePassword']);
 
     // ─── Pálya útvonalak ─────────────────────────────────────────────────────
     Route::get('/levels',      [LevelController::class, 'index']);

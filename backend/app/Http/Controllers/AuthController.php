@@ -90,6 +90,26 @@ class AuthController extends Controller
         return response()->json($this->userResponse($request->user()));
     }
 
+    // PUT /api/me/password
+    public function changePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => 'required|string',
+            'new_password'     => ['required', 'string', Password::min(6)->letters()->numbers()],
+        ]);
+
+        $user = $request->user();
+
+        if (!Hash::check($validated['current_password'], $user->PasswordHash)) {
+            return response()->json(['message' => 'A jelenlegi jelszó helytelen.'], 422);
+        }
+
+        $user->PasswordHash = Hash::make($validated['new_password']);
+        $user->save();
+
+        return response()->json(['message' => 'Jelszó sikeresen megváltoztatva.']);
+    }
+
     // Egységes user válasz formátum
     private function userResponse(User $user): array
     {

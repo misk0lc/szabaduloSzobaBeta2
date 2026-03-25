@@ -5,10 +5,10 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {
   AdminService,
-  AdminUser, AdminLevel, AdminQuestion, AdminQuestionOption, AdminStats
+  AdminUser, AdminLevel, AdminQuestion, AdminQuestionOption, AdminStats, AdminReport
 } from '../../services/admin.service';
 
-type Tab = 'dashboard' | 'users' | 'levels' | 'questions';
+type Tab = 'dashboard' | 'users' | 'levels' | 'questions' | 'reports';
 
 @Component({
   selector: 'app-admin',
@@ -41,6 +41,10 @@ export class AdminComponent implements OnInit {
   editingQuestion: Partial<AdminQuestion> | null = null;
   isNewQuestion = false;
 
+  // Reports
+  reports: AdminReport[] = [];
+  reportsFilter: '' | 'new' | 'seen' | 'resolved' = '';
+
   // Toast
   toast = '';
   toastType: 'ok' | 'err' = 'ok';
@@ -63,6 +67,7 @@ export class AdminComponent implements OnInit {
     if (tab === 'users') this.loadUsers();
     if (tab === 'levels') this.loadLevels();
     if (tab === 'questions') this.loadQuestions();
+    if (tab === 'reports') this.loadReports();
   }
 
   closeAllEditors(): void {
@@ -253,6 +258,34 @@ export class AdminComponent implements OnInit {
     if (!confirm('Biztosan törlöd ezt a kérdést?')) return;
     this.admin.deleteQuestion(q.QuestionID).subscribe({
       next: () => { this.showToast('Kérdés törölve.'); this.loadQuestions(); },
+      error: () => this.showToast('Törlés sikertelen.', 'err')
+    });
+  }
+
+  // ─── Reports ─────────────────────────────────────
+  loadReports(): void {
+    this.admin.getReports(this.reportsFilter || undefined).subscribe({
+      next: r => this.reports = r,
+      error: () => this.showToast('Bejelentések betöltése sikertelen.', 'err')
+    });
+  }
+
+  filterReports(f: '' | 'new' | 'seen' | 'resolved'): void {
+    this.reportsFilter = f;
+    this.loadReports();
+  }
+
+  updateReportStatus(r: AdminReport, status: 'new' | 'seen' | 'resolved'): void {
+    this.admin.updateReport(r.ReportID, status).subscribe({
+      next: () => { this.showToast('Státusz frissítve.'); this.loadReports(); },
+      error: () => this.showToast('Frissítés sikertelen.', 'err')
+    });
+  }
+
+  deleteReport(r: AdminReport): void {
+    if (!confirm('Biztosan törlöd ezt a bejelentést?')) return;
+    this.admin.deleteReport(r.ReportID).subscribe({
+      next: () => { this.showToast('Bejelentés törölve.'); this.loadReports(); },
       error: () => this.showToast('Törlés sikertelen.', 'err')
     });
   }

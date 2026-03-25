@@ -11,6 +11,8 @@ class Report extends Model
     protected $fillable = [
         'UserID',
         'Title',
+        'Category',
+        'ContactEmail',
         'Message',
         'Page',
         'Status',
