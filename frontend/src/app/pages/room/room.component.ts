@@ -9,6 +9,7 @@ import { QuestionService } from '../../services/question.service';
 import { ProgressService } from '../../services/progress.service';
 import { LevelService } from '../../services/level.service';
 import { ReportService } from '../../services/report.service';
+import { MultiplayerService, MultiplayerState } from '../../services/multiplayer.service';
 
 import { Question, CheckAnswerResponse } from '../../models/question.model';
 import { LevelDetail } from '../../models/level.model';
@@ -51,6 +52,22 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   questions: QuestionState[] = [];
   balance = 0;
+
+  // ─── Multiplayer ───────────────────────────────────────────────
+  isMultiplayer = false;
+  multiSessionId = 0;
+  multiState: MultiplayerState | null = null;
+  multiLinkCopied = false;
+  private pollSub?: Subscription;
+  private leaveCalled = false;  // dupla leave hívás megakadályozása
+
+  get multiWaiting(): boolean {
+    return this.isMultiplayer && this.multiState?.Status === 'waiting';
+  }
+
+  get multiPlayers(): { UserID: number; Username: string }[] {
+    return this.multiState?.Players ?? [];
+  }
 
   // ─── Timer ─────────────────────────────────────────────────────
   timeSpent = 0;
@@ -108,9 +125,19 @@ export class RoomComponent implements OnInit, OnDestroy {
   manualDigits: (string | undefined)[] = [];  // kézzel beírt számjegyek
 
   get collectedDigits(): (number | null)[] {
-    return [...this.questions]
-      .sort((a, b) => a.question.PositionX - b.question.PositionX)
-      .map(q => q.digit);
+    const sortedQuestions = [...this.questions]
+      .sort((a, b) => a.question.PositionX - b.question.PositionX);
+
+    if (this.isMultiplayer) {
+      const sessionSolved = this.multiState?.SolvedQuestions ?? [];
+      return sortedQuestions.map(qs => {
+        const sessionItem = sessionSolved.find(s => s.id === qs.question.QuestionID);
+        if (sessionItem) return sessionItem.digit;
+        return qs.digit;
+      });
+    }
+
+    return sortedQuestions.map(q => q.digit);
   }
 
   // Megoldott + kézzel beírt digit összefésülve (kód beküldéshez)
@@ -135,6 +162,9 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   get solvedCount(): number {
+    if (this.isMultiplayer) {
+      return this.collectedDigits.filter(d => d !== null).length;
+    }
     return this.questions.filter(q => q.solved).length;
   }
 
@@ -144,10 +174,21 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   get allSolved(): boolean {
+    if (this.isMultiplayer) {
+      return this.questions.length > 0 &&
+             this.collectedDigits.every(d => d !== null);
+    }
     return this.questions.length > 0 && this.questions.every(q => q.solved);
   }
 
   get canSubmitCode(): boolean {
+    if (this.isMultiplayer) {
+      const code = this.buildMultiCode();
+      // Minden kérdéshez kell digit: a kód hossza egyezzen a kérdések számával
+      // és egyetlen slot sem lehet üres
+      return code.length === this.questions.length &&
+             code.split('').every(ch => ch !== '');
+    }
     return this.mergedDigits.length > 0 && this.mergedDigits.every(d => d !== '');
   }
 
@@ -231,16 +272,32 @@ export class RoomComponent implements OnInit, OnDestroy {
     private levelSvc: LevelService,
     private questionSvc: QuestionService,
     private progressSvc: ProgressService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private multiSvc: MultiplayerService
   ) {}
 
   ngOnInit(): void {
     this.levelId = Number(this.route.snapshot.paramMap.get('id'));
+    const sessionParam = this.route.snapshot.paramMap.get('sessionId');
+    if (sessionParam) {
+      this.isMultiplayer = true;
+      this.multiSessionId = Number(sessionParam);
+    }
     this.loadRoom();
   }
 
   ngOnDestroy(): void {
     this.timerSub?.unsubscribe();
+    this.pollSub?.unsubscribe();
+    // Kilépés a sessionből ha multiplayer és még aktív (waiting vagy playing)
+    // és nem sikeres beküldéssel fejezte be (mert akkor a progress maradjon meg)
+    // leaveCalled flag védi a dupla hívástól (leaveMulti után ngOnDestroy is fut)
+    if (this.isMultiplayer && this.multiSessionId && !this.submitSuccess &&
+        !this.leaveCalled &&
+        (this.multiState?.Status === 'waiting' || this.multiState?.Status === 'playing')) {
+      this.leaveCalled = true;
+      this.multiSvc.leave(this.multiSessionId).subscribe({ error: () => {} });
+    }
   }
 
   private startTimer(): void {
@@ -256,11 +313,14 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   loadRoom(): void {
     this.loading = true;
-    forkJoin({
+
+    const base$ = {
       level: this.levelSvc.getLevel(this.levelId),
       questions: this.questionSvc.getQuestions(this.levelId),
       me: this.auth.getMe()
-    }).subscribe({
+    };
+
+    forkJoin(base$).subscribe({
       next: ({ level, questions, me }) => {
         this.level = level;
         this.balance = me.Balance ?? 0;
@@ -271,7 +331,23 @@ export class RoomComponent implements OnInit, OnDestroy {
           justSolved: false
         }));
         this.loading = false;
-        this.startTimer();
+
+        if (this.isMultiplayer) {
+          // Multiplayer: először lekérjük a session state-et (multiState feltöltése),
+          // majd indítjuk a pollingot
+          this.multiSvc.getState(this.multiSessionId).subscribe({
+            next: (state) => {
+              this.multiState = state;
+              if (state.Status === 'playing' && !this.timerSub) {
+                this.startTimer();
+              }
+              this.startMultiplayerPolling();
+            },
+            error: () => this.startMultiplayerPolling()
+          });
+        } else {
+          this.startTimer();
+        }
       },
       error: (err) => {
         this.error = err.status === 403
@@ -282,9 +358,112 @@ export class RoomComponent implements OnInit, OnDestroy {
     });
   }
 
+  // ─── Multiplayer polling ────────────────────────────────────────
+  private startMultiplayerPolling(): void {
+    // Azonnal lekérjük az állapotot
+    this.fetchMultiState();
+    // Majd 2 másodpercenként
+    this.pollSub = interval(2000).subscribe(() => this.fetchMultiState());
+  }
+
+  private fetchMultiState(): void {
+    this.multiSvc.getState(this.multiSessionId).subscribe({
+      next: (state) => {
+        const wasWaiting = this.multiState?.Status === 'waiting';
+        this.multiState = state;
+
+        // Ha éppen playing lett (valaki csatlakozott) → indítjuk a timert
+        if (wasWaiting && state.Status === 'playing' && !this.timerSub) {
+          this.startTimer();
+        }
+
+        // Ha a partner kilépett → 'abandoned' státusz → azonnal kilépünk, üzenet nélkül
+        if (state.Status === 'abandoned') {
+          this.pollSub?.unsubscribe();
+          this.timerSub?.unsubscribe();
+          if (this.activeQuestion) this.closeQuestion();
+          if (this.showCodeSubmit) this.showCodeSubmit = false;
+          this.router.navigate(['/game']);
+          return;
+        }
+
+        // Szinkronizáljuk a megoldott kérdéseket a partner alapján is
+        if (state.Status === 'playing') {
+          state.SolvedQuestions.forEach(item => {
+            const qs = this.questions.find(q => q.question.QuestionID === item.id);
+            if (qs && !qs.solved) {
+              qs.solved = true;
+              // A digit a session-ből jön (partner is megosztotta)
+              qs.digit = item.digit;
+
+              // Ha éppen ez a kérdés van nyitva, automatikusan bezárjuk
+              if (this.activeQuestion?.question.QuestionID === item.id) {
+                this.closeQuestion();
+              }
+            }
+          });
+        }
+
+        if (state.Status === 'finished') {
+          this.pollSub?.unsubscribe();
+          this.timerSub?.unsubscribe();
+          // Modalt bezárjuk ha nyitva van
+          if (this.activeQuestion) {
+            this.closeQuestion();
+          }
+          if (this.showCodeSubmit) {
+            this.showCodeSubmit = false;
+          }
+          // Ha nem mi küldtük be (submitSuccess === false) → partner oldotta meg
+          if (!this.submitSuccess) {
+            this.submitSuccess = true;
+            this.submitResult = { correct: true, message: '🎉 A partner beküldte a helyes kódot! Pálya teljesítve!' };
+            this.showCodeSubmit = true;
+            setTimeout(() => this.router.navigate(['/game']), 3500);
+          }
+        }
+      },
+      error: (err) => {
+        // 404 = session törölve (a másik játékos kilépett várakozás közben)
+        if (err.status === 404) {
+          this.pollSub?.unsubscribe();
+          this.timerSub?.unsubscribe();
+          this.router.navigate(['/game']);
+        }
+        // egyéb hiba: silent, újra próbál 2mp múlva
+      }
+    });
+  }
+
+  leaveMulti(): void {
+    this.pollSub?.unsubscribe();
+    this.timerSub?.unsubscribe();
+    if (!this.leaveCalled) {
+      this.leaveCalled = true;
+      this.multiSvc.leave(this.multiSessionId).subscribe({ error: () => {} });
+    }
+    this.router.navigate(['/game']);
+  }
+
+  copyMultiLink(): void {
+    const link = `${window.location.origin}/room/${this.levelId}/multi/${this.multiSessionId}`;
+    navigator.clipboard.writeText(link).then(() => {
+      this.multiLinkCopied = true;
+      setTimeout(() => this.multiLinkCopied = false, 2000);
+    });
+  }
+
   // ─── Kérdés modal ──────────────────────────────────────────────
   openQuestion(qs: QuestionState): void {
-    if (qs.solved) return;
+    // Multiplayerben a session-szintű megoldottságot is ellenőrizzük
+    if (this.isMultiplayer) {
+      const sessionSolved = this.multiState?.SolvedQuestions ?? [];
+      const alreadySolved = qs.solved ||
+        sessionSolved.some(s => s.id === qs.question.QuestionID);
+      if (alreadySolved) return;
+    } else {
+      if (qs.solved) return;
+    }
     this.activeQuestion = qs;
     this.answerInput = '';
     this.selectedOption = null;
@@ -343,8 +522,8 @@ export class RoomComponent implements OnInit, OnDestroy {
               setTimeout(() => this.modalBalanceAnim = null, 1200);
             }
           }
-          // Időbüntetés hozzáadása a timerhez + modal animáció
-          if (res.TimePenalty && res.TimePenalty > 0) {
+          // Időbüntetés: multiplayerben NEM adjuk hozzá a timerhez
+          if (!this.isMultiplayer && res.TimePenalty && res.TimePenalty > 0) {
             this.timeSpent += res.TimePenalty;
             this.modalTimeSpent = this.timeSpent;
             this.lastTimePenalty = res.TimePenalty;
@@ -373,7 +552,17 @@ export class RoomComponent implements OnInit, OnDestroy {
             setTimeout(() => this.modalBalanceAnim = null, 1200);
           }
 
-          setTimeout(() => this.closeQuestion(), 700);
+          // Multiplayer: bejelentjük a partnernek is (digit-tel együtt), majd bezárjuk a modalt
+          if (this.isMultiplayer && this.multiSessionId) {
+            const digit = res.RewardDigit ?? 0;
+            this.multiSvc.solve(this.multiSessionId, this.activeQuestion.question.QuestionID, digit).subscribe({
+              next: (state) => { this.multiState = state; },
+              error: () => {}
+            });
+            setTimeout(() => this.closeQuestion(), 700);
+          } else {
+            setTimeout(() => this.closeQuestion(), 700);
+          }
         }
       },
       error: () => {
@@ -414,9 +603,27 @@ export class RoomComponent implements OnInit, OnDestroy {
   // ─── Kód beküldés ──────────────────────────────────────────────
   openCodeSubmit(): void {
     this.showCodeSubmit = true;
-    this.codeInput = this.mergedDigits.join('');
+    if (this.isMultiplayer) {
+      this.codeInput = this.buildMultiCode();
+    } else {
+      this.codeInput = this.mergedDigits.join('');
+    }
     this.submitResult = null;
     this.submitSuccess = false;
+  }
+
+  /** Multiplayer kód összerakása: session SolvedQuestions + lokális digitek kombinációja */
+  private buildMultiCode(): string {
+    const sortedSolved = this.multiState?.SolvedQuestions ?? [];
+    return [...this.questions]
+      .sort((a, b) => a.question.PositionX - b.question.PositionX)
+      .map(qs => {
+        const sessionItem = sortedSolved.find(s => s.id === qs.question.QuestionID);
+        if (sessionItem) return String(sessionItem.digit);
+        if (qs.digit !== null) return String(qs.digit);
+        return '';
+      })
+      .join('');
   }
 
   closeCodeSubmit(): void {
@@ -428,6 +635,28 @@ export class RoomComponent implements OnInit, OnDestroy {
     if (!this.codeInput.trim()) return;
     this.submitLoading = true;
     this.submitResult = null;
+
+    if (this.isMultiplayer) {
+      // Multiplayer: a kódot a session SolvedQuestions + lokális digitek alapján rakjuk össze
+      const multiCode = this.buildMultiCode();
+
+      const given = this.codeInput.trim();
+
+      if (given === multiCode) {
+        this.submitLoading = false;
+        this.submitResult = { correct: true, message: '🎉 Gratulálok! A kód helyes! (Multiplayer – ranglista nélkül)' };
+        this.submitSuccess = true;
+        this.timerSub?.unsubscribe();
+        this.pollSub?.unsubscribe();
+        // finish → backend Status = 'finished', a polling a másik félnél is észleli és navigál
+        this.multiSvc.finish(this.multiSessionId).subscribe();
+        setTimeout(() => this.router.navigate(['/game']), 3500);
+      } else {
+        this.submitLoading = false;
+        this.submitResult = { correct: false, message: 'Hibás kód. Próbáld újra!' };
+      }
+      return;
+    }
 
     this.progressSvc.submitCode(this.levelId, {
       code: this.codeInput.trim(),
@@ -452,7 +681,12 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   // ─── Navigáció ─────────────────────────────────────────────────
   visszaMegyek(): void {
-    this.router.navigate(['/game']);
+    if (this.isMultiplayer && this.multiSessionId &&
+        (this.multiState?.Status === 'waiting' || this.multiState?.Status === 'playing')) {
+      this.leaveMulti();
+    } else {
+      this.router.navigate(['/game']);
+    }
   }
 
   kilepes(): void {

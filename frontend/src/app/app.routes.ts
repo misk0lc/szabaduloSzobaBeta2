@@ -23,6 +23,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/room/room.component').then(m => m.RoomComponent)
   },
   {
+    path: 'room/:id/multi/:sessionId',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/room/room.component').then(m => m.RoomComponent)
+  },
+  {
     path: 'leaderboard',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/leaderboard/leaderboard.component').then(m => m.LeaderboardComponent)

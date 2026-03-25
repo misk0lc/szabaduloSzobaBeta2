@@ -89,6 +89,10 @@ export class AdminService {
     return this.http.delete(`${this.api}/users/${id}`);
   }
 
+  resetUserProgress(id: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.api}/users/${id}/reset-progress`);
+  }
+
   // Levels
   getLevels(): Observable<AdminLevel[]> {
     return this.http.get<AdminLevel[]>(`${this.api}/levels`);

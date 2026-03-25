@@ -134,6 +134,14 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  resetUserProgress(u: AdminUser): void {
+    if (!confirm(`Biztosan törlöd "${u.Username}" haladását? (progress, válaszok, leaderboard, egyenleg nullázódik)`)) return;
+    this.admin.resetUserProgress(u.UserID).subscribe({
+      next: () => { this.showToast(`${u.Username} haladása törölve.`); this.loadUsers(); },
+      error: () => this.showToast('Reset sikertelen.', 'err')
+    });
+  }
+
   // ─── Levels ──────────────────────────────────────
   loadLevels(): void {
     this.admin.getLevels().subscribe({

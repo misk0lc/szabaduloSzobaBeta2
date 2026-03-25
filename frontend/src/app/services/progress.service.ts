@@ -12,4 +12,8 @@ export class ProgressService {
   submitCode(levelId: number, body: SubmitCodeRequest): Observable<SubmitCodeResponse> {
     return this.http.post<SubmitCodeResponse>(`${this.api}/levels/${levelId}/submit-code`, body);
   }
+
+  resetMyProgress(): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.api}/me/reset-progress`);
+  }
 }

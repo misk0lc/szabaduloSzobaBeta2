@@ -389,6 +389,9 @@ td {
 .btn-toggle { background: rgba(96,165,250,.1); }
 .btn-toggle:hover { background: rgba(96,165,250,.2); }
 
+.btn-reset { background: rgba(251,146,60,.1); }
+.btn-reset:hover { background: rgba(251,146,60,.22); }
+
 .btn-del { background: rgba(239,68,68,.08); }
 .btn-del:hover { background: rgba(239,68,68,.18); }
 

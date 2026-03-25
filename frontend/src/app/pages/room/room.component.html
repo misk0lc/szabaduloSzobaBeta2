@@ -1,4 +1,32 @@
-<div class="room-wrapper" [class]="roomTheme.bg">
+﻿<div class="room-wrapper" [class]="roomTheme.bg">
+
+  <!-- ═══ MULTIPLAYER VÁRAKOZÓ KÉPERNYŐ ════════════════════════ -->
+  @if (isMultiplayer && multiWaiting) {
+    <div class="multi-waiting-overlay">
+      <div class="multi-waiting-card">
+        <div class="multi-waiting-icon">👥</div>
+        <h2>Várakozás a másik játékosra...</h2>
+        <p class="multi-waiting-sub">Oszd meg a linket a barátodnak, hogy csatlakozhasson!</p>
+        <button class="multi-copy-btn" (click)="copyMultiLink()">
+          @if (multiLinkCopied) { ✅ Link másolva! } @else { 🔗 Link másolása }
+        </button>
+        <div class="multi-waiting-players">
+          @for (p of multiPlayers; track p.UserID) {
+            <div class="multi-player-chip">
+              <span class="multi-player-dot"></span>
+              {{ p.Username }}
+            </div>
+          }
+          <div class="multi-player-chip pending">
+            <span class="multi-player-dot pending"></span>
+            Várakozás...
+          </div>
+        </div>
+        <div class="multi-waiting-spinner"></div>
+        <button class="multi-leave-btn" (click)="leaveMulti()">✕ Mégsem</button>
+      </div>
+    </div>
+  }
 
   <!-- ═══════════════════════════════════════════════════════════
        HEADER
@@ -13,13 +41,26 @@
         <span class="room-theme-icon">{{ roomTheme.icon }}</span>
         <div class="room-title-text">
           <span class="room-name">{{ level?.Name ?? ('Szoba #' + levelId) }}</span>
-          <span class="room-sub">{{ level?.Description | slice:0:60 }}…</span>
+          @if (isMultiplayer) {
+            <span class="room-sub multi-players-sub">
+              👥
+              @for (p of multiPlayers; track p.UserID; let last = $last) {
+                <span [class.multi-me]="p.UserID === multiState?.MyUserID">
+                  {{ p.Username }}{{ p.UserID === multiState?.MyUserID ? ' (te)' : '' }}
+                </span>
+                @if (!last) { <span class="multi-sep">&amp;</span> }
+              }
+            </span>
+          } @else {
+            <span class="room-sub">{{ level?.Description | slice:0:60 }}…</span>
+          }
         </div>
       </div>
     </div>
 
     <!-- Timer + statisztika -->
     <div class="room-stats">
+      @if (!isMultiplayer) {
       <div class="stat-chip timer-chip" [class.warning]="timerWarning" [class.timer-penalty]="timePenaltyAnim">
         <span class="stat-icon">⏱</span>
         <span class="stat-val mono">{{ timerDisplay }}</span>
@@ -27,12 +68,13 @@
           <span class="penalty-badge">+{{ lastTimePenalty >= 60 ? (lastTimePenalty / 60) + ' perc' : lastTimePenalty + 'mp' }}</span>
         }
       </div>
+      }
       <div class="stat-chip">
         <span class="stat-icon">💰</span>
         <span class="stat-val">{{ balance }}</span>
       </div>
       <div class="stat-chip progress-chip">
-        <span class="stat-icon">�</span>
+        <span class="stat-icon">🔑</span>
         <span class="stat-val">{{ solvedCount }}/{{ questions.length }}</span>
         <div class="mini-progress-bar">
           <div class="mini-progress-fill" [style.width.%]="progressPercent"></div>
@@ -41,8 +83,12 @@
     </div>
 
     <div class="room-header-right">
-      <span class="username-chip">{{ getUsername() }}</span>
-      <button class="btn-logout" (click)="kilepes()">Kilépés</button>
+      @if (isMultiplayer && !multiWaiting) {
+        <button class="multi-leave-btn" (click)="leaveMulti()" title="Kilépés – progress reset">✕ Kilépés</button>
+      } @else {
+        <span class="username-chip">{{ getUsername() }}</span>
+        <button class="btn-logout" (click)="kilepes()">Kilépés</button>
+      }
     </div>
 
   </header>
@@ -175,13 +221,15 @@
                   [class.anim-loss]="modalBalanceAnim === 'loss'">
               💰 {{ modalBalance }}
             </span>
+            @if (!isMultiplayer) {
             <span class="modal-stat-chip modal-timer-chip"
                   [class.anim-time-penalty]="modalTimerAnim === 'penalty'">
               ⏱ {{ modalTimerDisplay }}
               @if (modalTimerAnim === 'penalty') {
                 <span class="modal-penalty-tag">+{{ lastTimePenalty >= 60 ? (lastTimePenalty / 60) + ' perc' : lastTimePenalty + 'mp' }}</span>
-              }
+            }
             </span>
+            }
           </div>
           <button class="btn-modal-close" (click)="closeQuestion()">✕</button>
         </div>

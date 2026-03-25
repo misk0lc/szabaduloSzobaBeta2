@@ -30,6 +30,10 @@
       <div class="hiba-doboz">{{ hiba }}</div>
     }
 
+    @if (multiError) {
+      <div class="hiba-doboz" style="margin-bottom:16px">{{ multiError }}</div>
+    }
+
     @if (!toltes && !hiba) {
       <div class="szobak-racs">
         @for (level of levels; track level.LevelID) {
@@ -39,7 +43,6 @@
             [class.aktiv]="getAllapot(level) === 'active'"
             [class.zarolt]="getAllapot(level) === 'locked'"
             [style.background-image]="getBgStyle(level)"
-            (click)="szobaValaszt(level)"
           >
             <div class="szoba-alap">
               <div class="szoba-szam">#{{ level.OrderNumber }}</div>
@@ -53,17 +56,36 @@
               <h2 class="szoba-nev">{{ level.Name }}</h2>
               <p class="szoba-leiras">{{ level.Description }}</p>
 
-              <div class="szoba-allapot-sav">
-                @if (getAllapot(level) === 'completed') {
+              @if (getAllapot(level) === 'completed') {
+                <div class="szoba-allapot-sav">
                   <span class="badge teljesitett-badge">✔ Teljesítve</span>
-                }
-                @if (getAllapot(level) === 'active') {
-                  <span class="badge aktiv-badge">▶ Belépés</span>
-                }
-                @if (getAllapot(level) === 'locked') {
+                </div>
+              }
+
+              @if (getAllapot(level) === 'active') {
+                <div class="szoba-gombok">
+                  <button class="szoba-btn btn-solo" (click)="szobaValaszt(level)">
+                    🎮 Egyjátékos
+                  </button>
+                  <button
+                    class="szoba-btn btn-multi"
+                    (click)="szobaMulti(level, $event)"
+                    [disabled]="multiJoining === level.LevelID"
+                  >
+                    @if (multiJoining === level.LevelID) {
+                      ⬛ Csatlakozás...
+                    } @else {
+                      👥 Többjátékos
+                    }
+                  </button>
+                </div>
+              }
+
+              @if (getAllapot(level) === 'locked') {
+                <div class="szoba-allapot-sav">
                   <span class="badge zarolt-badge">🔒 Zárolt</span>
-                }
-              </div>
+                </div>
+              }
             </div>
 
             @if (getAllapot(level) === 'locked') {
@@ -71,6 +93,27 @@
             }
           </div>
         }
+      </div>
+    }
+
+    @if (allLevelsCompleted) {
+      <div class="reset-banner">
+        <div class="reset-banner-text">
+          🏆 Minden szobát teljesítettél! Szeretnéd újrakezdeni a játékot?
+        </div>
+        @if (resetSuccess) {
+          <div class="reset-success">✅ {{ resetSuccess }}</div>
+        }
+        @if (resetError) {
+          <div class="reset-error">❌ {{ resetError }}</div>
+        }
+        <button
+          class="reset-btn"
+          (click)="resetProgress()"
+          [disabled]="resetLoading"
+        >
+          @if (resetLoading) { ⬛ Törlés... } @else { 🔄 Haladás törlése és újrakezdés }
+        </button>
       </div>
     }
   </main>

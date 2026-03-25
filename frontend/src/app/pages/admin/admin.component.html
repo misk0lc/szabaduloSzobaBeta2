@@ -132,6 +132,7 @@
                   <td class="cell-actions">
                     <button class="btn-sm btn-edit" (click)="editUser(u)">✏️</button>
                     <button class="btn-sm btn-toggle" (click)="toggleUserActive(u)">{{ u.IsActive ? '🔒' : '🔓' }}</button>
+                    <button class="btn-sm btn-reset" (click)="resetUserProgress(u)" title="Haladás törlése">🔄</button>
                     <button class="btn-sm btn-del" (click)="deleteUser(u)">🗑️</button>
                   </td>
                 </tr>

@@ -262,6 +262,49 @@
   border: 1px solid rgba(100, 116, 139, 0.3);
 }
 
+/* ── Szoba gombok (solo / multi) ── */
+.szoba-gombok {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.szoba-btn {
+  flex: 1 1 0;
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background .18s, transform .12s, opacity .15s;
+  white-space: nowrap;
+}
+
+.btn-solo {
+  background: rgba(193,154,107,.18);
+  border-color: rgba(193,154,107,.5);
+  color: #d4a76a;
+}
+.btn-solo:hover {
+  background: rgba(193,154,107,.32);
+  border-color: #c19a6b;
+  transform: translateY(-2px);
+}
+
+.btn-multi {
+  background: rgba(99,180,255,.12);
+  border-color: rgba(99,180,255,.4);
+  color: #7dd3fc;
+}
+.btn-multi:hover:not(:disabled) {
+  background: rgba(99,180,255,.24);
+  border-color: #7dd3fc;
+  transform: translateY(-2px);
+}
+.btn-multi:disabled { opacity: .55; cursor: not-allowed; }
+
 /* ── Lock takaró réteg ── */
 .lock-takaras {
   position: absolute;
@@ -433,3 +476,50 @@
 .cat-btn.cat-active { background: #c8a96e; color: #1a150f; border-color: #c8a96e; font-weight: 700; }
 
 .report-hiba { color: #e07070; font-size: 13px; margin-bottom: 8px; }
+
+/* ── Reset progress banner ── */
+.reset-banner {
+  margin: 32px auto 0;
+  max-width: 640px;
+  background: linear-gradient(135deg, #1e1a0e 0%, #2a2210 100%);
+  border: 2px solid #c19a6b;
+  border-radius: 14px;
+  padding: 22px 28px;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(193,154,107,.18);
+}
+
+.reset-banner-text {
+  font-size: 16px;
+  color: #e8ddd0;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.reset-btn {
+  padding: 11px 28px;
+  background: #8b1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .18s, transform .12s;
+}
+.reset-btn:hover:not(:disabled) {
+  background: #a82020;
+  transform: translateY(-1px);
+}
+.reset-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+.reset-success {
+  color: #5fc97a;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.reset-error {
+  color: #e07070;
+  font-size: 14px;
+  margin-bottom: 10px;
+}

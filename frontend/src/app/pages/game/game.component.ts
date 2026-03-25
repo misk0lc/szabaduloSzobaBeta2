@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { LevelService } from '../../services/level.service';
 import { ReportService } from '../../services/report.service';
+import { MultiplayerService } from '../../services/multiplayer.service';
+import { ProgressService } from '../../services/progress.service';
 import { Level } from '../../models/level.model';
 
 export const REPORT_CATEGORIES = [
@@ -27,6 +29,10 @@ export class GameComponent implements OnInit {
   toltes = true;
   hiba = '';
 
+  // Multiplayer joining state
+  multiJoining: number | null = null;   // melyik level ID-jére joinolunk éppen
+  multiError = '';
+
   // Report panel
   showReport = false;
   reportCategories = REPORT_CATEGORIES;
@@ -46,10 +52,17 @@ export class GameComponent implements OnInit {
   pwSuccess = '';
   pwError = '';
 
+  // Progress reset
+  resetLoading = false;
+  resetError = '';
+  resetSuccess = '';
+
   constructor(
     private auth: AuthService,
     private levelService: LevelService,
     private reportService: ReportService,
+    private multiSvc: MultiplayerService,
+    private progressSvc: ProgressService,
     private router: Router
   ) {
     this.user = this.auth.getUser();
@@ -71,6 +84,23 @@ export class GameComponent implements OnInit {
   szobaValaszt(level: Level): void {
     if (!level.IsUnlocked) return;
     this.router.navigate(['/room', level.LevelID]);
+  }
+
+  szobaMulti(level: Level, event: Event): void {
+    event.stopPropagation();
+    if (!level.IsUnlocked) return;
+    this.multiJoining = level.LevelID;
+    this.multiError = '';
+    this.multiSvc.join(level.LevelID).subscribe({
+      next: (state) => {
+        this.multiJoining = null;
+        this.router.navigate(['/room', level.LevelID, 'multi', state.id]);
+      },
+      error: () => {
+        this.multiJoining = null;
+        this.multiError = 'Nem sikerült csatlakozni. Próbáld újra.';
+      }
+    });
   }
 
   goLeaderboard(): void {
@@ -168,6 +198,32 @@ export class GameComponent implements OnInit {
     if (level.IsCompleted) return 'completed';
     if (level.IsUnlocked) return 'active';
     return 'locked';
+  }
+
+  get allLevelsCompleted(): boolean {
+    return this.levels.length > 0 && this.levels.every(l => l.IsCompleted);
+  }
+
+  resetProgress(): void {
+    if (!confirm('Biztosan törlöd az összes haladásod? Ez nem vonható vissza!')) return;
+    this.resetLoading = true;
+    this.resetError = '';
+    this.resetSuccess = '';
+    this.progressSvc.resetMyProgress().subscribe({
+      next: (res) => {
+        this.resetLoading = false;
+        this.resetSuccess = res.message;
+        // Újratöltjük a pályákat
+        setTimeout(() => {
+          this.resetSuccess = '';
+          this.levelService.getLevels().subscribe(l => this.levels = l);
+        }, 2500);
+      },
+      error: (err) => {
+        this.resetLoading = false;
+        this.resetError = err.error?.message ?? 'Hiba történt a reset során.';
+      }
+    });
   }
 
   getBgStyle(level: Level): string {
