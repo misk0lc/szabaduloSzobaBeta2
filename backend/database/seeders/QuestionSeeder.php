@@ -531,27 +531,27 @@ class QuestionSeeder extends Seeder
             // ─── 6. SZOBA: A Játékszoba (Könnyed) ─────────────────────────
             6 => [
                 ['text' => 'Hány szín van a szivárványban?',
-                 'answer' => '7', 'digit' => 1, 'money' => 20, 'x' => 1, 'y' => 1,
+                 'answer' => '7', 'digit' => 1, 'money' => 20, 'x' => 1, 'y' => 2,
                  'hint' => 'Piros, narancs, sárga, zöld, kék, indigó, ibolya.', 'cost' => 10,
                  'wrong' => ['5', '6', '8']],
 
                 ['text' => 'Hány láb van egy macskának?',
-                 'answer' => '4', 'digit' => 2, 'money' => 15, 'x' => 2, 'y' => 2,
+                 'answer' => '4', 'digit' => 2, 'money' => 15, 'x' => 2, 'y' => 1,
                  'hint' => 'Négylábú emlős.', 'cost' => 5,
                  'wrong' => ['2', '6', '8']],
 
                 ['text' => 'Mi a fővárosa Magyarországnak?',
-                 'answer' => 'Budapest', 'digit' => 3, 'money' => 20, 'x' => 3, 'y' => 1,
+                 'answer' => 'Budapest', 'digit' => 3, 'money' => 20, 'x' => 3, 'y' => 3,
                  'hint' => 'Buda és Pest egyesüléséből jött létre 1873-ban.', 'cost' => 10,
                  'wrong' => ['Pécs', 'Debrecen', 'Győr']],
 
                 ['text' => 'Hány perc van egy órában?',
-                 'answer' => '60', 'digit' => 4, 'money' => 15, 'x' => 4, 'y' => 3,
+                 'answer' => '60', 'digit' => 4, 'money' => 15, 'x' => 4, 'y' => 2,
                  'hint' => 'Az óramutató egyszer kerüli meg a számlapot.', 'cost' => 5,
                  'wrong' => ['30', '90', '100']],
 
                 ['text' => 'Melyik szín keletkezik a kék és sárga keveréséből?',
-                 'answer' => 'zöld', 'digit' => 5, 'money' => 20, 'x' => 5, 'y' => 2,
+                 'answer' => 'zöld', 'digit' => 5, 'money' => 20, 'x' => 5, 'y' => 4,
                  'hint' => 'A fű és a levél színe.', 'cost' => 10,
                  'wrong' => ['lila', 'narancs', 'barna']],
 
@@ -571,40 +571,90 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['10', '11', '13']],
 
                 ['text' => 'Melyik állat ugrik a legtöbbet?',
-                 'answer' => 'kenguru', 'digit' => 9, 'money' => 20, 'x' => 9, 'y' => 1,
+                 'answer' => 'kenguru', 'digit' => 9, 'money' => 20, 'x' => 9, 'y' => 4,
                  'hint' => 'Ausztrál erszényes állat.', 'cost' => 10,
                  'wrong' => ['béka', 'ló', 'nyúl']],
 
                 ['text' => 'Hány oldala van egy háromszögnek?',
-                 'answer' => '3', 'digit' => 0, 'money' => 15, 'x' => 10, 'y' => 3,
+                 'answer' => '3', 'digit' => 0, 'money' => 15, 'x' => 10, 'y' => 1,
                  'hint' => 'A neve is megmondja!', 'cost' => 5,
                  'wrong' => ['4', '5', '6']],
+
+                ['text' => 'Mi az 5+5?',
+                 'answer' => '10', 'digit' => 3, 'money' => 15, 'x' => 11, 'y' => 3,
+                 'hint' => 'Öt meg öt.', 'cost' => 5,
+                 'wrong' => ['8', '9', '11']],
+
+                ['text' => 'Hány nap van egy hétben?',
+                 'answer' => '7', 'digit' => 1, 'money' => 15, 'x' => 12, 'y' => 2,
+                 'hint' => 'Hétfőtől vasárnapig.', 'cost' => 5,
+                 'wrong' => ['5', '6', '8']],
+
+                ['text' => 'Mi a Nap körül keringő bolygók száma?',
+                 'answer' => '8', 'digit' => 4, 'money' => 20, 'x' => 13, 'y' => 4,
+                 'hint' => 'Plútót 2006-ban kivették a listából.', 'cost' => 10,
+                 'wrong' => ['7', '9', '10']],
+
+                ['text' => 'Mi a szivacs anyaga?',
+                 'answer' => 'cellulóz', 'digit' => 7, 'money' => 20, 'x' => 14, 'y' => 1,
+                 'hint' => 'Növényi sejtek alkotóeleme is.', 'cost' => 10,
+                 'wrong' => ['gumi', 'műanyag', 'fa']],
+
+                ['text' => 'Hány ujj van két kézen összesen?',
+                 'answer' => '10', 'digit' => 2, 'money' => 15, 'x' => 15, 'y' => 3,
+                 'hint' => 'Öt meg öt.', 'cost' => 5,
+                 'wrong' => ['8', '12', '14']],
+
+                ['text' => 'Melyik bolygón lakunk?',
+                 'answer' => 'Föld', 'digit' => 5, 'money' => 15, 'x' => 16, 'y' => 2,
+                 'hint' => 'A harmadik bolygó a Naptól.', 'cost' => 5,
+                 'wrong' => ['Mars', 'Vénusz', 'Hold']],
+
+                ['text' => 'Hány év = 1 évtized?',
+                 'answer' => '10', 'digit' => 8, 'money' => 15, 'x' => 17, 'y' => 4,
+                 'hint' => 'Deci- előtag: tíz.', 'cost' => 5,
+                 'wrong' => ['5', '100', '1000']],
+
+                ['text' => 'Mi a neve az esőből keletkező tócsának?',
+                 'answer' => 'pocsolya', 'digit' => 6, 'money' => 15, 'x' => 18, 'y' => 1,
+                 'hint' => 'Esős időben a járdán keletkezik.', 'cost' => 5,
+                 'wrong' => ['tó', 'patak', 'mocsár']],
+
+                ['text' => 'Hány oldalú egy kocka?',
+                 'answer' => '6', 'digit' => 9, 'money' => 20, 'x' => 19, 'y' => 3,
+                 'hint' => 'Felső, alsó és négy oldallap.', 'cost' => 10,
+                 'wrong' => ['4', '5', '8']],
+
+                ['text' => 'Mi a neve a legkisebb természetes számnak?',
+                 'answer' => '1', 'digit' => 0, 'money' => 15, 'x' => 20, 'y' => 2,
+                 'hint' => 'A számolás ezzel kezdődik.', 'cost' => 5,
+                 'wrong' => ['0', '2', '3']],
             ],
 
             // ─── 7. SZOBA: A Kávézó (Könnyed) ─────────────────────────────
             7 => [
                 ['text' => 'Melyik gyümölcsből készül a narancsszörp?',
-                 'answer' => 'narancs', 'digit' => 2, 'money' => 20, 'x' => 1, 'y' => 1,
+                 'answer' => 'narancs', 'digit' => 2, 'money' => 20, 'x' => 1, 'y' => 2,
                  'hint' => 'A neve is megmondja!', 'cost' => 5,
                  'wrong' => ['citrom', 'alma', 'szőlő']],
 
                 ['text' => 'Hány csésze fér egy literbe kb.?',
-                 'answer' => '4', 'digit' => 5, 'money' => 20, 'x' => 2, 'y' => 2,
+                 'answer' => '4', 'digit' => 5, 'money' => 20, 'x' => 2, 'y' => 1,
                  'hint' => 'Egy átlagos csésze kb. 250 ml.', 'cost' => 10,
                  'wrong' => ['2', '6', '10']],
 
                 ['text' => 'Mi a tejes kávé olasz neve?',
-                 'answer' => 'latte', 'digit' => 1, 'money' => 25, 'x' => 3, 'y' => 1,
+                 'answer' => 'latte', 'digit' => 1, 'money' => 25, 'x' => 3, 'y' => 3,
                  'hint' => 'Olasz szó, tejjel készül.', 'cost' => 10,
                  'wrong' => ['cappuccino', 'espresso', 'macchiato']],
 
                 ['text' => 'Hány gramm cukor van egy kockacukorban kb.?',
-                 'answer' => '4', 'digit' => 7, 'money' => 20, 'x' => 4, 'y' => 3,
+                 'answer' => '4', 'digit' => 7, 'money' => 20, 'x' => 4, 'y' => 2,
                  'hint' => 'Kis kocka, nem sok cukor.', 'cost' => 10,
                  'wrong' => ['1', '10', '20']],
 
                 ['text' => 'Melyik italban nincs koffein?',
-                 'answer' => 'víz', 'digit' => 3, 'money' => 20, 'x' => 5, 'y' => 2,
+                 'answer' => 'víz', 'digit' => 3, 'money' => 20, 'x' => 5, 'y' => 4,
                  'hint' => 'A legtermészetesebb ital.', 'cost' => 5,
                  'wrong' => ['kávé', 'tea', 'cola']],
 
@@ -624,40 +674,90 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['karamell', 'csokoládé', 'fahéj']],
 
                 ['text' => 'Hány kalória van egy átlagos süteményben kb.?',
-                 'answer' => '300', 'digit' => 8, 'money' => 20, 'x' => 9, 'y' => 1,
+                 'answer' => '300', 'digit' => 8, 'money' => 20, 'x' => 9, 'y' => 4,
                  'hint' => 'Kb. 200-400 kalória között szokott lenni.', 'cost' => 10,
                  'wrong' => ['50', '100', '1000']],
 
                 ['text' => 'Hány dl = 1 liter?',
-                 'answer' => '10', 'digit' => 0, 'money' => 15, 'x' => 10, 'y' => 3,
+                 'answer' => '10', 'digit' => 0, 'money' => 15, 'x' => 10, 'y' => 1,
                  'hint' => 'Deciliter = 1/10 liter.', 'cost' => 5,
                  'wrong' => ['5', '100', '1000']],
+
+                ['text' => 'Mi a kávé eredeti hazája?',
+                 'answer' => 'Etiópia', 'digit' => 3, 'money' => 25, 'x' => 11, 'y' => 3,
+                 'hint' => 'Kelet-afrikai ország, Kaffa tartományából ered.', 'cost' => 10,
+                 'wrong' => ['Brazília', 'Colombia', 'Jemen']],
+
+                ['text' => 'Hány gramm kávét tesznek egy átlagos espressóba?',
+                 'answer' => '7', 'digit' => 1, 'money' => 20, 'x' => 12, 'y' => 2,
+                 'hint' => 'Egy adag kb. 7-9 gramm.', 'cost' => 10,
+                 'wrong' => ['3', '15', '20']],
+
+                ['text' => 'Mi a neve a kávé főzésére használt olasz edénynek?',
+                 'answer' => 'moka', 'digit' => 4, 'money' => 25, 'x' => 13, 'y' => 4,
+                 'hint' => 'Kávéfőző edény, a tűzhelyen melegítik.', 'cost' => 10,
+                 'wrong' => ['french press', 'dripper', 'aeropress']],
+
+                ['text' => 'Hány milliliter egy standard espresso?',
+                 'answer' => '30', 'digit' => 7, 'money' => 20, 'x' => 14, 'y' => 1,
+                 'hint' => 'Kis, tömény adag, kb. 25-35 ml.', 'cost' => 10,
+                 'wrong' => ['10', '60', '100']],
+
+                ['text' => 'Melyik kávéban van a legtöbb tej?',
+                 'answer' => 'flat white', 'digit' => 2, 'money' => 25, 'x' => 15, 'y' => 3,
+                 'hint' => 'Ausztrál-új-zélandi kávé, sok tejjel.', 'cost' => 10,
+                 'wrong' => ['ristretto', 'americano', 'lungo']],
+
+                ['text' => 'Hány óra telik el, míg a koffein fele lebomlik?',
+                 'answer' => '5', 'digit' => 5, 'money' => 25, 'x' => 16, 'y' => 2,
+                 'hint' => 'Fél-életideje kb. 5-6 óra.', 'cost' => 10,
+                 'wrong' => ['1', '10', '24']],
+
+                ['text' => 'Mi a kávé sütésekor keletkező folyamat neve?',
+                 'answer' => 'pörkölés', 'digit' => 8, 'money' => 20, 'x' => 17, 'y' => 4,
+                 'hint' => 'Magas hőn sötétednek és aromássá válnak a babszemek.', 'cost' => 10,
+                 'wrong' => ['fermentálás', 'szárítás', 'erjesztés']],
+
+                ['text' => 'Hány csésze kávét iszik átlagosan egy magyar naponta?',
+                 'answer' => '2', 'digit' => 6, 'money' => 15, 'x' => 18, 'y' => 1,
+                 'hint' => 'Statisztikailag 1-3 csésze között van az átlag.', 'cost' => 5,
+                 'wrong' => ['5', '10', '1']],
+
+                ['text' => 'Melyik összetevő adja a kávé keserűségét?',
+                 'answer' => 'koffein', 'digit' => 9, 'money' => 20, 'x' => 19, 'y' => 3,
+                 'hint' => 'Az ébresztő hatású anyag.', 'cost' => 10,
+                 'wrong' => ['tannin', 'klórogénsav', 'cukor']],
+
+                ['text' => 'Hány fokon pörkölik a sötét kávét kb.?',
+                 'answer' => '230', 'digit' => 0, 'money' => 25, 'x' => 20, 'y' => 2,
+                 'hint' => 'Kb. 220-240 Celsius fok között pörkölik.', 'cost' => 10,
+                 'wrong' => ['100', '150', '300']],
             ],
 
             // ─── 8. SZOBA: Az Osztályterem (Könnyed) ───────────────────────
             8 => [
                 ['text' => 'Hány az 5×5?',
-                 'answer' => '25', 'digit' => 3, 'money' => 15, 'x' => 1, 'y' => 1,
+                 'answer' => '25', 'digit' => 3, 'money' => 15, 'x' => 1, 'y' => 2,
                  'hint' => 'Öt ötös.', 'cost' => 5,
                  'wrong' => ['20', '30', '15']],
 
                 ['text' => 'Mi Magyarország nemzeti jelképe?',
-                 'answer' => 'korona', 'digit' => 6, 'money' => 20, 'x' => 2, 'y' => 2,
+                 'answer' => 'korona', 'digit' => 6, 'money' => 20, 'x' => 2, 'y' => 1,
                  'hint' => 'Szent István kapott ilyet a pápától.', 'cost' => 10,
                  'wrong' => ['zászló', 'sas', 'kard']],
 
                 ['text' => 'Hány folyó van Magyarország közepén (fő folyó)?',
-                 'answer' => '1', 'digit' => 9, 'money' => 20, 'x' => 3, 'y' => 1,
+                 'answer' => '1', 'digit' => 9, 'money' => 20, 'x' => 3, 'y' => 3,
                  'hint' => 'A Duna Budapest közepén folyik át.', 'cost' => 10,
                  'wrong' => ['2', '3', '5']],
 
                 ['text' => 'Mennyi 10+10?',
-                 'answer' => '20', 'digit' => 1, 'money' => 15, 'x' => 4, 'y' => 3,
+                 'answer' => '20', 'digit' => 1, 'money' => 15, 'x' => 4, 'y' => 2,
                  'hint' => 'Tíz meg tíz.', 'cost' => 5,
                  'wrong' => ['10', '15', '30']],
 
                 ['text' => 'Melyik évszakban van a leghosszabb nap?',
-                 'answer' => 'nyár', 'digit' => 4, 'money' => 20, 'x' => 5, 'y' => 2,
+                 'answer' => 'nyár', 'digit' => 4, 'money' => 20, 'x' => 5, 'y' => 4,
                  'hint' => 'Június 21. a nyári napforduló.', 'cost' => 10,
                  'wrong' => ['tél', 'tavasz', 'ősz']],
 
@@ -677,40 +777,90 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['57', '73', '67']],
 
                 ['text' => 'Ki festette a Mona Lisát?',
-                 'answer' => 'Leonardo da Vinci', 'digit' => 8, 'money' => 25, 'x' => 9, 'y' => 1,
+                 'answer' => 'Leonardo da Vinci', 'digit' => 8, 'money' => 25, 'x' => 9, 'y' => 4,
                  'hint' => 'Olasz reneszánsz mester.', 'cost' => 10,
                  'wrong' => ['Michelangelo', 'Raphael', 'Botticelli']],
 
                 ['text' => 'Hány kontinens van a Földön?',
-                 'answer' => '7', 'digit' => 0, 'money' => 20, 'x' => 10, 'y' => 3,
+                 'answer' => '7', 'digit' => 0, 'money' => 20, 'x' => 10, 'y' => 1,
                  'hint' => 'Afrika, Amerika (2), Ázsia, Ausztrália, Európa, Antarktisz.', 'cost' => 10,
                  'wrong' => ['5', '6', '8']],
+
+                ['text' => 'Hány betű van az angol ábécében?',
+                 'answer' => '26', 'digit' => 3, 'money' => 15, 'x' => 11, 'y' => 3,
+                 'hint' => 'A-tól Z-ig.', 'cost' => 5,
+                 'wrong' => ['24', '28', '30']],
+
+                ['text' => 'Melyik bolygó van legközelebb a Naphoz?',
+                 'answer' => 'Merkúr', 'digit' => 1, 'money' => 20, 'x' => 12, 'y' => 2,
+                 'hint' => 'Az első a sorban a Naptól.', 'cost' => 10,
+                 'wrong' => ['Vénusz', 'Mars', 'Föld']],
+
+                ['text' => 'Mi az I betű értéke a római számokban?',
+                 'answer' => '1', 'digit' => 4, 'money' => 15, 'x' => 13, 'y' => 4,
+                 'hint' => 'A legkisebb római szám.', 'cost' => 5,
+                 'wrong' => ['5', '10', '50']],
+
+                ['text' => 'Hány évszak van?',
+                 'answer' => '4', 'digit' => 7, 'money' => 15, 'x' => 14, 'y' => 1,
+                 'hint' => 'Tél, tavasz, nyár, ősz.', 'cost' => 5,
+                 'wrong' => ['2', '3', '6']],
+
+                ['text' => 'Mi a Hold felszínének neve?',
+                 'answer' => 'regolith', 'digit' => 2, 'money' => 25, 'x' => 15, 'y' => 3,
+                 'hint' => 'Poros, törmelékes kőzetanyag.', 'cost' => 10,
+                 'wrong' => ['bazalt', 'homok', 'agyag']],
+
+                ['text' => 'Hány napból áll egy szökőév?',
+                 'answer' => '366', 'digit' => 5, 'money' => 20, 'x' => 16, 'y' => 2,
+                 'hint' => 'Februárban egy nappal több van.', 'cost' => 10,
+                 'wrong' => ['365', '364', '367']],
+
+                ['text' => 'Melyik ország zászlaja piros-fehér-zöld?',
+                 'answer' => 'Magyarország', 'digit' => 8, 'money' => 15, 'x' => 17, 'y' => 4,
+                 'hint' => 'Közép-európai ország.', 'cost' => 5,
+                 'wrong' => ['Olaszország', 'Bulgária', 'Lengyelország']],
+
+                ['text' => 'Hány méter van 1 kilométerben?',
+                 'answer' => '1000', 'digit' => 6, 'money' => 15, 'x' => 18, 'y' => 1,
+                 'hint' => 'Kilo = ezer.', 'cost' => 5,
+                 'wrong' => ['100', '10', '10000']],
+
+                ['text' => 'Mi a szél mérésének neve?',
+                 'answer' => 'anemométer', 'digit' => 9, 'money' => 25, 'x' => 19, 'y' => 3,
+                 'hint' => 'Görög anemos = szél.', 'cost' => 10,
+                 'wrong' => ['barométer', 'hőmérő', 'higrométer']],
+
+                ['text' => 'Hány napból áll átlagban egy hónap?',
+                 'answer' => '30', 'digit' => 0, 'money' => 15, 'x' => 20, 'y' => 2,
+                 'hint' => 'Kb. 30-31 nap, kivéve február.', 'cost' => 5,
+                 'wrong' => ['28', '25', '35']],
             ],
 
             // ─── 9. SZOBA: A Kert (Könnyed) ────────────────────────────────
             9 => [
                 ['text' => 'Melyik virág jelképe a szerelemnek?',
-                 'answer' => 'rózsa', 'digit' => 4, 'money' => 20, 'x' => 1, 'y' => 1,
+                 'answer' => 'rózsa', 'digit' => 4, 'money' => 20, 'x' => 1, 'y' => 2,
                  'hint' => 'Piros, tüskés szárú virág.', 'cost' => 10,
                  'wrong' => ['tulipán', 'napraforgó', 'liliom']],
 
                 ['text' => 'Hány szirom van egy tulipánon általában?',
-                 'answer' => '6', 'digit' => 7, 'money' => 20, 'x' => 2, 'y' => 2,
+                 'answer' => '6', 'digit' => 7, 'money' => 20, 'x' => 2, 'y' => 1,
                  'hint' => 'Kívül 3, belül 3 – összesen 6.', 'cost' => 10,
                  'wrong' => ['3', '4', '5']],
 
                 ['text' => 'Mi a neve a fa tápanyagot szállító szöveteinek?',
-                 'answer' => 'háncs', 'digit' => 2, 'money' => 25, 'x' => 3, 'y' => 1,
+                 'answer' => 'háncs', 'digit' => 2, 'money' => 25, 'x' => 3, 'y' => 3,
                  'hint' => 'A kéreg alatt van, lefelé szállítja a cukrot.', 'cost' => 10,
                  'wrong' => ['gyökér', 'xilém', 'parenchima']],
 
                 ['text' => 'Hány éves egy fa, ha 50 évgyűrűje van?',
-                 'answer' => '50', 'digit' => 5, 'money' => 15, 'x' => 4, 'y' => 3,
+                 'answer' => '50', 'digit' => 5, 'money' => 15, 'x' => 4, 'y' => 2,
                  'hint' => 'Minden év egy évgyűrű.', 'cost' => 5,
                  'wrong' => ['25', '100', '200']],
 
                 ['text' => 'Melyik rovaron keres nektárt?',
-                 'answer' => 'méh', 'digit' => 1, 'money' => 20, 'x' => 5, 'y' => 2,
+                 'answer' => 'méh', 'digit' => 1, 'money' => 20, 'x' => 5, 'y' => 4,
                  'hint' => 'Mézet is csinál belőle.', 'cost' => 10,
                  'wrong' => ['lepke', 'hangya', 'bogár']],
 
@@ -730,40 +880,90 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['tölgy', 'fenyő', 'bükk']],
 
                 ['text' => 'Mi a neve a virág szárát végén lévő porzónak?',
-                 'answer' => 'portok', 'digit' => 8, 'money' => 25, 'x' => 9, 'y' => 1,
+                 'answer' => 'portok', 'digit' => 8, 'money' => 25, 'x' => 9, 'y' => 4,
                  'hint' => 'A pollen itt keletkezik.', 'cost' => 10,
                  'wrong' => ['bibeszál', 'vacok', 'csésze']],
 
                 ['text' => 'Hány cm-t nő egy bambusz naponta kb.?',
-                 'answer' => '90', 'digit' => 0, 'money' => 30, 'x' => 10, 'y' => 3,
+                 'answer' => '90', 'digit' => 0, 'money' => 30, 'x' => 10, 'y' => 1,
                  'hint' => 'A leggyorsabban növő növény, majdnem 1 méter naponta.', 'cost' => 15,
                  'wrong' => ['1', '10', '30']],
+
+                ['text' => 'Mi a neve a kerti komposztáló folyamatának?',
+                 'answer' => 'komposztálás', 'digit' => 3, 'money' => 20, 'x' => 11, 'y' => 3,
+                 'hint' => 'Szerves anyagok lebomlása tápanyaggá.', 'cost' => 10,
+                 'wrong' => ['trágyázás', 'öntözés', 'mulcsozás']],
+
+                ['text' => 'Hány éve él átlagosan egy tölgyfa?',
+                 'answer' => '500', 'digit' => 1, 'money' => 25, 'x' => 12, 'y' => 2,
+                 'hint' => 'Több száz évig is elél, akár fél évezredet.', 'cost' => 10,
+                 'wrong' => ['50', '100', '1000']],
+
+                ['text' => 'Mi a neve a virág bibéjét és magházát összekötő résznek?',
+                 'answer' => 'bibeszál', 'digit' => 4, 'money' => 25, 'x' => 13, 'y' => 4,
+                 'hint' => 'A pollen ezen jutott le a magházba.', 'cost' => 10,
+                 'wrong' => ['portok', 'csésze', 'lepel']],
+
+                ['text' => 'Hány méter magasra nő a napraforgó?',
+                 'answer' => '3', 'digit' => 7, 'money' => 20, 'x' => 14, 'y' => 1,
+                 'hint' => 'Kb. 1,5-3 méter a tipikus magasság.', 'cost' => 10,
+                 'wrong' => ['1', '5', '10']],
+
+                ['text' => 'Melyik évszakban virágzanak az almafák?',
+                 'answer' => 'tavasz', 'digit' => 2, 'money' => 20, 'x' => 15, 'y' => 3,
+                 'hint' => 'Amikor a hideg elmúlt és a nap ereje visszatér.', 'cost' => 10,
+                 'wrong' => ['nyár', 'ősz', 'tél']],
+
+                ['text' => 'Mi a neve a növényeket megfertőző gombabetegségnek?',
+                 'answer' => 'lisztharmat', 'digit' => 5, 'money' => 25, 'x' => 16, 'y' => 2,
+                 'hint' => 'Fehér lisztes bevonat jelenik meg a leveleken.', 'cost' => 10,
+                 'wrong' => ['rozsda', 'penész', 'atkásodás']],
+
+                ['text' => 'Hány hónapig tart a kert téli pihenője?',
+                 'answer' => '3', 'digit' => 8, 'money' => 20, 'x' => 17, 'y' => 4,
+                 'hint' => 'December, január, február – a tél hónapjai.', 'cost' => 10,
+                 'wrong' => ['1', '2', '6']],
+
+                ['text' => 'Mi a neve a kerti öntözőrendszernek?',
+                 'answer' => 'sprinkler', 'digit' => 6, 'money' => 20, 'x' => 18, 'y' => 1,
+                 'hint' => 'Forgó fejjel szórja a vizet.', 'cost' => 10,
+                 'wrong' => ['csepegtető', 'permetező', 'locsoló']],
+
+                ['text' => 'Hány szirmú a legtöbb pipacs?',
+                 'answer' => '4', 'digit' => 9, 'money' => 20, 'x' => 19, 'y' => 3,
+                 'hint' => 'Egyszerű, négy nagy piros szirom.', 'cost' => 10,
+                 'wrong' => ['3', '5', '6']],
+
+                ['text' => 'Mi a neve a kerti földigiliszta tudományos nevének?',
+                 'answer' => 'Lumbricus terrestris', 'digit' => 0, 'money' => 30, 'x' => 20, 'y' => 2,
+                 'hint' => 'Latin neve, a "földi" szó is benne van.', 'cost' => 15,
+                 'wrong' => ['Annelida vulgaris', 'Vermis horta', 'Oligochaeta minor']],
             ],
 
             // ─── 10. SZOBA: A Cukrászda (Könnyed) ─────────────────────────
             10 => [
                 ['text' => 'Mi a tortaalaphoz szükséges fő alapanyag?',
-                 'answer' => 'liszt', 'digit' => 6, 'money' => 20, 'x' => 1, 'y' => 1,
+                 'answer' => 'liszt', 'digit' => 6, 'money' => 20, 'x' => 1, 'y' => 2,
                  'hint' => 'Búzából őrölt fehér por.', 'cost' => 10,
                  'wrong' => ['cukor', 'tojás', 'vaj']],
 
                 ['text' => 'Hány tojás kell általában egy süteményhez (alap)?',
-                 'answer' => '3', 'digit' => 2, 'money' => 20, 'x' => 2, 'y' => 2,
+                 'answer' => '3', 'digit' => 2, 'money' => 20, 'x' => 2, 'y' => 1,
                  'hint' => 'A legtöbb alaprecept ennyit ír.', 'cost' => 10,
                  'wrong' => ['1', '6', '10']],
 
                 ['text' => 'Melyik ország hozta létre a macaron süteményt?',
-                 'answer' => 'Franciaország', 'digit' => 9, 'money' => 25, 'x' => 3, 'y' => 1,
+                 'answer' => 'Franciaország', 'digit' => 9, 'money' => 25, 'x' => 3, 'y' => 3,
                  'hint' => 'Párizsi elegáns cukrászdák specialitása.', 'cost' => 10,
                  'wrong' => ['Olaszország', 'Belgium', 'Ausztria']],
 
                 ['text' => 'Hány Celsius fokon olvad a csoki kb.?',
-                 'answer' => '34', 'digit' => 5, 'money' => 25, 'x' => 4, 'y' => 3,
+                 'answer' => '34', 'digit' => 5, 'money' => 25, 'x' => 4, 'y' => 2,
                  'hint' => 'Majdnem a testünk hőmérsékletén, ezért olvad a szánkban.', 'cost' => 10,
                  'wrong' => ['50', '20', '100']],
 
                 ['text' => 'Mi a neve a habverő angol megfelelőjének?',
-                 'answer' => 'whisk', 'digit' => 1, 'money' => 20, 'x' => 5, 'y' => 2,
+                 'answer' => 'whisk', 'digit' => 1, 'money' => 20, 'x' => 5, 'y' => 4,
                  'hint' => 'Angolul így kérd a cukrásznál.', 'cost' => 10,
                  'wrong' => ['mixer', 'beater', 'blender']],
 
@@ -783,40 +983,90 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['liszt', 'tojás', 'vaj']],
 
                 ['text' => 'Hány gramm az egy evőkanálnyi méz kb.?',
-                 'answer' => '21', 'digit' => 8, 'money' => 25, 'x' => 9, 'y' => 1,
+                 'answer' => '21', 'digit' => 8, 'money' => 25, 'x' => 9, 'y' => 4,
                  'hint' => 'Kb. 20-22 gramm, a méz sűrű.', 'cost' => 10,
                  'wrong' => ['10', '50', '100']],
 
                 ['text' => 'Mi a neve a sajttortában használt alapnak?',
-                 'answer' => 'keksz', 'digit' => 0, 'money' => 20, 'x' => 10, 'y' => 3,
+                 'answer' => 'keksz', 'digit' => 0, 'money' => 20, 'x' => 10, 'y' => 1,
                  'hint' => 'Összezúzva, vajjal keverve teszik a formába.', 'cost' => 10,
                  'wrong' => ['piskóta', 'tészta', 'muffin']],
+
+                ['text' => 'Mi a neve a tejszínhab franciás csúcsos díszítésének?',
+                 'answer' => 'rozetta', 'digit' => 3, 'money' => 25, 'x' => 11, 'y' => 3,
+                 'hint' => 'Virágszerű habdísz a cukrászkészítményeken.', 'cost' => 10,
+                 'wrong' => ['spirál', 'csík', 'glaze']],
+
+                ['text' => 'Hány gramm vajat használnak általában egy alap piskótához?',
+                 'answer' => '100', 'digit' => 1, 'money' => 20, 'x' => 12, 'y' => 2,
+                 'hint' => 'Kb. 10 dkg, ami 100 gramm.', 'cost' => 10,
+                 'wrong' => ['50', '200', '300']],
+
+                ['text' => 'Melyik sütemény neve jelent "villámlást" franciául?',
+                 'answer' => 'éclair', 'digit' => 4, 'money' => 30, 'x' => 13, 'y' => 4,
+                 'hint' => 'Francia krémes sütemény, mázzal bevonva.', 'cost' => 15,
+                 'wrong' => ['mille-feuille', 'croissant', 'profiterol']],
+
+                ['text' => 'Hány fokra kell melegíteni a sütőt sütemény sütéskor általában?',
+                 'answer' => '180', 'digit' => 7, 'money' => 20, 'x' => 14, 'y' => 1,
+                 'hint' => 'Közepes hőmérséklet, a legtöbb recept ezt írja.', 'cost' => 10,
+                 'wrong' => ['100', '250', '300']],
+
+                ['text' => 'Mi a neve az osztrák csokoládés süteménynek?',
+                 'answer' => 'Sachertorta', 'digit' => 2, 'money' => 25, 'x' => 15, 'y' => 3,
+                 'hint' => 'Franz Sacher alkotta 1832-ben Bécsben.', 'cost' => 10,
+                 'wrong' => ['Dobostorta', 'Linzer', 'Strudel']],
+
+                ['text' => 'Hány rétegből áll a klasszikus Dobostore?',
+                 'answer' => '6', 'digit' => 5, 'money' => 25, 'x' => 16, 'y' => 2,
+                 'hint' => 'Hat piskótalap, köztük csokoládékrém.', 'cost' => 10,
+                 'wrong' => ['3', '4', '8']],
+
+                ['text' => 'Mi a neve a karamellizált cukorsüvegnek?',
+                 'answer' => 'karamell', 'digit' => 8, 'money' => 20, 'x' => 17, 'y' => 4,
+                 'hint' => 'Barnára olvasztott cukorból készül.', 'cost' => 10,
+                 'wrong' => ['fondant', 'glazúr', 'marcipán']],
+
+                ['text' => 'Hány gramm egy közepes méretű tojás?',
+                 'answer' => '55', 'digit' => 6, 'money' => 20, 'x' => 18, 'y' => 1,
+                 'hint' => 'Kb. 50-60 gramm, M-es méret.', 'cost' => 10,
+                 'wrong' => ['30', '80', '100']],
+
+                ['text' => 'Mi a neve a cukrászban használt vajkrémes tölteléknek?',
+                 'answer' => 'buttercream', 'digit' => 9, 'money' => 20, 'x' => 19, 'y' => 3,
+                 'hint' => 'Vaj és porcukor keveréke, angolul is ezt hívják.', 'cost' => 10,
+                 'wrong' => ['ganache', 'praline', 'custard']],
+
+                ['text' => 'Hány percig sül általában egy muffin?',
+                 'answer' => '20', 'digit' => 0, 'money' => 20, 'x' => 20, 'y' => 2,
+                 'hint' => 'Kb. 18-22 perc 180 fokon.', 'cost' => 10,
+                 'wrong' => ['5', '45', '60']],
             ],
 
             // ─── 11. SZOBA: A Detektív Irodája (Közepes) ──────────────────
             11 => [
                 ['text' => 'Ki írta a Sherlock Holmes históriákat?',
-                 'answer' => 'Arthur Conan Doyle', 'digit' => 3, 'money' => 40, 'x' => 1, 'y' => 1,
+                 'answer' => 'Arthur Conan Doyle', 'digit' => 3, 'money' => 40, 'x' => 1, 'y' => 2,
                  'hint' => 'Skót orvos-szerző, a 19. században élt.', 'cost' => 20,
                  'wrong' => ['Agatha Christie', 'Edgar Allan Poe', 'Raymond Chandler']],
 
                 ['text' => 'Mi a neve a bűnjelnek angolul?',
-                 'answer' => 'evidence', 'digit' => 7, 'money' => 35, 'x' => 2, 'y' => 2,
+                 'answer' => 'evidence', 'digit' => 7, 'money' => 35, 'x' => 2, 'y' => 1,
                  'hint' => 'Amit a nyomozó gyűjt.', 'cost' => 20,
                  'wrong' => ['clue', 'proof', 'suspect']],
 
                 ['text' => 'Hány érzékszerve van az embernek?',
-                 'answer' => '5', 'digit' => 1, 'money' => 30, 'x' => 3, 'y' => 1,
+                 'answer' => '5', 'digit' => 1, 'money' => 30, 'x' => 3, 'y' => 3,
                  'hint' => 'Látás, hallás, szaglás, ízlés, tapintás.', 'cost' => 15,
                  'wrong' => ['4', '6', '7']],
 
                 ['text' => 'Mi a neve a lábnyom vizsgálatának?',
-                 'answer' => 'nyomrögzítés', 'digit' => 5, 'money' => 45, 'x' => 4, 'y' => 3,
+                 'answer' => 'nyomrögzítés', 'digit' => 5, 'money' => 45, 'x' => 4, 'y' => 2,
                  'hint' => 'Gipsszel is lehet rögzíteni.', 'cost' => 25,
                  'wrong' => ['daktiloszkópia', 'balisztika', 'profilalkotás']],
 
                 ['text' => 'Melyik tudományág foglalkozik az ujjlenyomatokkal?',
-                 'answer' => 'daktiloszkópia', 'digit' => 9, 'money' => 50, 'x' => 5, 'y' => 2,
+                 'answer' => 'daktiloszkópia', 'digit' => 9, 'money' => 50, 'x' => 5, 'y' => 4,
                  'hint' => 'A görög "daktylos" (ujj) szóból ered.', 'cost' => 30,
                  'wrong' => ['kriminológia', 'toxikológia', 'patológia']],
 
@@ -836,40 +1086,90 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['tanú', 'gyanúsított', 'besúgó']],
 
                 ['text' => 'Melyik évben alapítottak meg az FBI-t?',
-                 'answer' => '1908', 'digit' => 8, 'money' => 55, 'x' => 9, 'y' => 1,
+                 'answer' => '1908', 'digit' => 8, 'money' => 55, 'x' => 9, 'y' => 4,
                  'hint' => 'A 20. század elején, Theodore Roosevelt elnöksége alatt.', 'cost' => 30,
                  'wrong' => ['1865', '1935', '1945']],
 
                 ['text' => 'Mi az alias szó jelentése?',
-                 'answer' => 'álnév', 'digit' => 0, 'money' => 35, 'x' => 10, 'y' => 3,
+                 'answer' => 'álnév', 'digit' => 0, 'money' => 35, 'x' => 10, 'y' => 1,
                  'hint' => 'Bűnözők gyakran használnak ilyet.', 'cost' => 20,
-                 'wrong' => ['fedőszto', 'tettes', 'helyszín']],
+                 'wrong' => ['fedősztori', 'tettes', 'helyszín']],
+
+                ['text' => 'Melyik módszerrel vizsgálják a hazugságot?',
+                 'answer' => 'poligráf', 'digit' => 3, 'money' => 45, 'x' => 11, 'y' => 3,
+                 'hint' => 'Köznyelven "hazugságvizsgáló".', 'cost' => 25,
+                 'wrong' => ['MRI', 'EEG', 'spektroszkóp']],
+
+                ['text' => 'Hány fő alkot egy esküdtszéket az USA-ban?',
+                 'answer' => '12', 'digit' => 1, 'money' => 40, 'x' => 12, 'y' => 2,
+                 'hint' => 'Tizenkét polgár dönt a bűnösségről.', 'cost' => 20,
+                 'wrong' => ['6', '9', '15']],
+
+                ['text' => 'Mi a neve a bűntett helyszínének angolul?',
+                 'answer' => 'crime scene', 'digit' => 4, 'money' => 35, 'x' => 13, 'y' => 4,
+                 'hint' => 'A CSI sorozat nevében is benne van.', 'cost' => 20,
+                 'wrong' => ['murder spot', 'offense area', 'incident zone']],
+
+                ['text' => 'Melyik vegyület használnak ujjlenyomat előhívásához?',
+                 'answer' => 'ninhidrin', 'digit' => 7, 'money' => 50, 'x' => 14, 'y' => 1,
+                 'hint' => 'Aminosavakra reagálva lila színt ad.', 'cost' => 30,
+                 'wrong' => ['jód', 'luminol', 'ezüst-nitrát']],
+
+                ['text' => 'Hány évet kaphat valaki emberölésért Magyarországon (max)?',
+                 'answer' => '25', 'digit' => 2, 'money' => 45, 'x' => 15, 'y' => 3,
+                 'hint' => 'Alapeset 25 évig terjedő szabadságvesztés.', 'cost' => 25,
+                 'wrong' => ['10', '15', '20']],
+
+                ['text' => 'Mi a neve a digitális nyomok vizsgálatának?',
+                 'answer' => 'digitális forensika', 'digit' => 5, 'money' => 50, 'x' => 16, 'y' => 2,
+                 'hint' => 'Számítógépes eszközök vizsgálata bűncselekményeknél.', 'cost' => 30,
+                 'wrong' => ['kiberkriminalisztika', 'hálózatelemzés', 'adatbányászat']],
+
+                ['text' => 'Mi az Interpol székhelye?',
+                 'answer' => 'Lyon', 'digit' => 8, 'money' => 45, 'x' => 17, 'y' => 4,
+                 'hint' => 'Franciaország második legnagyobb városa.', 'cost' => 25,
+                 'wrong' => ['Párizs', 'Brüsszel', 'Hága']],
+
+                ['text' => 'Hány cikkelye van a Miranda-figyelmeztetésnek (USA)?',
+                 'answer' => '4', 'digit' => 6, 'money' => 40, 'x' => 18, 'y' => 1,
+                 'hint' => 'Hallgatáshoz való jog, ügyvédhez való jog stb.', 'cost' => 20,
+                 'wrong' => ['2', '6', '8']],
+
+                ['text' => 'Mi a neve a vérvizsgálat helyszíni gyorstesztjének?',
+                 'answer' => 'luminol', 'digit' => 9, 'money' => 45, 'x' => 19, 'y' => 3,
+                 'hint' => 'UV fényben kékesen világít a vér jelenlétében.', 'cost' => 25,
+                 'wrong' => ['ninhidrin', 'DNS-teszt', 'hemoglobin-spray']],
+
+                ['text' => 'Hány éve volt aktív Jack the Ripper kb.?',
+                 'answer' => '1', 'digit' => 0, 'money' => 50, 'x' => 20, 'y' => 2,
+                 'hint' => '1888-ban, mindössze néhány hónap alatt követte el a bűncselekményeket.', 'cost' => 25,
+                 'wrong' => ['5', '10', '20']],
             ],
 
             // ─── 12. SZOBA: A Múzeum (Közepes) ────────────────────────────
             12 => [
                 ['text' => 'Melyik civilizáció építette a piramisokat?',
-                 'answer' => 'egyiptomiak', 'digit' => 5, 'money' => 40, 'x' => 1, 'y' => 1,
+                 'answer' => 'egyiptomiak', 'digit' => 5, 'money' => 40, 'x' => 1, 'y' => 2,
                  'hint' => 'Fáraók sírjai, az ókori Keleten.', 'cost' => 20,
                  'wrong' => ['görögök', 'rómaiak', 'maják']],
 
                 ['text' => 'Hány éve épült a Nagy Fal (hozzávetőleg)?',
-                 'answer' => '2000', 'digit' => 2, 'money' => 45, 'x' => 2, 'y' => 2,
-                 'hint' => 'Kr.e. 7. száztól fokozatosan építették.', 'cost' => 25,
+                 'answer' => '2000', 'digit' => 2, 'money' => 45, 'x' => 2, 'y' => 1,
+                 'hint' => 'Kr.e. 7. százától fokozatosan építették.', 'cost' => 25,
                  'wrong' => ['500', '1000', '5000']],
 
                 ['text' => 'Mi a neve a régi görög amfiteátrumnak?',
-                 'answer' => 'théátron', 'digit' => 8, 'money' => 40, 'x' => 3, 'y' => 1,
+                 'answer' => 'théátron', 'digit' => 8, 'money' => 40, 'x' => 3, 'y' => 3,
                  'hint' => 'Ebből ered a "théáter" szavunk.', 'cost' => 20,
                  'wrong' => ['stadion', 'agora', 'akropolisz']],
 
                 ['text' => 'Hány csodája van az ókori világnak?',
-                 'answer' => '7', 'digit' => 6, 'money' => 35, 'x' => 4, 'y' => 3,
+                 'answer' => '7', 'digit' => 6, 'money' => 35, 'x' => 4, 'y' => 2,
                  'hint' => 'Hét csoda volt, ebből ma csak egy áll: a piramisok.', 'cost' => 20,
                  'wrong' => ['5', '10', '12']],
 
                 ['text' => 'Ki volt Kleopátra férje?',
-                 'answer' => 'Antonius', 'digit' => 4, 'money' => 45, 'x' => 5, 'y' => 2,
+                 'answer' => 'Antonius', 'digit' => 4, 'money' => 45, 'x' => 5, 'y' => 4,
                  'hint' => 'Marcus Antonius, a római hadvezér.', 'cost' => 25,
                  'wrong' => ['Caesar', 'Octavianus', 'Pompeius']],
 
@@ -889,40 +1189,90 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['athéni sisak', 'spártai sisak', 'makedón sisak']],
 
                 ['text' => 'Melyik évben omlott le Római Birodalom nyugati fele?',
-                 'answer' => '476', 'digit' => 9, 'money' => 55, 'x' => 9, 'y' => 1,
+                 'answer' => '476', 'digit' => 9, 'money' => 55, 'x' => 9, 'y' => 4,
                  'hint' => 'Az 5. század végén, Romulus Augustulus alatt.', 'cost' => 30,
                  'wrong' => ['410', '500', '380']],
 
                 ['text' => 'Mi a neve a mérési tartálynak az ókori Rómában (folyadékra)?',
-                 'answer' => 'amphora', 'digit' => 0, 'money' => 40, 'x' => 10, 'y' => 3,
+                 'answer' => 'amphora', 'digit' => 0, 'money' => 40, 'x' => 10, 'y' => 1,
                  'hint' => 'Két füles agyagedény, bor tárolásra is használták.', 'cost' => 20,
                  'wrong' => ['urna', 'hidria', 'krater']],
+
+                ['text' => 'Melyik város volt az ókori görög világ kulturális központja?',
+                 'answer' => 'Athén', 'digit' => 3, 'money' => 40, 'x' => 11, 'y' => 3,
+                 'hint' => 'Akropolisz, Parthenon, demokrácia szülőhelye.', 'cost' => 20,
+                 'wrong' => ['Spárta', 'Korinthosz', 'Théba']],
+
+                ['text' => 'Hány évig tartott az első olimpia megrendezése előtt az előkészület?',
+                 'answer' => '776', 'digit' => 1, 'money' => 45, 'x' => 12, 'y' => 2,
+                 'hint' => 'Az első olimpiát Kr.e. 776-ban tartották Olümpiában.', 'cost' => 25,
+                 'wrong' => ['500', '1000', '200']],
+
+                ['text' => 'Mi a neve az egyiptomi halottas könyvnek?',
+                 'answer' => 'Halottak Könyve', 'digit' => 4, 'money' => 45, 'x' => 13, 'y' => 4,
+                 'hint' => 'A túlvilági utazást segítette varázslatos szövegekkel.', 'cost' => 25,
+                 'wrong' => ['Papirusz Tekercse', 'Fáraók Bibliája', 'Osiris-könyv']],
+
+                ['text' => 'Hány méter magas a Cheops-piramis?',
+                 'answer' => '137', 'digit' => 7, 'money' => 50, 'x' => 14, 'y' => 1,
+                 'hint' => 'Eredetileg 147 m volt, de lepusztult a csúcsa.', 'cost' => 30,
+                 'wrong' => ['50', '200', '300']],
+
+                ['text' => 'Melyik civilizáció alkotott maja piramisokat?',
+                 'answer' => 'maják', 'digit' => 2, 'money' => 40, 'x' => 15, 'y' => 3,
+                 'hint' => 'Közép-amerikai őscivilizáció.', 'cost' => 20,
+                 'wrong' => ['aztékok', 'inkák', 'olmékek']],
+
+                ['text' => 'Mi a neve az ókori görög szobrász remekének?',
+                 'answer' => 'Miló Vénusza', 'digit' => 5, 'money' => 45, 'x' => 16, 'y' => 2,
+                 'hint' => 'Kar nélküli márványszobor, a Louvre-ban van.', 'cost' => 25,
+                 'wrong' => ['Laokoón', 'Nike', 'Diszkoszvetők']],
+
+                ['text' => 'Hány évig tartott az ókori Egyiptom civilizációja kb. (évezred)?',
+                 'answer' => '3', 'digit' => 8, 'money' => 50, 'x' => 17, 'y' => 4,
+                 'hint' => 'Kr.e. 3000-től Kr.e. 30-ig, kb. 3000 év.', 'cost' => 25,
+                 'wrong' => ['1', '2', '5']],
+
+                ['text' => 'Mi a neve az ókori görög városállami szervezetnek?',
+                 'answer' => 'polisz', 'digit' => 6, 'money' => 40, 'x' => 18, 'y' => 1,
+                 'hint' => 'Ebből ered a "politika" és "polgár" szavunk.', 'cost' => 20,
+                 'wrong' => ['agora', 'démosz', 'akropolisz']],
+
+                ['text' => 'Hány évnyi múltat fed le a British Museum gyűjteménye?',
+                 'answer' => '2000000', 'digit' => 9, 'money' => 55, 'x' => 19, 'y' => 3,
+                 'hint' => 'Két millió éves tárgyaktól a jelenig.', 'cost' => 30,
+                 'wrong' => ['1000', '10000', '100000']],
+
+                ['text' => 'Melyik városban található az Ermitázs múzeum?',
+                 'answer' => 'Szentpétervár', 'digit' => 0, 'money' => 45, 'x' => 20, 'y' => 2,
+                 'hint' => 'Orosz város, a Néva partján.', 'cost' => 25,
+                 'wrong' => ['Moszkva', 'Kijev', 'Minszk']],
             ],
 
             // ─── 13. SZOBA: A Téli Kunyhó (Közepes) ───────────────────────
             13 => [
                 ['text' => 'Hány fokos a víz fagyáspontja Celsius-ban?',
-                 'answer' => '0', 'digit' => 7, 'money' => 30, 'x' => 1, 'y' => 1,
+                 'answer' => '0', 'digit' => 7, 'money' => 30, 'x' => 1, 'y' => 2,
                  'hint' => 'A jég olvadási pontja is ugyanennyi.', 'cost' => 15,
                  'wrong' => ['-10', '4', '-4']],
 
                 ['text' => 'Mi a neve a hópihe szimmetriájának?',
-                 'answer' => 'hatszoros szimmetria', 'digit' => 3, 'money' => 45, 'x' => 2, 'y' => 2,
+                 'answer' => 'hatszoros szimmetria', 'digit' => 3, 'money' => 45, 'x' => 2, 'y' => 1,
                  'hint' => 'Hat ág, hatszoros tengely.', 'cost' => 25,
                  'wrong' => ['négyszeres szimmetria', 'háromszoros szimmetria', 'nyolcszoros szimmetria']],
 
                 ['text' => 'Hány Celsius fokban fagy meg a tengervíz kb.?',
-                 'answer' => '-2', 'digit' => 5, 'money' => 40, 'x' => 3, 'y' => 1,
+                 'answer' => '-2', 'digit' => 5, 'money' => 40, 'x' => 3, 'y' => 3,
                  'hint' => 'A só csökkenti a fagyáspontot.', 'cost' => 20,
                  'wrong' => ['0', '-5', '-10']],
 
                 ['text' => 'Mi a lavinák leggyakoribb kiváltó oka?',
-                 'answer' => 'friss hó', 'digit' => 1, 'money' => 45, 'x' => 4, 'y' => 3,
+                 'answer' => 'friss hó', 'digit' => 1, 'money' => 45, 'x' => 4, 'y' => 2,
                  'hint' => 'Az instabil friss réteg csúszik meg.', 'cost' => 25,
                  'wrong' => ['eső', 'szél', 'földrengés']],
 
                 ['text' => 'Hány méter per másodpercnél számít viharnak a szél?',
-                 'answer' => '25', 'digit' => 9, 'money' => 50, 'x' => 5, 'y' => 2,
+                 'answer' => '25', 'digit' => 9, 'money' => 50, 'x' => 5, 'y' => 4,
                  'hint' => 'Kb. 90 km/h feletti szélerőnél.', 'cost' => 25,
                  'wrong' => ['10', '15', '50']],
 
@@ -942,40 +1292,90 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['homeotherm', 'endotherm', 'mezotherm']],
 
                 ['text' => 'Hány fokos volt a rekord hideg a Földön (Celsius)?',
-                 'answer' => '-89.2', 'digit' => 8, 'money' => 60, 'x' => 9, 'y' => 1,
+                 'answer' => '-89.2', 'digit' => 8, 'money' => 60, 'x' => 9, 'y' => 4,
                  'hint' => '1983-ban mérték Antarktiszon, Vostok állomáson.', 'cost' => 35,
                  'wrong' => ['-50', '-70', '-100']],
 
                 ['text' => 'Mi a hólabda angolul?',
-                 'answer' => 'snowball', 'digit' => 0, 'money' => 25, 'x' => 10, 'y' => 3,
+                 'answer' => 'snowball', 'digit' => 0, 'money' => 25, 'x' => 10, 'y' => 1,
                  'hint' => 'Snow = hó, ball = labda.', 'cost' => 10,
                  'wrong' => ['iceball', 'frostball', 'coldball']],
+
+                ['text' => 'Hány cm lehet egy átlagos hóember magassága?',
+                 'answer' => '150', 'digit' => 3, 'money' => 30, 'x' => 11, 'y' => 3,
+                 'hint' => 'Kb. átlagos embernél alacsonyabb, 120-180 cm között.', 'cost' => 15,
+                 'wrong' => ['50', '300', '500']],
+
+                ['text' => 'Mi a neve a jégből épített eszkimó háznak?',
+                 'answer' => 'iglu', 'digit' => 1, 'money' => 30, 'x' => 12, 'y' => 2,
+                 'hint' => 'Iglunak hívják, hóból és jégből rakják össze.', 'cost' => 15,
+                 'wrong' => ['jurtya', 'tipi', 'kunyhó']],
+
+                ['text' => 'Hány fok körül tartják az iglu belsejét?',
+                 'answer' => '16', 'digit' => 4, 'money' => 40, 'x' => 13, 'y' => 4,
+                 'hint' => 'Kint -40 fok is lehet, bent 16 fok körüli a hőmérséklet.', 'cost' => 20,
+                 'wrong' => ['0', '-10', '30']],
+
+                ['text' => 'Mi a neve a hó tömörödéséből keletkező jégnek?',
+                 'answer' => 'gleccser', 'digit' => 7, 'money' => 45, 'x' => 14, 'y' => 1,
+                 'hint' => 'Lassan mozgó jégtömeg a hegyekben.', 'cost' => 25,
+                 'wrong' => ['jéghegy', 'jégmező', 'permafroszt']],
+
+                ['text' => 'Melyik ország fővárosa a leghidegebb a világon?',
+                 'answer' => 'Ulánbátor', 'digit' => 2, 'money' => 50, 'x' => 15, 'y' => 3,
+                 'hint' => 'Mongólia fővárosa, télen -40 fok alá is süllyed.', 'cost' => 25,
+                 'wrong' => ['Reykjavík', 'Oslo', 'Helsinki']],
+
+                ['text' => 'Hány %-a édesvíz a Földön lévő víznek?',
+                 'answer' => '3', 'digit' => 5, 'money' => 40, 'x' => 16, 'y' => 2,
+                 'hint' => 'A többi sós tengervíz.', 'cost' => 20,
+                 'wrong' => ['10', '50', '30']],
+
+                ['text' => 'Mi a neve az olvadó permafroszt jelenségének?',
+                 'answer' => 'termokarsztosodás', 'digit' => 8, 'money' => 55, 'x' => 17, 'y' => 4,
+                 'hint' => 'Az olvadó örök fagy bemélyedéseket okoz a tájban.', 'cost' => 30,
+                 'wrong' => ['szubszidencia', 'krioplanáció', 'soliflukció']],
+
+                ['text' => 'Hány fokos szögben esik le a jégkristály tengelye?',
+                 'answer' => '60', 'digit' => 6, 'money' => 45, 'x' => 18, 'y' => 1,
+                 'hint' => 'Hatszögű szerkezet, 60 fokos szimmetria.', 'cost' => 25,
+                 'wrong' => ['90', '45', '120']],
+
+                ['text' => 'Mi a neve a téli sportok olimpiai versenyközpontjának?',
+                 'answer' => 'sípálya', 'digit' => 9, 'money' => 30, 'x' => 19, 'y' => 3,
+                 'hint' => 'Havas lejtőn csúsznak le a versenyzők.', 'cost' => 15,
+                 'wrong' => ['korcsolyapálya', 'bobpálya', 'curlingpálya']],
+
+                ['text' => 'Hány hónapig tart a sarkköri éjszaka (poláris éj)?',
+                 'answer' => '6', 'digit' => 0, 'money' => 45, 'x' => 20, 'y' => 2,
+                 'hint' => 'A sarkokon fél évig nem kel fel a Nap.', 'cost' => 25,
+                 'wrong' => ['1', '3', '12']],
             ],
 
             // ─── 14. SZOBA: A Hajógyár (Közepes) ──────────────────────────
             14 => [
                 ['text' => 'Mi a neve a hajótest legalsó szerkezeti elemének?',
-                 'answer' => 'gerinc', 'digit' => 4, 'money' => 40, 'x' => 1, 'y' => 1,
+                 'answer' => 'gerinc', 'digit' => 4, 'money' => 40, 'x' => 1, 'y' => 2,
                  'hint' => 'Az emberi testnek is van ilyen!', 'cost' => 20,
                  'wrong' => ['borda', 'fenék', 'talpgerenda']],
 
                 ['text' => 'Hány tonna az átlagos modern óceánjáró (ezer tonna)?',
-                 'answer' => '100', 'digit' => 8, 'money' => 45, 'x' => 2, 'y' => 2,
+                 'answer' => '100', 'digit' => 8, 'money' => 45, 'x' => 2, 'y' => 1,
                  'hint' => 'A nagy luxushajók kb. 100-230 ezer tonnásak.', 'cost' => 25,
                  'wrong' => ['10', '50', '500']],
 
                 ['text' => 'Melyik anyagból készül a modern hajótest?',
-                 'answer' => 'acél', 'digit' => 2, 'money' => 35, 'x' => 3, 'y' => 1,
+                 'answer' => 'acél', 'digit' => 2, 'money' => 35, 'x' => 3, 'y' => 3,
                  'hint' => 'Erős és korrózióálló fém.', 'cost' => 20,
                  'wrong' => ['alumínium', 'titán', 'fa']],
 
                 ['text' => 'Mi a neve a hajó felső, vízszintes padlójának?',
-                 'answer' => 'fedélzet', 'digit' => 6, 'money' => 35, 'x' => 4, 'y' => 3,
+                 'answer' => 'fedélzet', 'digit' => 6, 'money' => 35, 'x' => 4, 'y' => 2,
                  'hint' => 'Ezen sétálnak az utasok.', 'cost' => 20,
                  'wrong' => ['orrfedél', 'talppadló', 'burkolat']],
 
                 ['text' => 'Hány km/h a legsebbesebb hajó rekordja kb.?',
-                 'answer' => '120', 'digit' => 5, 'money' => 50, 'x' => 5, 'y' => 2,
+                 'answer' => '120', 'digit' => 5, 'money' => 50, 'x' => 5, 'y' => 4,
                  'hint' => 'A Spirit of Australia víziröppentyű tartja.', 'cost' => 30,
                  'wrong' => ['50', '80', '200']],
 
@@ -995,40 +1395,90 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['keel', 'stem', 'skeg']],
 
                 ['text' => 'Hány méter magas az Empire State Building?',
-                 'answer' => '443', 'digit' => 9, 'money' => 45, 'x' => 9, 'y' => 1,
+                 'answer' => '443', 'digit' => 9, 'money' => 45, 'x' => 9, 'y' => 4,
                  'hint' => 'Az antennával együtt 443 méter.', 'cost' => 25,
                  'wrong' => ['300', '500', '600']],
 
                 ['text' => 'Mi a neve a hullámtörő gátnak a kikötőnél?',
-                 'answer' => 'móló', 'digit' => 0, 'money' => 35, 'x' => 10, 'y' => 3,
+                 'answer' => 'móló', 'digit' => 0, 'money' => 35, 'x' => 10, 'y' => 1,
                  'hint' => 'A hajók mellé kötnek ki.', 'cost' => 20,
                  'wrong' => ['gát', 'töltés', 'rakpart']],
+
+                ['text' => 'Mi a neve a hajóépítő mesternek?',
+                 'answer' => 'hajóács', 'digit' => 3, 'money' => 40, 'x' => 11, 'y' => 3,
+                 'hint' => 'Fából és acélból épít hajókat.', 'cost' => 20,
+                 'wrong' => ['hajókapitány', 'tengerész', 'mérnök']],
+
+                ['text' => 'Hány méter az átlagos teherhajó hossza?',
+                 'answer' => '200', 'digit' => 1, 'money' => 45, 'x' => 12, 'y' => 2,
+                 'hint' => 'Kb. 150-300 méter között mozog.', 'cost' => 25,
+                 'wrong' => ['50', '500', '1000']],
+
+                ['text' => 'Mi a neve a hajó motorját meghajtó üzemanyagnak?',
+                 'answer' => 'bunkerolaj', 'digit' => 4, 'money' => 45, 'x' => 13, 'y' => 4,
+                 'hint' => 'Nehéz fűtőolaj, amit a hajók használnak.', 'cost' => 25,
+                 'wrong' => ['benzin', 'gázolaj', 'kerozin']],
+
+                ['text' => 'Hány tengelyű egy tipikus kereskedelmi hajó?',
+                 'answer' => '1', 'digit' => 7, 'money' => 35, 'x' => 14, 'y' => 1,
+                 'hint' => 'A legtöbb cargo hajónak egy csavartengely van.', 'cost' => 20,
+                 'wrong' => ['2', '3', '4']],
+
+                ['text' => 'Melyik anyagból készülnek a modern hajócsavarok?',
+                 'answer' => 'bronz', 'digit' => 2, 'money' => 40, 'x' => 15, 'y' => 3,
+                 'hint' => 'Réz-ón ötvözet, korrózióálló.', 'cost' => 20,
+                 'wrong' => ['acél', 'alumínium', 'titán']],
+
+                ['text' => 'Mi a neve a hajó vízalatti részeinek bevonatolásának?',
+                 'answer' => 'antifouling', 'digit' => 5, 'money' => 50, 'x' => 16, 'y' => 2,
+                 'hint' => 'Megakadályozza a kagylók és algák tapadását.', 'cost' => 30,
+                 'wrong' => ['primer', 'epoxibevonat', 'galvanizálás']],
+
+                ['text' => 'Hány méter mélységig tud merülni egy tengeralattjáró átlag?',
+                 'answer' => '300', 'digit' => 8, 'money' => 50, 'x' => 17, 'y' => 4,
+                 'hint' => 'Hadihajók általában 200-400 méterig merülnek.', 'cost' => 25,
+                 'wrong' => ['50', '1000', '5000']],
+
+                ['text' => 'Mi a neve a hajókat összekötő kötélnek?',
+                 'answer' => 'kötél', 'digit' => 6, 'money' => 30, 'x' => 18, 'y' => 1,
+                 'hint' => 'Általánosnak tűnik, de a hajóknál "kötél"-nek hívják.', 'cost' => 15,
+                 'wrong' => ['drót', 'lánc', 'sodrony']],
+
+                ['text' => 'Hány méter a világ leghosszabb hajójának (MSC Irina) hossza?',
+                 'answer' => '400', 'digit' => 9, 'money' => 55, 'x' => 19, 'y' => 3,
+                 'hint' => 'Kb. 400 méter, négy focipálya hossza.', 'cost' => 30,
+                 'wrong' => ['200', '300', '500']],
+
+                ['text' => 'Mi a neve a hajó egyensúlyát biztosító oldalszárnyaknak?',
+                 'answer' => 'stabilizátor', 'digit' => 0, 'money' => 45, 'x' => 20, 'y' => 2,
+                 'hint' => 'Csökkenti a hullámzás által okozott billegést.', 'cost' => 25,
+                 'wrong' => ['uszony', 'bordázat', 'vitorla']],
             ],
 
             // ─── 15. SZOBA: A Varázslatos Könyvtár (Közepes) ──────────────
             15 => [
                 ['text' => 'Mi a neve a varázslók szervezetének Harry Potterben?',
-                 'answer' => 'Mágiaügyi Minisztérium', 'digit' => 6, 'money' => 40, 'x' => 1, 'y' => 1,
+                 'answer' => 'Mágiaügyi Minisztérium', 'digit' => 6, 'money' => 40, 'x' => 1, 'y' => 2,
                  'hint' => 'A Ministry of Magic magyar neve.', 'cost' => 20,
                  'wrong' => ['Roxfort', 'Azkaban', 'Kviddics-szövetség']],
 
                 ['text' => 'Hány varázspálca fér az Ollivander üzletébe?',
-                 'answer' => 'több ezer', 'digit' => 2, 'money' => 35, 'x' => 2, 'y' => 2,
+                 'answer' => 'több ezer', 'digit' => 2, 'money' => 35, 'x' => 2, 'y' => 1,
                  'hint' => 'Tele van polcokkal a plafonig.', 'cost' => 20,
                  'wrong' => ['100', '500', '1000']],
 
                 ['text' => 'Mi a neve az ógörög varázslástudománynak?',
-                 'answer' => 'mágia', 'digit' => 8, 'money' => 35, 'x' => 3, 'y' => 1,
+                 'answer' => 'mágia', 'digit' => 8, 'money' => 35, 'x' => 3, 'y' => 3,
                  'hint' => 'A perzsa "magus" szóból ered.', 'cost' => 20,
                  'wrong' => ['alkímia', 'asztrológia', 'jóslás']],
 
                 ['text' => 'Hány sárkányfajta szerepel a "Tűz és jég dala" sorozatban?',
-                 'answer' => '3', 'digit' => 4, 'money' => 40, 'x' => 4, 'y' => 3,
+                 'answer' => '3', 'digit' => 4, 'money' => 40, 'x' => 4, 'y' => 2,
                  'hint' => 'Daenerys három sárkánya: Drogon, Rhaegal, Viserion.', 'cost' => 20,
                  'wrong' => ['1', '5', '7']],
 
                 ['text' => 'Mi a neve a boszorkányok gyülekezőhelyének?',
-                 'answer' => 'szombat', 'digit' => 7, 'money' => 45, 'x' => 5, 'y' => 2,
+                 'answer' => 'szombat', 'digit' => 7, 'money' => 45, 'x' => 5, 'y' => 4,
                  'hint' => 'A "Walpurgis-éj" is egy ilyen esemény neve.', 'cost' => 25,
                  'wrong' => ['kovén', 'rituálé', 'sabbat']],
 
@@ -1048,14 +1498,64 @@ class QuestionSeeder extends Seeder
                  'wrong' => ['9', '12', '13']],
 
                 ['text' => 'Mi a neve Gandalf fehér lovának?',
-                 'answer' => 'Shadowfax', 'digit' => 9, 'money' => 50, 'x' => 9, 'y' => 1,
+                 'answer' => 'Shadowfax', 'digit' => 9, 'money' => 50, 'x' => 9, 'y' => 4,
                  'hint' => 'A lovak ura, Tolkien Gyűrűk Urából.', 'cost' => 25,
                  'wrong' => ['Roheryn', 'Arod', 'Asfaloth']],
 
                 ['text' => 'Hány könyvből áll a Gyűrűk Ura?',
-                 'answer' => '3', 'digit' => 0, 'money' => 35, 'x' => 10, 'y' => 3,
+                 'answer' => '3', 'digit' => 0, 'money' => 35, 'x' => 10, 'y' => 1,
                  'hint' => 'A Gyűrű szövetsége, A két torony, A király visszatér.', 'cost' => 20,
                  'wrong' => ['1', '2', '6']],
+
+                ['text' => 'Mi a neve a Roxfort négy házának egyike?',
+                 'answer' => 'Griffendél', 'digit' => 3, 'money' => 30, 'x' => 11, 'y' => 3,
+                 'hint' => 'Harry Potter háza, bátor és hűséges jellemű diákok.', 'cost' => 15,
+                 'wrong' => ['Mardekár', 'Hollóhát', 'Hugrabug']],
+
+                ['text' => 'Hány éves Bilbo Baggins a Hobbitban az induláskor?',
+                 'answer' => '50', 'digit' => 1, 'money' => 40, 'x' => 12, 'y' => 2,
+                 'hint' => 'Félkori hobbit, amikor Gandalf bekopog.', 'cost' => 20,
+                 'wrong' => ['30', '70', '111']],
+
+                ['text' => 'Mi a neve Narnia teremtő oroszlánjának?',
+                 'answer' => 'Aslan', 'digit' => 4, 'money' => 35, 'x' => 13, 'y' => 4,
+                 'hint' => 'C.S. Lewis teremtette meg ezt a karaktert.', 'cost' => 20,
+                 'wrong' => ['Simba', 'Leo', 'Mufasa']],
+
+                ['text' => 'Hány éven keresztül tanít Dumbledore a Roxfortban?',
+                 'answer' => '150', 'digit' => 7, 'money' => 50, 'x' => 14, 'y' => 1,
+                 'hint' => 'Több mint egy évszázadon át, mivel varázsló.', 'cost' => 30,
+                 'wrong' => ['10', '30', '50']],
+
+                ['text' => 'Mi a neve a mágia ellenszerének?',
+                 'answer' => 'ellenméreg', 'digit' => 2, 'money' => 40, 'x' => 15, 'y' => 3,
+                 'hint' => 'Általánosan elfogadott szó mérgek ellensúlyozására.', 'cost' => 20,
+                 'wrong' => ['ellenvarázslat', 'semlegesítő', 'bájital']],
+
+                ['text' => 'Hány elemet tartalmaz a Szilmarillion (Tolkien könyve)?',
+                 'answer' => '24', 'digit' => 5, 'money' => 55, 'x' => 16, 'y' => 2,
+                 'hint' => 'A Quenta Silmarillion 24 fejezetre tagolódik.', 'cost' => 30,
+                 'wrong' => ['10', '15', '30']],
+
+                ['text' => 'Mi a neve a Harry Potterben a búvóhelyteremtő varázslatnak?',
+                 'answer' => 'Diagonalley', 'digit' => 8, 'money' => 40, 'x' => 17, 'y' => 4,
+                 'hint' => 'A varázslók bevásárló utcája London szívében.', 'cost' => 20,
+                 'wrong' => ['Knockturn Alley', 'Hogsmeade', 'Godric\'s Hollow']],
+
+                ['text' => 'Hány évig aludt Csipkerózsika a mesében?',
+                 'answer' => '100', 'digit' => 6, 'money' => 30, 'x' => 18, 'y' => 1,
+                 'hint' => 'A gonosz boszorkány átka száz évre szólt.', 'cost' => 15,
+                 'wrong' => ['10', '50', '1000']],
+
+                ['text' => 'Mi a neve a varázslók titkos iskolájának Brazíliában?',
+                 'answer' => 'Castelobruxo', 'digit' => 9, 'money' => 50, 'x' => 19, 'y' => 3,
+                 'hint' => 'Harry Potter univerzumban, a brazil varázsiskolák egyike.', 'cost' => 30,
+                 'wrong' => ['Ilvermorny', 'Mahoutokoro', 'Durmstrang']],
+
+                ['text' => 'Hány varázslatot tartalmaz a Szortilegek Gyűjteménye (HP)?',
+                 'answer' => '14', 'digit' => 0, 'money' => 45, 'x' => 20, 'y' => 2,
+                 'hint' => 'J.K. Rowling egy 14 varázslatot tartalmazó könyvet írt.', 'cost' => 25,
+                 'wrong' => ['7', '21', '100']],
             ],
         ];
 
