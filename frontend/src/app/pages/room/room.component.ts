@@ -211,14 +211,8 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   get roomBgStyle(): string {
-    // BackgroundUrl (admin által beállított) elsőbbséget élvez
     if (this.level?.BackgroundUrl) {
       return `url(${this.level.BackgroundUrl})`;
-    }
-    // Fallback: csak 1-5 OrderNumber esetén van helyi kép
-    const n = this.level?.OrderNumber ?? 0;
-    if (n >= 1 && n <= 5) {
-      return `url(/rooms/room${n}/background.png)`;
     }
     return 'none';
   }

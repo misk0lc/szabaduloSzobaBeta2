@@ -230,10 +230,6 @@ export class GameComponent implements OnInit {
     if (level.BackgroundUrl) {
       return `url(${level.BackgroundUrl})`;
     }
-    const n = level.OrderNumber;
-    if (n >= 1 && n <= 5) {
-      return `url(/rooms/room${n}/background.png)`;
-    }
     return 'none';
   }
 
