@@ -442,7 +442,7 @@
   border: 2px solid var(--room-accent, #c19a6b);
   backdrop-filter: blur(4px);
   transition: transform .2s, box-shadow .2s, background .2s;
-  overflow: hidden;
+  overflow: visible;
   padding: 0;
 }
 
