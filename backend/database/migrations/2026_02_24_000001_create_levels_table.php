@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('levels', function (Blueprint $table) {
@@ -18,6 +15,7 @@ return new class extends Migration
             $table->string('Category', 50)->default('Könnyed');
             $table->integer('OrderNumber')->unique();
             $table->boolean('IsActive')->default(true);
+            $table->string('BackgroundUrl', 500)->nullable();
             $table->dateTime('CreatedAt')->useCurrent();
         });
     }

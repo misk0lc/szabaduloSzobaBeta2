@@ -6,17 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('multiplayer_sessions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('LevelID');
             $table->foreign('LevelID')->references('LevelID')->on('levels')->onDelete('cascade');
-            $table->enum('Status', ['waiting', 'playing', 'finished'])->default('waiting');
-            // Megoldott kérdések: JSON tömb QuestionID-kkal
+            $table->enum('Status', ['waiting', 'playing', 'finished', 'abandoned'])->default('waiting');
             $table->json('SolvedQuestions')->default('[]');
             $table->timestamps();
         });
@@ -33,9 +29,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('multiplayer_session_users');

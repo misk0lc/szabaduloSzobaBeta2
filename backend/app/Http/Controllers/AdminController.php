@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\ProgressController;
 use App\Models\Level;
 use App\Models\Question;
-use App\Models\QuestionOption;
 use App\Models\Report;
 use App\Models\User;
 use App\Models\UserAnswer;
-use App\Models\UserMoney;
 use App\Models\UserProgress;
-use App\Models\LeaderboardEntry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 

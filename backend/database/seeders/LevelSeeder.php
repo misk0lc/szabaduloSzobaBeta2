@@ -16,6 +16,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Nehéz',
                 'OrderNumber' => 1,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room1/background.png',
             ],
             [
                 'Name'        => 'A Laboratorium',
@@ -23,6 +24,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Nehéz',
                 'OrderNumber' => 2,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room2/background.png',
             ],
             [
                 'Name'        => 'A Kastély Pincéje',
@@ -30,6 +32,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Nehéz',
                 'OrderNumber' => 3,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room3/background.png',
             ],
             [
                 'Name'        => 'A Kapitány Kabinja',
@@ -37,6 +40,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Nehéz',
                 'OrderNumber' => 4,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room4/background.png',
             ],
             [
                 'Name'        => 'Az Űrállomás',
@@ -44,6 +48,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Nehéz',
                 'OrderNumber' => 5,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room5/background.png',
             ],
 
             // ── Könnyed (OrderNumber 6-10) ───────────────────────────────
@@ -53,6 +58,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Könnyed',
                 'OrderNumber' => 6,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room6/background.png',
             ],
             [
                 'Name'        => 'A Kávézó',
@@ -60,6 +66,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Könnyed',
                 'OrderNumber' => 7,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room7/background.png',
             ],
             [
                 'Name'        => 'Az Osztályterem',
@@ -67,6 +74,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Könnyed',
                 'OrderNumber' => 8,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room8/background.png',
             ],
             [
                 'Name'        => 'A Kert',
@@ -74,6 +82,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Könnyed',
                 'OrderNumber' => 9,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room9/background.png',
             ],
             [
                 'Name'        => 'A Cukrászda',
@@ -81,6 +90,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Könnyed',
                 'OrderNumber' => 10,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room10/background.png',
             ],
 
             // ── Közepes (OrderNumber 11-15) ──────────────────────────────
@@ -90,6 +100,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Közepes',
                 'OrderNumber' => 11,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room11/background.png',
             ],
             [
                 'Name'        => 'A Múzeum',
@@ -97,6 +108,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Közepes',
                 'OrderNumber' => 12,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room12/background.png',
             ],
             [
                 'Name'        => 'A Téli Kunyhó',
@@ -104,6 +116,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Közepes',
                 'OrderNumber' => 13,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room13/background.png',
             ],
             [
                 'Name'        => 'A Hajógyár',
@@ -111,6 +124,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Közepes',
                 'OrderNumber' => 14,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room14/background.png',
             ],
             [
                 'Name'        => 'A Varázslatos Könyvtár',
@@ -118,6 +132,7 @@ class LevelSeeder extends Seeder
                 'Category'    => 'Közepes',
                 'OrderNumber' => 15,
                 'IsActive'    => true,
+                'BackgroundUrl' => '/rooms/room15/background.png',
             ],
         ];
 
