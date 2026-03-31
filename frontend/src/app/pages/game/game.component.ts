@@ -10,9 +10,9 @@ import { ProgressService } from '../../services/progress.service';
 import { Level } from '../../models/level.model';
 
 export const REPORT_CATEGORIES = [
-  { value: 'bug',      label: '🐛 Bug / Hiba' },
-  { value: 'question', label: '❓ Kérdés' },
-  { value: 'other',    label: '📝 Egyéb' },
+  { value: 'bug',      label: 'Bug / Hiba' },
+  { value: 'question', label: 'Kérdés' },
+  { value: 'other',    label: 'Egyéb' },
 ];
 
 @Component({

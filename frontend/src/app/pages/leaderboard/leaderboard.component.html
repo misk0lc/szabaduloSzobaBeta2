@@ -3,15 +3,15 @@
   <!-- ═══ HEADER ═══ -->
   <header class="lb-header">
     <div class="lb-logo">
-      <span class="lb-icon">🏆</span>
+      <span class="lb-icon"></span>
       <h1>Ranglista</h1>
     </div>
     <div class="lb-actions">
-      <button class="btn-back" (click)="visszaMegyek()">← Vissza</button>
+      <button class="btn-nav" (click)="visszaMegyek()">Játék</button>
       @if (isAdmin()) {
-        <button class="btn-admin" (click)="adminPanel()">🛠️ Admin</button>
+        <button class="btn-nav btn-admin-nav" (click)="adminPanel()">Admin</button>
       }
-      <button class="btn-logout" (click)="kilepes()">Kilépés</button>
+      <button class="btn-logout" (click)="kilepes()">Kijelentkezés</button>
     </div>
   </header>
 

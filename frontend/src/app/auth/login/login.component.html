@@ -31,13 +31,13 @@
   <div class="report-overlay" (click)="closeReport()"></div>
   <div class="report-modal">
     <div class="report-modal-header">
-      <span>💬 Kapcsolat / Bejelentés</span>
+      <span>Kapcsolat / Bejelentés</span>
       <button class="report-close" (click)="closeReport()">✕</button>
     </div>
 
     @if (reportSent) {
       <div class="report-success">
-        <div class="report-success-ikon">✅</div>
+        <div class="report-success-ikon">✓</div>
         <p>Köszönjük! Hamarosan felvesszük veled a kapcsolatot.</p>
       </div>
     } @else {
@@ -89,7 +89,7 @@
           (click)="submitReport()"
           [disabled]="reportLoading || !reportTitle.trim() || !reportMessage.trim()"
         >
-          @if (reportLoading) { ⏳ Küldés... } @else { 📤 Beküldés }
+          @if (reportLoading) { Küldés... } @else { Beküldés }
         </button>
       </div>
     }

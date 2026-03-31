@@ -95,9 +95,9 @@ export class RoomComponent implements OnInit, OnDestroy {
   // ─── Report panel ───────────────────────────────────────────────
   showReport = false;
   reportCategories = [
-    { value: 'bug',      label: '🐛 Bug / Hiba' },
-    { value: 'question', label: '❓ Kérdés' },
-    { value: 'other',    label: '📝 Egyéb' },
+    { value: 'bug',      label: 'Bug / Hiba' },
+    { value: 'question', label: 'Kérdés' },
+    { value: 'other',    label: 'Egyéb' },
   ];
   reportCategory = 'bug';
   reportTitle = '';

@@ -1,6 +1,7 @@
 /* ════════════════════════════════════════════════════════════
    LOGIN – Csak login-specifikus stílusok
    (Az alap auth stílusok az auth.css-ből jönnek)
+   (Report modal stílusok a globális styles.css-ből jönnek)
 ════════════════════════════════════════════════════════════ */
 
 /* ── Segítség gomb ── */
@@ -38,148 +39,16 @@
   flex-shrink: 0;
 }
 
-/* ── Report overlay ── */
-.report-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.65);
-  z-index: 1000;
-}
-
-/* ── Report modal ── */
-.report-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1001;
-  width: min(460px, 94vw);
-  background: #1f1a15;
-  border: 1px solid #c19a6b44;
-  border-radius: 12px;
-  box-shadow: 0 8px 40px rgba(0,0,0,.7);
-  overflow: hidden;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.report-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 18px;
-  background: #2a1f15;
-  border-bottom: 1px solid #c19a6b33;
-  font-weight: 600;
-  font-size: 15px;
-  color: #c19a6b;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
+/* ── Auth.css button override a modal elemekhez ── */
 .report-close {
-  background: none;
-  border: none;
-  color: #999;
-  font-size: 18px;
-  cursor: pointer;
-  line-height: 1;
-  padding: 2px 6px;
-  border-radius: 4px;
-  flex-shrink: 0;
   width: auto;
+  background: none;
+  margin-top: 0;
+  padding: 2px 6px;
 }
-.report-close:hover { color: #fff; background: #4a3a2a; }
-
-.report-modal-body {
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.report-modal-body label {
-  font-size: 13px;
-  color: #c19a6b;
-  font-weight: 600;
-  margin-bottom: -4px;
-}
-
-/* ── Kategória gombok ── */
-.category-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.cat-btn {
-  width: 100%;
-  padding: 9px 10px;
-  background: #2a1f15;
-  border: 1px solid #c19a6b33;
-  border-radius: 8px;
-  color: #c8bdb4;
-  font-size: 13px;
-  cursor: pointer;
-  text-align: left;
-  transition: background .15s, border-color .15s;
-}
-.cat-btn:hover { background: #3a2a18; border-color: #c19a6b66; }
-.cat-btn.cat-active {
-  background: #3a2810;
-  border-color: #c19a6b;
-  color: #e8ddd0;
-  font-weight: 600;
-}
-
-.report-modal-body input,
-.report-modal-body textarea {
-  width: 100%;
-  background: #2a1f15;
-  border: 1px solid #c19a6b44;
-  border-radius: 8px;
-  color: #e8ddd0;
-  padding: 10px 12px;
-  font-size: 14px;
-  font-family: inherit;
-  resize: vertical;
-  box-sizing: border-box;
-}
-.report-modal-body input:focus,
-.report-modal-body textarea:focus {
-  outline: none;
-  border-color: #c19a6b;
-}
-
-.report-hiba {
-  color: #e05;
-  font-size: 13px;
-  background: #3a1010;
-  padding: 8px 12px;
-  border-radius: 6px;
-}
-
 .report-submit {
   margin-top: 4px;
-  padding: 11px;
-  background: #c19a6b;
-  color: #1a1410;
-  border: none;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background .15s;
-  width: 100%;
 }
-.report-submit:hover:not(:disabled) { background: #d4ab7a; }
-.report-submit:disabled { opacity: .5; cursor: not-allowed; }
-
-.report-success {
-  padding: 40px 18px;
-  text-align: center;
-  color: #5c9e5c;
-  font-size: 15px;
+.cat-btn {
+  padding: 9px 10px;
 }
-.report-success-ikon { font-size: 44px; margin-bottom: 12px; }

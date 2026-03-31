@@ -3,13 +3,13 @@
   <!-- ═══ TOP HEADER (game-stílusú) ═══ -->
   <header class="top-header">
     <div class="top-header-bal">
-      <span class="top-logo">🔐 SzabaduláS</span>
-      <span class="top-admin-badge">🛠️ Admin</span>
+      <span class="top-logo">SzabadulóS</span>
+      <span class="top-admin-badge">Admin</span>
     </div>
     <div class="top-header-jobb">
       <span class="top-udvozles">Üdv, <strong>{{ user?.Username }}</strong>!</span>
-      <button class="top-nav-gomb" (click)="goGame()">🎮 Játék</button>
-      <button class="top-nav-gomb" (click)="goLeaderboard()">🏆 Ranglista</button>
+      <button class="top-nav-gomb" (click)="goGame()">Játék</button>
+      <button class="top-nav-gomb" (click)="goLeaderboard()">Ranglista</button>
       <button class="top-kijel-gomb" (click)="logout()">Kijelentkezés</button>
     </div>
   </header>
@@ -20,19 +20,19 @@
     <aside class="sidebar">
       <nav class="sidebar-nav">
         <button [class.active]="activeTab==='dashboard'" (click)="switchTab('dashboard')">
-          <span class="nav-icon">📊</span> Áttekintés
+          <span class="nav-icon">1</span> Áttekintés
         </button>
         <button [class.active]="activeTab==='users'" (click)="switchTab('users')">
-          <span class="nav-icon">👥</span> Felhasználók
+          <span class="nav-icon">2</span> Felhasználók
         </button>
         <button [class.active]="activeTab==='levels'" (click)="switchTab('levels')">
-          <span class="nav-icon">🚪</span> Pályák
+          <span class="nav-icon">3</span> Pályák
         </button>
         <button [class.active]="activeTab==='questions'" (click)="switchTab('questions')">
-          <span class="nav-icon">❓</span> Kérdések
+          <span class="nav-icon">4</span> Kérdések
         </button>
         <button [class.active]="activeTab==='reports'" (click)="switchTab('reports')">
-          <span class="nav-icon">📋</span> Bejelentések
+          <span class="nav-icon">5</span> Bejelentések
           @if (stats && stats.newReports > 0) {
             <span class="nav-badge">{{ stats.newReports }}</span>
           }
@@ -44,11 +44,11 @@
     <main class="admin-main">
 
       <div class="admin-page-title">
-        @if (activeTab === 'dashboard') { 📊 Áttekintés }
-        @else if (activeTab === 'users') { 👥 Felhasználók }
-        @else if (activeTab === 'levels') { 🚪 Pályák }
-        @else if (activeTab === 'questions') { ❓ Kérdések }
-        @else if (activeTab === 'reports') { 📋 Bejelentések }
+        @if (activeTab === 'dashboard') { Áttekintés }
+        @else if (activeTab === 'users') { Felhasználók }
+        @else if (activeTab === 'levels') { Pályák }
+        @else if (activeTab === 'questions') { Kérdések }
+        @else if (activeTab === 'reports') { Bejelentések }
       </div>
 
       <div class="admin-content">

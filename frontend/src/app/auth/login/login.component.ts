@@ -7,11 +7,11 @@ import { AuthService } from '../../services/auth.service';
 import { ReportService } from '../../services/report.service';
 
 export const REPORT_CATEGORIES = [
-  { value: 'forgotten-password', label: '🔑 Elfelejtett jelszó' },
-  { value: 'bug',                label: '🐛 Bug / Hiba bejelentés' },
-  { value: 'account',            label: '👤 Fiókkal kapcsolatos' },
-  { value: 'question',           label: '❓ Kérdés / Visszajelzés' },
-  { value: 'other',              label: '📝 Egyéb' },
+  { value: 'forgotten-password', label: 'Elfelejtett jelszó' },
+  { value: 'bug',                label: 'Bug / Hiba bejelentés' },
+  { value: 'account',            label: 'Fiókkal kapcsolatos' },
+  { value: 'question',           label: 'Kérdés / Visszajelzés' },
+  { value: 'other',              label: 'Egyéb' },
 ];
 
 @Component({

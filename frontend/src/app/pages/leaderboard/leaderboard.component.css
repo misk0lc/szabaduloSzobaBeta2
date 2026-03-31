@@ -15,10 +15,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 2rem;
+  padding: 16px 40px;
   background: rgba(0,0,0,.35);
-  border-bottom: 1px solid rgba(193,154,107,.15);
-  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(193,154,107,.12);
+  backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -47,35 +47,50 @@
   gap: .75rem;
 }
 
-.btn-back, .btn-admin {
-  padding: .5rem 1.2rem;
-  background: rgba(193,154,107,.12);
-  border: 1px solid rgba(193,154,107,.3);
+.btn-nav {
+  padding: 8px 18px;
+  border: 1px solid rgba(193,154,107,.5);
   border-radius: 8px;
+  background: rgba(193,154,107,.12);
   color: #c19a6b;
+  font-weight: 600;
+  font-size: .88rem;
   cursor: pointer;
-  font-size: .9rem;
-  transition: all .2s;
+  transition: background .2s, border-color .2s, transform .15s;
 }
 
-.btn-back:hover, .btn-admin:hover {
-  background: rgba(193,154,107,.22);
+.btn-nav:hover {
+  background: rgba(193,154,107,.25);
+  border-color: #c19a6b;
+  transform: translateY(-1px);
 }
 
-.btn-back:hover { transform: translateX(-2px); }
+.btn-admin-nav {
+  border-color: rgba(251,146,60,.5);
+  color: #fb923c;
+  background: rgba(251,146,60,.1);
+}
+
+.btn-admin-nav:hover {
+  background: rgba(251,146,60,.22);
+  border-color: #fb923c;
+}
 
 .btn-logout {
-  padding: .5rem 1.2rem;
-  background: rgba(239,68,68,.1);
-  border: 1px solid rgba(239,68,68,.3);
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid rgba(193,154,107,.3);
   border-radius: 8px;
-  color: #f87171;
+  color: #a89280;
+  font-size: 13px;
   cursor: pointer;
-  font-size: .9rem;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 
-.btn-logout:hover { background: rgba(239,68,68,.2); }
+.btn-logout:hover {
+  border-color: #c19a6b;
+  color: #c19a6b;
+}
 
 /* ─── Main ────────────────────────────────────────── */
 .lb-main {
@@ -432,6 +447,7 @@ tr.top3 .row-bar-fill { background: linear-gradient(90deg, #cd7f32, #a0652b); }
     flex-direction: column;
     gap: .75rem;
     text-align: center;
+    padding: 14px 20px;
   }
 
   .stats-row { grid-template-columns: repeat(2, 1fr); }

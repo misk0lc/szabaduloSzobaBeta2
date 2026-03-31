@@ -4,11 +4,11 @@
   @if (isMultiplayer && multiWaiting) {
     <div class="multi-waiting-overlay">
       <div class="multi-waiting-card">
-        <div class="multi-waiting-icon">👥</div>
+        <div class="multi-waiting-icon">Multiplayer</div>
         <h2>Várakozás a másik játékosra...</h2>
         <p class="multi-waiting-sub">Oszd meg a linket a barátodnak, hogy csatlakozhasson!</p>
         <button class="multi-copy-btn" (click)="copyMultiLink()">
-          @if (multiLinkCopied) { ✅ Link másolva! } @else { 🔗 Link másolása }
+          @if (multiLinkCopied) { Link másolva! } @else { Link másolása }
         </button>
         <div class="multi-waiting-players">
           @for (p of multiPlayers; track p.UserID) {
@@ -43,7 +43,6 @@
           <span class="room-name">{{ level?.Name ?? ('Szoba #' + levelId) }}</span>
           @if (isMultiplayer) {
             <span class="room-sub multi-players-sub">
-              👥
               @for (p of multiPlayers; track p.UserID; let last = $last) {
                 <span [class.multi-me]="p.UserID === multiState?.MyUserID">
                   {{ p.Username }}{{ p.UserID === multiState?.MyUserID ? ' (te)' : '' }}
@@ -62,7 +61,6 @@
     <div class="room-stats">
       @if (!isMultiplayer) {
       <div class="stat-chip timer-chip" [class.warning]="timerWarning" [class.timer-penalty]="timePenaltyAnim">
-        <span class="stat-icon">⏱</span>
         <span class="stat-val mono">{{ timerDisplay }}</span>
         @if (timePenaltyAnim) {
           <span class="penalty-badge">+{{ lastTimePenalty >= 60 ? (lastTimePenalty / 60) + ' perc' : lastTimePenalty + 'mp' }}</span>
@@ -70,11 +68,9 @@
       </div>
       }
       <div class="stat-chip">
-        <span class="stat-icon">💰</span>
         <span class="stat-val">{{ balance }}</span>
       </div>
       <div class="stat-chip progress-chip">
-        <span class="stat-icon">🔑</span>
         <span class="stat-val">{{ solvedCount }}/{{ questions.length }}</span>
         <div class="mini-progress-bar">
           <div class="mini-progress-fill" [style.width.%]="progressPercent"></div>
@@ -103,7 +99,7 @@
     </div>
   } @else if (error) {
     <div class="center-state error-state">
-      <div class="error-icon-big">⚠️</div>
+      <div class="error-icon-big">Hiba</div>
       <p>{{ error }}</p>
       <button class="btn-retry" (click)="loadRoom()">Újrapróbálás</button>
     </div>
@@ -184,7 +180,7 @@
 
         @if (canSubmitCode) {
           <button class="btn-open-code pulse-green" (click)="openCodeSubmit()">
-            🔓 Kód beküldése
+            Kód beküldése
           </button>
         }
       </div>
@@ -211,7 +207,7 @@
               Rejtély #{{ questions.indexOf(activeQuestion) + 1 }}
             </span>
             @if (activeQuestion.question.MoneyReward) {
-              <span class="modal-reward-badge">💰 +{{ activeQuestion.question.MoneyReward }}</span>
+              <span class="modal-reward-badge">+{{ activeQuestion.question.MoneyReward }}</span>
             }
           </div>
           <!-- Élő pénz + idő a modalban -->
@@ -224,7 +220,7 @@
             @if (!isMultiplayer) {
             <span class="modal-stat-chip modal-timer-chip"
                   [class.anim-time-penalty]="modalTimerAnim === 'penalty'">
-              ⏱ {{ modalTimerDisplay }}
+              {{ modalTimerDisplay }}
               @if (modalTimerAnim === 'penalty') {
                 <span class="modal-penalty-tag">+{{ lastTimePenalty >= 60 ? (lastTimePenalty / 60) + ' perc' : lastTimePenalty + 'mp' }}</span>
             }
@@ -273,13 +269,13 @@
             [class.feedback-ok]="answerResult.correct"
             [class.feedback-err]="!answerResult.correct"
           >
-            <span class="feedback-icon">{{ answerResult.correct ? '🎉' : '❌' }}</span>
+            <span class="feedback-icon">{{ answerResult.correct ? '✓' : '✗' }}</span>
             <span>{{ answerResult.message }}</span>
             @if (!answerResult.correct && answerResult.MoneyPenalty) {
-              <span class="penalty-detail">💰 -{{ answerResult.MoneyPenalty }} pont</span>
+              <span class="penalty-detail">-{{ answerResult.MoneyPenalty }} pont</span>
             }
             @if (!answerResult.correct && answerResult.TimePenalty) {
-              <span class="penalty-detail">⏱ +{{ answerResult.TimePenalty }} másodperc</span>
+              <span class="penalty-detail">+{{ answerResult.TimePenalty }} másodperc</span>
             }
           </div>
         }
@@ -288,12 +284,12 @@
         <div class="hint-section">
           @if (!hintUsed) {
             <button class="btn-fifty-fifty" (click)="use5050()">
-              <span class="hint-icon">🃏</span>
-              <span>50/50</span>
-              <span class="hint-cost">💰 25</span>
+              <span class="hint-icon">50/50</span>
+              <span>Segítség</span>
+              <span class="hint-cost">25 pont</span>
             </button>
           } @else {
-            <div class="hint-used-badge">✂️ 50/50 használva</div>
+            <div class="hint-used-badge">50/50 használva</div>
           }
           @if (hintError) {
             <div class="hint-error-msg">{{ hintError }}</div>
@@ -349,7 +345,7 @@
             @if (submitLoading) {
               <span class="btn-spinner"></span> Ellenőrzés...
             } @else {
-              🔓 Kód beküldése
+              Kód beküldése
             }
           </button>
         }
@@ -360,11 +356,11 @@
             [class.result-ok]="submitResult.correct"
             [class.result-err]="!submitResult.correct"
           >
-            <span class="result-icon">{{ submitResult.correct ? '🎉' : '❌' }}</span>
+            <span class="result-icon">{{ submitResult.correct ? '✓' : '✗' }}</span>
             <div class="result-body">
               <p class="result-msg">{{ submitResult.message }}</p>
               @if (submitResult.correct && submitResult.score) {
-                <p class="result-score">🏆 Pontszám: <strong>{{ submitResult.score }}</strong></p>
+                <p class="result-score">Pontszám: <strong>{{ submitResult.score }}</strong></p>
               }
               @if (submitResult.correct) {
                 <p class="result-redirect">Visszairányítás a pályák menübe...</p>
@@ -380,20 +376,20 @@
 </div>
 
 <!-- Lebegő bejelentés gomb -->
-<button class="report-fab" (click)="openReport()" title="Hiba bejelentése">🐛</button>
+<button class="report-fab" (click)="openReport()" title="Hiba bejelentése">?</button>
 
 <!-- Report modal -->
 @if (showReport) {
   <div class="report-overlay" (click)="closeReport()"></div>
   <div class="report-modal">
     <div class="report-modal-header">
-      <span>🐛 Bejelentés / Visszajelzés</span>
+      <span>Bejelentés / Visszajelzés</span>
       <button class="report-close" (click)="closeReport()">✕</button>
     </div>
 
     @if (reportSent) {
       <div class="report-success">
-        <div class="report-success-ikon">✅</div>
+        <div class="report-success-ikon">✓</div>
         <p>Köszönjük a visszajelzést!</p>
       </div>
     } @else {
@@ -434,7 +430,7 @@
           (click)="submitReport()"
           [disabled]="reportLoading || !reportTitle.trim() || !reportMessage.trim()"
         >
-          @if (reportLoading) { ⏳ Küldés... } @else { 📤 Beküldés }
+          @if (reportLoading) { Küldés... } @else { Beküldés }
         </button>
       </div>
     }

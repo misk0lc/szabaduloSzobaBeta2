@@ -2,15 +2,15 @@
 
   <header class="fejlec">
     <div class="fejlec-bal">
-      <span class="logo">🔐 SzabadulóS</span>
+      <span class="logo">SzabadulóS</span>
     </div>
     <div class="fejlec-jobb">
       <span class="udvozles">Üdv, <strong>{{ user?.Username }}</strong>!</span>
       @if (user?.IsAdmin) {
-        <button class="nav-gomb admin-gomb" (click)="goAdmin()">🛡️ Admin</button>
+        <button class="nav-gomb admin-gomb" (click)="goAdmin()">Admin</button>
       }
-      <button class="nav-gomb" (click)="goLeaderboard()">🏆 Ranglista</button>
-      <button class="nav-gomb" (click)="openPasswordChange()">🔑 Jelszó</button>
+      <button class="nav-gomb" (click)="goLeaderboard()">Ranglista</button>
+      <button class="nav-gomb" (click)="openPasswordChange()">Jelszó</button>
       <button class="kijel-gomb" (click)="logout()">Kijelentkezés</button>
     </div>
   </header>
@@ -70,7 +70,7 @@
                   @if (getAllapot(level) === 'active') {
                     <div class="szoba-gombok">
                       <button class="szoba-btn btn-solo" (click)="szobaValaszt(level)">
-                        🎮 Egyjátékos
+                        Egyjátékos
                       </button>
                       <button
                         class="szoba-btn btn-multi"
@@ -78,9 +78,9 @@
                         [disabled]="multiJoining === level.LevelID"
                       >
                         @if (multiJoining === level.LevelID) {
-                          ⬛ Csatlakozás...
+                          Csatlakozás...
                         } @else {
-                          👥 Többjátékos
+                          Többjátékos
                         }
                       </button>
                     </div>
@@ -109,20 +109,20 @@
     @if (allLevelsCompleted) {
       <div class="reset-banner">
         <div class="reset-banner-text">
-          🏆 Minden szobát teljesítettél! Szeretnéd újrakezdeni a játékot?
+          Minden szobát teljesítettél! Szeretnéd újrakezdeni a játékot?
         </div>
         @if (resetSuccess) {
-          <div class="reset-success">✅ {{ resetSuccess }}</div>
+          <div class="reset-success">{{ resetSuccess }}</div>
         }
         @if (resetError) {
-          <div class="reset-error">❌ {{ resetError }}</div>
+          <div class="reset-error">{{ resetError }}</div>
         }
         <button
           class="reset-btn"
           (click)="resetProgress()"
           [disabled]="resetLoading"
         >
-          @if (resetLoading) { ⬛ Törlés... } @else { 🔄 Haladás törlése és újrakezdés }
+          @if (resetLoading) { Törlés... } @else { Haladás törlése és újrakezdés }
         </button>
       </div>
     }
@@ -131,20 +131,20 @@
 </div>
 
 <!-- Lebegő bejelentés gomb -->
-<button class="report-fab" (click)="openReport()" title="Hiba bejelentése">🐛</button>
+<button class="report-fab" (click)="openReport()" title="Hiba bejelentése">?</button>
 
 <!-- Jelszóváltó modal -->
 @if (showPasswordChange) {
   <div class="report-overlay" (click)="closePasswordChange()"></div>
   <div class="report-modal">
     <div class="report-modal-header">
-      <span>🔑 Jelszó megváltoztatása</span>
+      <span>Jelszó megváltoztatása</span>
       <button class="report-close" (click)="closePasswordChange()">✕</button>
     </div>
     <div class="report-modal-body">
       @if (pwSuccess) {
         <div class="report-success">
-          <div class="report-success-ikon">✅</div>
+          <div class="report-success-ikon">✓</div>
           <p>{{ pwSuccess }}</p>
         </div>
       } @else {
@@ -166,7 +166,7 @@
           (click)="submitPasswordChange()"
           [disabled]="pwLoading"
         >
-          @if (pwLoading) { ⬛ Mentés... } @else { 💾 Jelszó mentése }
+          @if (pwLoading) { Mentés... } @else { Jelszó mentése }
         </button>
       }
     </div>
@@ -178,13 +178,13 @@
   <div class="report-overlay" (click)="closeReport()"></div>
   <div class="report-modal">
     <div class="report-modal-header">
-      <span>🐛 Bejelentés / Visszajelzés</span>
+      <span>Bejelentés / Visszajelzés</span>
       <button class="report-close" (click)="closeReport()">✕</button>
     </div>
 
     @if (reportSent) {
       <div class="report-success">
-        <div class="report-success-ikon">✅</div>
+        <div class="report-success-ikon">✓</div>
         <p>Köszönjük a visszajelzést!</p>
       </div>
     } @else {
@@ -225,7 +225,7 @@
           (click)="submitReport()"
           [disabled]="reportLoading || !reportTitle.trim() || !reportMessage.trim()"
         >
-          @if (reportLoading) { ⬛ Küldés... } @else { 📤 Beküldés }
+          @if (reportLoading) { Küldés... } @else { Beküldés }
         </button>
       </div>
     }
