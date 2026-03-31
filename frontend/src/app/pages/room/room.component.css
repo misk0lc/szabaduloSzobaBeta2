@@ -20,46 +20,6 @@
   justify-content: center;
 }
 
-.abandoned-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.85);
-  z-index: 9100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.abandoned-card {
-  background: #1e1814;
-  border: 1px solid rgba(239,68,68,.4);
-  border-radius: 20px;
-  padding: 48px 40px;
-  max-width: 400px;
-  width: 90vw;
-  text-align: center;
-  box-shadow: 0 8px 48px rgba(0,0,0,.7);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-
-.abandoned-icon { font-size: 52px; }
-
-.abandoned-card p {
-  color: #fca5a5;
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.abandoned-sub {
-  color: #8a7a6a !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
-}
-
 .multi-waiting-card {
   background: #1e1814;
   border: 1px solid rgba(99,180,255,.3);
@@ -168,53 +128,6 @@
   transition: background .15s;
 }
 .multi-copy-btn:hover { background: rgba(99,180,255,.22); }
-
-/* ─── Multiplayer fejléc sáv ─────────────────────────────── */
-.multi-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 24px;
-  background: rgba(99,180,255,.08);
-  border-bottom: 1px solid rgba(99,180,255,.2);
-  font-size: 13px;
-  flex-wrap: wrap;
-}
-
-.multi-bar-icon { font-size: 18px; }
-
-.multi-bar-label {
-  font-weight: 700;
-  color: #7dd3fc;
-}
-
-.multi-bar-players {
-  display: flex;
-  gap: 8px;
-  flex: 1;
-}
-
-.multi-bar-player {
-  background: rgba(99,180,255,.12);
-  border: 1px solid rgba(99,180,255,.25);
-  border-radius: 12px;
-  padding: 3px 10px;
-  color: #93c5fd;
-  font-size: 12px;
-}
-
-.multi-bar-me {
-  background: rgba(99,180,255,.25);
-  border-color: #7dd3fc;
-  color: #e0f2fe;
-  font-weight: 700;
-}
-
-.multi-bar-note {
-  color: #fb923c;
-  font-size: 12px;
-  margin-left: auto;
-}
 
 /* ─── Szoba témák ─────────────────────────────────────────── */
 .room-wrapper {
@@ -478,8 +391,6 @@
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
-
 .btn-retry {
   padding: .5rem 1.4rem;
   background: rgba(193,154,107,.12);
@@ -504,8 +415,6 @@
   background-repeat: no-repeat;
 }
 
-/* Téma-specifikus háttérképek – a szerver dinamikusan állítja */
-
 .room-grid-overlay {
   position: absolute;
   inset: 0;
@@ -514,17 +423,6 @@
     repeating-linear-gradient(90deg, transparent, transparent 4.75%, rgba(255,255,255,.02) 5%);
   pointer-events: none;
   z-index: 0;
-}
-
-.room-deco {
-  position: absolute;
-  font-size: 2.2rem;
-  opacity: .15;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  filter: blur(.5px);
-  user-select: none;
 }
 
 /* ─── Kérdés objektumok ───────────────────────────────────── */
@@ -1040,43 +938,6 @@
   word-break: break-word;
 }
 
-.answer-input {
-  flex: 1;
-  padding: .65rem 1rem;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 10px;
-  color: #e8ddd0;
-  font-size: .95rem;
-  outline: none;
-  transition: border-color .2s, box-shadow .2s;
-}
-
-.answer-input:focus {
-  border-color: var(--room-accent, #c19a6b);
-  box-shadow: 0 0 0 3px rgba(193,154,107,.15);
-}
-
-.answer-input:disabled { opacity: .5; }
-
-.btn-check {
-  padding: .65rem 1.2rem;
-  background: var(--room-accent, #c19a6b);
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-weight: 700;
-  font-size: .9rem;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: opacity .2s;
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-}
-
-.btn-check:disabled { opacity: .4; cursor: not-allowed; }
-
 .solved-banner {
   display: flex;
   align-items: center;
@@ -1180,26 +1041,6 @@
   60%      { transform: translateX(4px) scale(1); }
   75%      { transform: translateX(-2px) scale(1); }
   90%      { transform: translateX(2px) scale(1); }
-}
-
-/* Wrong answer input flash red border */
-.answer-input.input-shake {
-  border-color: #f87171 !important;
-  animation: input-shake .4s ease;
-}
-
-@keyframes input-shake {
-  0%, 100% { transform: translateX(0); }
-  20%      { transform: translateX(-4px); }
-  40%      { transform: translateX(4px); }
-  60%      { transform: translateX(-3px); }
-  80%      { transform: translateX(3px); }
-}
-
-/* Correct answer input flash green border */
-.answer-input.input-success {
-  border-color: #34d399 !important;
-  box-shadow: 0 0 12px rgba(52,211,153,.3);
 }
 
 .feedback-icon { font-size: 1.1rem; }
@@ -1557,5 +1398,3 @@
 }
 .cat-btn:hover { background: #3a2e18; border-color: #c8a96e; }
 .cat-btn.cat-active { background: #c8a96e; color: #1a150f; border-color: #c8a96e; font-weight: 700; }
-
-.report-hiba { color: #e07070; font-size: 13px; margin-bottom: 8px; }

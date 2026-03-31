@@ -21,20 +21,6 @@ export interface QuestionState {
   justSolved: boolean;   // animáció triggerhez
 }
 
-// Szoba téma szobánév alapján
-export interface RoomTheme {
-  icon: string;
-  bgClass: string;
-  objects: RoomObject[];
-}
-
-export interface RoomObject {
-  emoji: string;
-  label: string;
-  col: number;   // PositionX tartomány (1-5, 6-10, stb.)
-  row: number;   // PositionY (1-4)
-}
-
 @Component({
   selector: 'app-room',
   standalone: true,
@@ -215,37 +201,6 @@ export class RoomComponent implements OnInit, OnDestroy {
       return `url(${this.level.BackgroundUrl})`;
     }
     return 'none';
-  }
-
-  // Objektum ikonok a PositionX/Y alapján (dekoráció)
-  get roomDecorations(): { emoji: string; x: number; y: number }[] {
-    const name = (this.level?.Name ?? '').toLowerCase();
-    if (name.includes('könyvtár')) return [
-      { emoji: '🗄️', x: 5, y: 10 }, { emoji: '🕯️', x: 85, y: 8 },
-      { emoji: '🦉', x: 50, y: 5 }, { emoji: '🖋️', x: 30, y: 85 },
-      { emoji: '📜', x: 70, y: 80 }
-    ];
-    if (name.includes('labor')) return [
-      { emoji: '⚗️', x: 10, y: 15 }, { emoji: '🔬', x: 75, y: 10 },
-      { emoji: '💊', x: 45, y: 75 }, { emoji: '🧫', x: 20, y: 70 },
-      { emoji: '☢️', x: 80, y: 80 }
-    ];
-    if (name.includes('pince')) return [
-      { emoji: '🕸️', x: 5, y: 5 }, { emoji: '🕸️', x: 90, y: 8 },
-      { emoji: '🪨', x: 40, y: 85 }, { emoji: '🔦', x: 65, y: 20 },
-      { emoji: '🐀', x: 80, y: 80 }
-    ];
-    if (name.includes('kapitány')) return [
-      { emoji: '🗺️', x: 10, y: 10 }, { emoji: '⚓', x: 85, y: 15 },
-      { emoji: '🦜', x: 50, y: 8 }, { emoji: '🧭', x: 25, y: 80 },
-      { emoji: '💎', x: 75, y: 75 }
-    ];
-    if (name.includes('űr')) return [
-      { emoji: '🌌', x: 5, y: 5 }, { emoji: '🛸', x: 80, y: 10 },
-      { emoji: '⭐', x: 45, y: 8 }, { emoji: '🌙', x: 20, y: 78 },
-      { emoji: '🤖', x: 78, y: 80 }
-    ];
-    return [];
   }
 
   // Kérdés-pont pozíció: PositionX (1-20) → %, PositionY (1-4) → %

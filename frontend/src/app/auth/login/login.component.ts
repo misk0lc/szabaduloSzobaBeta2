@@ -19,7 +19,7 @@ export const REPORT_CATEGORIES = [
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['../auth.css', './login.component.css']
 })
 export class LoginComponent {
 

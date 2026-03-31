@@ -1,3 +1,7 @@
+/* ════════════════════════════════════════════════════════════
+   KÖZÖS AUTH STÍLUSOK (Login + Register)
+════════════════════════════════════════════════════════════ */
+
 .oldal {
   min-height: 100vh;
   display: flex;
@@ -6,7 +10,7 @@
   background: #1a1410;
 }
 
-.kártya {
+.kartya {
   background: #1e1814;
   border-radius: 12px;
   padding: 40px;
@@ -23,19 +27,19 @@ h1 {
   text-align: center;
 }
 
-.mező {
+.mezo {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
 }
 
-.mező label {
+.mezo label {
   color: #a89280;
   font-size: 13px;
   margin-bottom: 6px;
 }
 
-.mező input {
+.mezo input {
   background: #2a1f15;
   border: 1px solid rgba(193,154,107,.2);
   border-radius: 8px;
@@ -45,11 +49,11 @@ h1 {
   outline: none;
 }
 
-.mező input:focus {
+.mezo input:focus {
   border-color: #c19a6b;
 }
 
-.hiba-szöveg {
+.hiba-szoveg {
   color: #fc8181;
   font-size: 12px;
   margin-top: 4px;
