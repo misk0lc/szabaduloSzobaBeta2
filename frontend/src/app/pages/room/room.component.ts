@@ -10,6 +10,7 @@ import { ProgressService } from '../../services/progress.service';
 import { LevelService } from '../../services/level.service';
 import { ReportService } from '../../services/report.service';
 import { MultiplayerService, MultiplayerState } from '../../services/multiplayer.service';
+import { HintService } from '../../services/hint.service';
 
 import { Question, CheckAnswerResponse } from '../../models/question.model';
 import { LevelDetail } from '../../models/level.model';
@@ -222,7 +223,8 @@ export class RoomComponent implements OnInit, OnDestroy {
     private questionSvc: QuestionService,
     private progressSvc: ProgressService,
     private reportService: ReportService,
-    private multiSvc: MultiplayerService
+    private multiSvc: MultiplayerService,
+    private hintSvc: HintService
   ) {}
 
   ngOnInit(): void {
@@ -530,23 +532,30 @@ export class RoomComponent implements OnInit, OnDestroy {
     }
     if (!this.activeQuestion?.question.Options) return;
 
-    // Levonjuk a 25 pénzt lokálisan (backend nélkül)
-    this.balance -= 25;
-    this.modalBalance = this.balance;
-    this.modalBalanceAnim = 'loss';
-    setTimeout(() => this.modalBalanceAnim = null, 1200);
+    this.hintSvc.use5050().subscribe({
+      next: (res) => {
+        // Egyenleg frissítése a szerver válasza alapján
+        this.balance = res.NewBalance;
+        this.modalBalance = res.NewBalance;
+        this.modalBalanceAnim = 'loss';
+        setTimeout(() => this.modalBalanceAnim = null, 1200);
 
-    // 50/50: megtartjuk a helyes + 1 véletlenszerű rosszat
-    const opts = this.activeQuestion.question.Options;
-    const correct = opts.filter(o => o.IsCorrect);
-    const wrong   = opts.filter(o => !o.IsCorrect);
-    const keepWrong = wrong.length > 0
-      ? [wrong[Math.floor(Math.random() * wrong.length)]]
-      : [];
-    this.activeQuestion.question.Options = [...correct, ...keepWrong]
-      .sort(() => Math.random() - 0.5);
+        // 50/50: megtartjuk a helyes + 1 véletlenszerű rosszat
+        const opts = this.activeQuestion!.question.Options!;
+        const correct = opts.filter(o => o.IsCorrect);
+        const wrong   = opts.filter(o => !o.IsCorrect);
+        const keepWrong = wrong.length > 0
+          ? [wrong[Math.floor(Math.random() * wrong.length)]]
+          : [];
+        this.activeQuestion!.question.Options = [...correct, ...keepWrong]
+          .sort(() => Math.random() - 0.5);
 
-    this.hintUsed = true;
+        this.hintUsed = true;
+      },
+      error: (err) => {
+        this.hintError = err.error?.message ?? 'Nem sikerült a 50/50 használata.';
+      }
+    });
   }
 
   // ─── Kód beküldés ──────────────────────────────────────────────

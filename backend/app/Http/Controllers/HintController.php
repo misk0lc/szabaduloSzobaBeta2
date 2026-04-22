@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Hint;
 use App\Models\LeaderboardEntry;
 use App\Models\UserMoney;
 use Illuminate\Http\Request;
@@ -10,70 +9,35 @@ use Illuminate\Http\Request;
 class HintController extends Controller
 {
     /**
-     * GET /api/questions/{questionId}/hints
-     * Visszaadja a kérdés elérhető tippjeit (HintText nélkül!).
+     * POST /api/hints/use5050
+     * 50/50 tipp: 25 pénz levonás + HintsUsed növelés a ranglistán.
      */
-    public function index(int $questionId)
-    {
-        $hints = Hint::where('QuestionID', $questionId)
-            ->orderBy('HintOrder')
-            ->get()
-            ->map(fn($h) => [
-                'HintID'    => $h->HintID,
-                'HintOrder' => $h->HintOrder,
-                'Cost'      => $h->Cost,
-                // HintText NEM kerül ki vásárlás előtt!
-            ]);
-
-        return response()->json($hints);
-    }
-
-    /**
-     * POST /api/hints/{id}/buy
-     * Megvásárolja a tippet, levonja a pénzt, visszaküldi a szöveget.
-     */
-    public function buy(Request $request, int $id)
+    public function use5050(Request $request)
     {
         $user = $request->user();
-        $hint = Hint::findOrFail($id);
+        $cost = 25;
 
-        // Pénztárca lekérése vagy létrehozása
         $money = UserMoney::firstOrCreate(
             ['UserID' => $user->UserID],
             ['Amount' => 0]
         );
 
-        // Elegendő pénz ellenőrzése
-        if ($money->Amount < $hint->Cost) {
+        if ($money->Amount < $cost) {
             return response()->json([
-                'message'    => 'Nincs elegendő pénzed ehhez a tipphez.',
-                'Balance'    => $money->Amount,
-                'HintCost'   => $hint->Cost,
-                'Missing'    => $hint->Cost - $money->Amount,
+                'message' => 'Nincs elegendő pénzed a 50/50 használatához.',
+                'Balance' => $money->Amount,
             ], 422);
         }
 
-        // Pénz levonása
-        $money->decrement('Amount', $hint->Cost);
+        $money->decrement('Amount', $cost);
 
-        // Leaderboard hint count növelése
         $leaderboard = LeaderboardEntry::firstOrCreate(
             ['UserID' => $user->UserID],
-            [
-                'Score'           => 0,
-                'LevelsCompleted' => 0,
-                'TimeTotal'       => 0,
-                'HintsUsed'       => 0,
-            ]
+            ['Score' => 0, 'LevelsCompleted' => 0, 'TimeTotal' => 0, 'HintsUsed' => 0]
         );
         $leaderboard->increment('HintsUsed');
 
         return response()->json([
-            'message'    => 'Tipp sikeresen megvásárolva.',
-            'HintID'     => $hint->HintID,
-            'HintOrder'  => $hint->HintOrder,
-            'HintText'   => $hint->HintText,
-            'Cost'       => $hint->Cost,
             'NewBalance' => $money->fresh()->Amount,
             'HintsUsed'  => $leaderboard->fresh()->HintsUsed,
         ]);

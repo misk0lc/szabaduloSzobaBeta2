@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HintController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\MultiplayerController;
@@ -29,6 +30,9 @@ Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
     // ─── Kérdés útvonalak ────────────────────────────────────────────────────
     Route::get('/levels/{levelId}/questions',   [QuestionController::class, 'index']);
     Route::post('/questions/{id}/check-answer', [QuestionController::class, 'checkAnswer']);
+
+    // ─── Tipp útvonalak ──────────────────────────────────────────────────────
+    Route::post('/hints/use5050', [HintController::class, 'use5050']);
 
     // ─── Progress / kód beküldés ─────────────────────────────────────────────
     Route::post('/levels/{levelId}/submit-code', [ProgressController::class, 'submitCode']);
